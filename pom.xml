@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.tatum</groupId>
+    <artifactId>tatum-java</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0.6</version>
+
+    <name>Tatum API client</name>
+    <description>Tatum API client allows Java projects to interact with Tatum API.</description>
+    <url>https://tatum.io/</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://github.com/tatumio/tatum-java/blob/master/LICENSE.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Martin Machava</name>
+            <email>martin.machava@tatum.io</email>
+            <organization>Tatum</organization>
+            <organizationUrl>https://tatum.io</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/tatumio/tatum-java.git</connection>
+        <developerConnection>scm:git:ssh://github.com/tatumio/tatum-java.git</developerConnection>
+        <url>https://github.com/tatumio/tatum-java/tree/master</url>
+    </scm>
+
+    <properties>
+        <kotlin.version>1.4.10</kotlin.version>
+        <project.maindir>${project.basedir}/src/main/kotlin</project.maindir>
+        <project.testdir>${project.basedir}/src/test/kotlin</project.testdir>
+        <project.mainclass>${project.maindir}/MainKt.class</project.mainclass>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
+            <version>1.4.10</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.danilopianini</groupId>
+            <artifactId>khttp</artifactId>
+            <version>0.1.0-dev1j+7559632</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+            <version>2.10.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.10.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20200518</version>
+        </dependency>
+        <dependency>
+            <groupId>com.konghq</groupId>
+            <artifactId>unirest-objectmapper-jackson</artifactId>
+            <version>2.3.08</version>
+        </dependency>
+
+        <!-- Crypto -->
+        <dependency>
+            <groupId>com.github.komputing</groupId>
+            <artifactId>kethereum</artifactId>
+            <version>0.83.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.komputing</groupId>
+            <artifactId>kbip44</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.komputing.kethereum</groupId>
+            <artifactId>crypto_impl_bouncycastle</artifactId>
+            <version>0.81.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.madgag.spongycastle</groupId>
+            <artifactId>core</artifactId>
+            <version>1.58.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.komputing.khash</groupId>
+            <artifactId>sha256</artifactId>
+            <version>1.0.0-RC5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.komputing.khash</groupId>
+            <artifactId>ripemd160</artifactId>
+            <version>1.0.0-RC5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.komputing</groupId>
+            <artifactId>kbase58</artifactId>
+            <version>0.1</version>
+        </dependency>
+
+        <!-- this dependencies are mainly for createExtendedKeyFromXpub -->
+        <dependency>
+            <groupId>com.github.komputing.khex</groupId>
+            <artifactId>core</artifactId>
+            <version>1.0.0-RC6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.komputing.khex</groupId>
+            <artifactId>extensions</artifactId>
+            <version>1.0.0-RC6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.komputing</groupId>
+            <artifactId>Khash</artifactId>
+            <version>1.0.0-RC5</version>
+        </dependency>
+
+        <!-- Validation -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>javax.el-api</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>javax.el</artifactId>
+            <version>2.2.6</version>
+        </dependency>
+
+        <!-- Tests -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.5.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>5.5.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.15.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.mockk</groupId>
+            <artifactId>mockk</artifactId>
+            <version>1.9.3.kotlin12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.13</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray.kotlin.eap</id>
+            <name>Bintray Kotlin EAP Repository</name>
+            <url>https://dl.bintray.com/kotlin/kotlin-eap</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray.kotlin.eap</id>
+            <name>Bintray Kotlin EAP Repository</name>
+            <url>https://dl.bintray.com/kotlin/kotlin-eap</url>
+        </pluginRepository>
+
+        <pluginRepository>
+            <id>jcenter</id>
+            <name>JCenter</name>
+            <url>https://jcenter.bintray.com/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+    <build>
+        <sourceDirectory>src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>src/test/kotlin</testSourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.8</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <jvmTarget>1.8</jvmTarget>
+                    <args>
+                        <arg>-Xinline-classes</arg>
+                    </args>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jetbrains.dokka</groupId>
+                <artifactId>dokka-maven-plugin</artifactId>
+                <version>0.10.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>javadocJar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includes>
+                        <include>README.md</include>
+                    </includes>
+                    <sourceLinks>
+                        <link>
+                            <path>${project.basedir}</path>
+                            <url>https://github.com/tatumio/tatum-java</url>
+                            <lineSuffix>#L</lineSuffix>
+                        </link>
+                    </sourceLinks>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>MainKt</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <finalName>${project.build.finalName}</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
