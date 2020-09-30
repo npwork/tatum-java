@@ -1,6 +1,5 @@
 package wallet.address
 
-import Currency
 import MAINNET_ETH_ADDRESS_OF_MNEM_15_AT_0
 import MAINNET_ETH_ADDRESS_OF_MNEM_15_AT_1
 import MAINNET_ETH_ADDRESS_OF_MNEM_15_AT_2
@@ -13,6 +12,9 @@ import TESTNET_ETH_ADDRESS_OF_MNEM_15_AT_2
 import TESTNET_ETH_ADDRESS_OF_MNEM_15_AT_3
 import TESTNET_ETH_ADDRESS_OF_MNEM_15_AT_4
 import TESTNET_XPUB_OF_MNEM_15
+import io.tatum.Currency
+import io.tatum.wallet.address.generateAddressFromXPub
+import io.tatum.wallet.address.generateEthAddress
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.params.ParameterizedTest

@@ -1,9 +1,12 @@
 package transaction
 
-import Currency
 import FAUCET_MNEMONIC
-import blockchain.ethGetTransactionsCount
-import model.request.TransferEthErc20
+import io.tatum.Currency
+import io.tatum.blockchain.ethGetTransactionsCount
+import io.tatum.model.request.TransferEthErc20
+import io.tatum.transaction.prepareEthOrErc20SignedTransaction
+import io.tatum.transaction.sendEthOrErc20Transaction
+import io.tatum.wallet.address.generateEthPrivateKey
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -12,7 +15,6 @@ import org.kethereum.crypto.toECKeyPair
 import org.kethereum.model.Address
 import org.kethereum.model.PrivateKey
 import org.komputing.khex.model.HexString
-import wallet.address.generateEthPrivateKey
 import java.math.BigDecimal
 
 private val faucetPrivateKeyOf0 =

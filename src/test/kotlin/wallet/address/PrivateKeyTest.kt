@@ -1,6 +1,5 @@
 package wallet.address
 
-import Currency
 import MAINNET_PRIVATE_KEY_OF_MNEM_15_AT_0
 import MAINNET_PRIVATE_KEY_OF_MNEM_15_AT_1
 import MAINNET_PRIVATE_KEY_OF_MNEM_15_AT_2
@@ -12,6 +11,9 @@ import TESTNET_PRIVATE_KEY_OF_MNEM_15_AT_2
 import TESTNET_PRIVATE_KEY_OF_MNEM_15_AT_3
 import TESTNET_PRIVATE_KEY_OF_MNEM_15_AT_4
 import VALID_MNEMONIC_15
+import io.tatum.Currency
+import io.tatum.wallet.address.generateEthPrivateKey
+import io.tatum.wallet.address.generatePrivateKeyFromMnemonic
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.params.ParameterizedTest

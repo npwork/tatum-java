@@ -1,5 +1,8 @@
 package transaction
 
+import io.tatum.transaction.ethToWei
+import io.tatum.transaction.gweiToWei
+import io.tatum.transaction.weiToEth
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal

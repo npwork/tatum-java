@@ -1,15 +1,16 @@
 package model.request
 
-import Currency
 import FAUCET_MNEMONIC
-import blockchain.ethGetTransactionsCount
+import io.tatum.Currency
+import io.tatum.blockchain.ethGetTransactionsCount
+import io.tatum.model.request.TransferEthErc20
+import io.tatum.wallet.address.generateEthPrivateKey
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.kethereum.model.Address
-import wallet.address.generateEthPrivateKey
 import java.math.BigDecimal
 import java.math.BigInteger
 

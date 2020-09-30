@@ -1,11 +1,14 @@
 package wallet
 
-import Currency
 import MAINNET_ETH_WALLET_OF_MNEM_15
 import TESTNET_ETH_WALLET_OF_MNEM_15
 import TESTNET_XPRV_OF_MNEM_15
 import TESTNET_XPUB_OF_MNEM_15
 import VALID_MNEMONIC_15
+import io.tatum.Currency
+import io.tatum.wallet.Wallet
+import io.tatum.wallet.generateEthWallet
+import io.tatum.wallet.generateWallet
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

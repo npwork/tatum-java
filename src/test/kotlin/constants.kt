@@ -1,4 +1,4 @@
-import wallet.Wallet
+import io.tatum.wallet.Wallet
 
 // Valid mnemonics, seeds, xprvs, xpubs
 const val VALID_MNEMONIC_15 =

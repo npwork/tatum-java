@@ -1,5 +1,5 @@
-import bip32.XPub
-import bip32.toExtendedKey
+import io.tatum.bip32.XPub
+import io.tatum.bip32.toExtendedKey
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource

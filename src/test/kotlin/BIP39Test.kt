@@ -1,4 +1,4 @@
-import bip39.generateOrValidate
+import io.tatum.bip39.generateOrValidate
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
