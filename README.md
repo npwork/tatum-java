@@ -1,6 +1,6 @@
 # tatum-java
 
-To use tatum library in your project, add following dependency to your Maven's *pom.xml* file:
+To use Tatum library in your project, add following dependency to your Maven's *pom.xml* file:
 ```
 <dependency>
   <groupId>io.tatum</groupId>
