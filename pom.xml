@@ -7,7 +7,7 @@
     <groupId>io.tatum</groupId>
     <artifactId>tatum-java</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
 
     <name>Tatum API client</name>
     <description>Tatum API client allows Java projects to interact with Tatum API.</description>

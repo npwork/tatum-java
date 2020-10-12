@@ -40,7 +40,6 @@ internal class Demo {
         val wallet = generateEthWallet(true, randomMnemonic).also {
             println("mnemonic: ${it.mnemonic}")
             println("xpub: ${it.xpub}")
-            println("xprv: ${it.xprv}")
         }
 
         val prvKey = generatePrivateKeyFromMnemonic(

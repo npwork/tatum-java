@@ -5,8 +5,7 @@ To use Tatum library in your project, add following dependency to your Maven's *
 <dependency>
   <groupId>io.tatum</groupId>
   <artifactId>tatum-java</artifactId>
-  <version>1.0.4</version>
-  <classifier>jar-with-dependencies</classifier>
+  <version>1.0.9</version>
 </dependency>
 ```
 

@@ -5,7 +5,6 @@ import io.tatum.bip39.generateOrValidate
 
 data class Wallet(
     val xpub: String,
-    val xprv: String,
     val mnemonic: String,
 )
 

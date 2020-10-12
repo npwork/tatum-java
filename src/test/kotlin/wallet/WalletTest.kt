@@ -2,7 +2,6 @@ package wallet
 
 import MAINNET_ETH_WALLET_OF_MNEM_15
 import TESTNET_ETH_WALLET_OF_MNEM_15
-import TESTNET_XPRV_OF_MNEM_15
 import TESTNET_XPUB_OF_MNEM_15
 import VALID_MNEMONIC_15
 import io.tatum.Currency
@@ -46,7 +45,6 @@ internal class WalletTest {
             assertThat(actualWallet)
                 .hasNoNullFieldsOrProperties()
             assertThat(actualWallet.xpub).startsWith("xpub").hasSameSizeAs(TESTNET_XPUB_OF_MNEM_15)
-            assertThat(actualWallet.xprv).startsWith("xprv").hasSameSizeAs(TESTNET_XPRV_OF_MNEM_15)
             assertThat(MnemonicWords(actualWallet.mnemonic).validate(WORDLIST_ENGLISH)).isTrue
         }
 

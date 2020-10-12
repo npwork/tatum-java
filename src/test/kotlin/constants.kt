@@ -35,13 +35,11 @@ const val MAINNET_XPUB_OF_MNEM_15 =
 // Wallets
 val TESTNET_ETH_WALLET_OF_MNEM_15 = Wallet(
     xpub = TESTNET_XPUB_OF_MNEM_15,
-    xprv = TESTNET_XPRV_OF_MNEM_15,
     mnemonic = VALID_MNEMONIC_15,
 )
 
 val MAINNET_ETH_WALLET_OF_MNEM_15 = Wallet(
     xpub = MAINNET_XPUB_OF_MNEM_15,
-    xprv = MAINNET_XPRV_OF_MNEM_15,
     mnemonic = VALID_MNEMONIC_15,
 )
 

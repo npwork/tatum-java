@@ -9,7 +9,7 @@ import org.kethereum.bip39.toSeed
 /**
  * Generate Bitcoin wallet
  * @param testnet testnet or mainnet version of wallet.address
- * @param mnem mnemonic seed to use
+ * @param mnemonic seed to use
  * @returns wallet
  */
 internal fun generateBtcWallet(testnet: Boolean, mnemonic: String): Wallet = TODO("Will be implemented later")
@@ -17,7 +17,7 @@ internal fun generateBtcWallet(testnet: Boolean, mnemonic: String): Wallet = TOD
 /**
  * Generate Litecoin wallet
  * @param testnet testnet or mainnet version of wallet.address
- * @param mnem mnemonic seed to use
+ * @param mnemonic seed to use
  * @returns wallet
  */
 internal fun generateLtcWallet(testnet: Boolean, mnemonic: String): Wallet = TODO("Will be implemented later")
@@ -25,7 +25,7 @@ internal fun generateLtcWallet(testnet: Boolean, mnemonic: String): Wallet = TOD
 /**
  * Generate Bitcoin Cash wallet
  * @param testnet testnet or mainnet version of wallet.address
- * @param mnem mnemonic seed to use
+ * @param mnemonic seed to use
  * @returns wallet
  */
 internal fun generateBchWallet(testnet: Boolean, mnemonic: String): Wallet = TODO("Will be implemented later")
@@ -33,7 +33,7 @@ internal fun generateBchWallet(testnet: Boolean, mnemonic: String): Wallet = TOD
 /**
  * Generate Ethereum or any other ERC20 wallet
  * @param testnet testnet or mainnet version of wallet.address
- * @param mnem mnemonic seed to use
+ * @param mnemonic seed to use
  * @returns wallet
  */
 fun generateEthWallet(testnet: Boolean, mnemonic: String): Wallet {
@@ -42,7 +42,6 @@ fun generateEthWallet(testnet: Boolean, mnemonic: String): Wallet {
     val derivedKey = seed.toKey(path, false)
     return Wallet(
         xpub = derivedKey.serialize(true),
-        xprv = derivedKey.serialize(false),
         mnemonic = mnemonic
     )
 }
@@ -61,7 +60,7 @@ internal fun generateXlmWallet(): Wallet = TODO("Will be implemented later")
 /**
  * Generate VeChain wallet
  * @param testnet testnet or mainnet version of wallet.address
- * @param mnem mnemonic seed to use
+ * @param mnemonic seed to use
  * @returns wallet
  */
 internal fun generateVetWallet(testnet: Boolean, mnemonic: String): Wallet = TODO("Will be implemented later")
@@ -74,7 +73,7 @@ internal fun generateNeoWallet(): Wallet = TODO("Will be implemented later")
 /**
  * Generate BnB wallet
  * @param testnet testnet or mainnet version of wallet.address
- * @param mnem mnemonic seed to use
+ * @param mnemonic seed to use
  * @returns wallet
  */
 internal fun generateBnbWallet(testnet: Boolean, mnemonic: String): Wallet = TODO("Will be implemented later")
