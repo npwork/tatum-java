@@ -1,17 +1,10 @@
 package io.tatum.model.response.ltc;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import io.tatum.model.response.common.IUTXO;
 
 import java.math.BigDecimal;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-@EqualsAndHashCode
-public class LtcUTXO {
+public class LtcUTXO implements IUTXO {
 
     private BigDecimal version;
     private BigDecimal height;
@@ -22,4 +15,83 @@ public class LtcUTXO {
     private String hash;
     private BigDecimal index;
 
+    @Override
+    public BigDecimal getVersion() {
+        return version;
+    }
+
+    @Override
+    public void setVersion(BigDecimal version) {
+        this.version = version;
+    }
+
+    @Override
+    public BigDecimal getHeight() {
+        return height;
+    }
+
+    @Override
+    public void setHeight(BigDecimal height) {
+        this.height = height;
+    }
+
+    @Override
+    public void setValue(BigDecimal value) {
+        this.value = value;
+    }
+
+    @Override
+    public BigDecimal getScript() {
+        return script;
+    }
+
+    @Override
+    public void setScript(BigDecimal script) {
+        this.script = script;
+    }
+
+    @Override
+    public BigDecimal getValue() {
+        return value;
+    }
+
+    @Override
+    public String getAddress() {
+        return address;
+    }
+
+    @Override
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    @Override
+    public Boolean getCoinbase() {
+        return coinbase;
+    }
+
+    @Override
+    public void setCoinbase(Boolean coinbase) {
+        this.coinbase = coinbase;
+    }
+
+    @Override
+    public String getHash() {
+        return hash;
+    }
+
+    @Override
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
+    @Override
+    public BigDecimal getIndex() {
+        return index;
+    }
+
+    @Override
+    public void setIndex(BigDecimal index) {
+        this.index = index;
+    }
 }

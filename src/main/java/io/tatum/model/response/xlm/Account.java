@@ -1,14 +1,16 @@
 package io.tatum.model.response.xlm;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+public class Account implements IAccount {
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-@EqualsAndHashCode
-public class Account {
     private String sequence;
+
+    @Override
+    public String getSequence() {
+        return sequence;
+    }
+
+    @Override
+    public void setSequence(String sequence) {
+        this.sequence = sequence;
+    }
 }

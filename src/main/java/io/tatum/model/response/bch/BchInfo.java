@@ -1,23 +1,43 @@
 package io.tatum.model.response.bch;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
 import java.math.BigDecimal;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-@EqualsAndHashCode
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class BchInfo {
+public class BchInfo implements IBchInfo {
 
     private String chain;
     private BigDecimal blocks;
     private String bestblockhash;
     private BigDecimal difficulty;
+
+    public String getChain() {
+        return chain;
+    }
+
+    public void setChain(String chain) {
+        this.chain = chain;
+    }
+
+    public BigDecimal getBlocks() {
+        return blocks;
+    }
+
+    public void setBlocks(BigDecimal blocks) {
+        this.blocks = blocks;
+    }
+
+    public String getBestblockhash() {
+        return bestblockhash;
+    }
+
+    public void setBestblockhash(String bestblockhash) {
+        this.bestblockhash = bestblockhash;
+    }
+
+    public BigDecimal getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(BigDecimal difficulty) {
+        this.difficulty = difficulty;
+    }
 }
