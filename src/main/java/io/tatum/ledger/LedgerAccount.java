@@ -7,7 +7,7 @@ import io.tatum.model.request.CreateAccount;
 import io.tatum.model.request.CreateAccountsBatch;
 import io.tatum.model.response.ledger.AccountBalance;
 import io.tatum.model.response.ledger.Blockage;
-import io.tatum.model.response.ledger.LedgerAccount;
+import io.tatum.model.response.ledger.Account;
 import io.tatum.utils.Async;
 import io.tatum.utils.Env;
 
@@ -16,23 +16,23 @@ import java.util.concurrent.ExecutionException;
 
 import static io.tatum.constants.Constant.TATUM_API_URL;
 
-public class Account {
+public class LedgerAccount {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getAccountByAccountId" target="_blank">Tatum API documentation</a>
      */
-    public LedgerAccount getAccountById(String id) throws IOException, ExecutionException, InterruptedException {
+    public Account getAccountById(String id) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ledger/account" + id;
         String account = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
-        return new LedgerAccount();
+        return new Account();
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/createAccount" target="_blank">Tatum API documentation</a>
      */
-    public LedgerAccount createAccount(CreateAccount account) throws IOException, ExecutionException, InterruptedException {
+    public Account createAccount(CreateAccount account) throws IOException, ExecutionException, InterruptedException {
 //        await validateOrReject(account);
 //        TO-DO
         String tatumApiUrl = Env.getTatumApiUrl();
@@ -43,13 +43,13 @@ public class Account {
 
         String acc = Async.post(uri, Env.getTatumApiKey(), requestBody);
         // TO-DO
-        return new LedgerAccount();
+        return new Account();
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/createAccountBatch" target="_blank">Tatum API documentation</a>
      */
-    public LedgerAccount[] createAccounts(CreateAccountsBatch accounts) throws IOException, ExecutionException, InterruptedException {
+    public Account[] createAccounts(CreateAccountsBatch accounts) throws IOException, ExecutionException, InterruptedException {
 //        await validateOrReject(accounts);
 //        TO-DO
         String tatumApiUrl = Env.getTatumApiUrl();
@@ -59,7 +59,7 @@ public class Account {
 
         String acc = Async.post(uri, Env.getTatumApiKey(), requestBody);
         // TO-DO
-        return new LedgerAccount[]{};
+        return new Account[]{};
     }
 
     /**
@@ -148,23 +148,23 @@ public class Account {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getAccountsByCustomerId" target="_blank">Tatum API documentation</a>
      */
-    public LedgerAccount[] getAccountsByCustomerId(String id, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
+    public Account[] getAccountsByCustomerId(String id, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ledger/account/customer/" + id + "?pageSize=" + pageSize + "&offset=" + offset;
         String accounts = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
-        return new LedgerAccount[]{};
+        return new Account[]{};
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getAllAccounts" target="_blank">Tatum API documentation</a>
      */
-    public LedgerAccount[] getAllAccounts(Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
+    public Account[] getAllAccounts(Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ledger/account?pageSize=" + pageSize + "&offset=" + offset;
         String accounts = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
-        return new LedgerAccount[]{};
+        return new Account[]{};
     }
 
     /**
