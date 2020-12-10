@@ -12,7 +12,7 @@ public class Async {
     public static String post(String uri, String apiKey, String requestBody) throws ExecutionException, InterruptedException {
         var request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
-                .timeout(Duration.ofMinutes(1))
+                .timeout(Duration.ofSeconds(20))
                 .header("Content-Type", "application/json")
                 .headers("x-api-key", apiKey)
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
@@ -30,7 +30,7 @@ public class Async {
     public static String put(String uri, String apiKey, String requestBody) throws ExecutionException, InterruptedException {
         var request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
-                .timeout(Duration.ofMinutes(1))
+                .timeout(Duration.ofSeconds(20))
                 .header("Content-Type", "application/json")
                 .headers("x-api-key", apiKey)
                 .PUT(HttpRequest.BodyPublishers.ofString(requestBody))
@@ -48,7 +48,7 @@ public class Async {
     public static String get(String uri, String apiKey) throws ExecutionException, InterruptedException {
         var request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
-                .timeout(Duration.ofMinutes(1))
+                .timeout(Duration.ofSeconds(20))
                 .header("Content-Type", "application/json")
                 .headers("x-api-key", apiKey)
                 .GET()
@@ -66,7 +66,7 @@ public class Async {
     public static String delete(String uri, String apiKey) throws ExecutionException, InterruptedException {
         var request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
-                .timeout(Duration.ofMinutes(1))
+                .timeout(Duration.ofSeconds(20))
                 .header("Content-Type", "application/json")
                 .headers("x-api-key", apiKey)
                 .DELETE()
