@@ -22,7 +22,8 @@ public final class Ethereum {
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthBroadcast" target="_blank">Tatum API documentation</a>
      */
     public TransactionHash ethBroadcast(final String txData, final String signatureId) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiKey()) ? TATUM_API_URL + "/v3/ethereum/broadcast" : Env.getTatumApiKey();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ethereum/broadcast";
 
         var values = new HashMap<String, String>() {{
             put("txData", txData);
@@ -40,7 +41,8 @@ public final class Ethereum {
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetTransactionCount" target="_blank">Tatum API documentation</a>
      */
     public BigDecimal ethGetTransactionsCount(String address) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/ethereum/transaction/count/" + address : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ethereum/transaction/count/" + address;
         String count = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new BigDecimal(count);
@@ -50,7 +52,8 @@ public final class Ethereum {
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetCurrentBlock" target="_blank">Tatum API documentation</a>
      */
     public BigDecimal ethGetCurrentBlock() throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/ethereum/block/current" : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ethereum/block/current";
         String block = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new BigDecimal(block);
@@ -60,7 +63,8 @@ public final class Ethereum {
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetBlock" target="_blank">Tatum API documentation</a>
      */
     public IEthBlock ethGetBlock(String hash) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/ethereum/block/" + hash : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ethereum/block/" + hash;
         String block = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new EthBlock();
@@ -70,7 +74,8 @@ public final class Ethereum {
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetBalance" target="_blank">Tatum API documentation</a>
      */
     public BigDecimal ethGetAccountBalance(String address) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/ethereum/account/balance" + address : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ethereum/account/balance" + address;
         String balance = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new BigDecimal(balance);
@@ -80,7 +85,8 @@ public final class Ethereum {
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthErc20GetBalance" target="_blank">Tatum API documentation</a>
      */
     public BigDecimal ethGetAccountErc20Address(String address, String contractAddress) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/ethereum/account/balance/erc20/" + address + "?contractAddress=" + contractAddress : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ethereum/account/balance/erc20/" + address + "?contractAddress=" + contractAddress;
         String transaction = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new BigDecimal(transaction);
@@ -90,7 +96,8 @@ public final class Ethereum {
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetTransaction" target="_blank">Tatum API documentation</a>
      */
     public EthTx ethGetTransaction(String hash) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/ethereum/transaction/" + hash : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ethereum/transaction/" + hash;
         String transactions = Async.get(uri, Env.getTatumApiKey());
         return new EthTx();
     }
@@ -99,7 +106,8 @@ public final class Ethereum {
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetTransactionByAddress" target="_blank">Tatum API documentation</a>
      */
     public EthTx[] ethGetAccountTransactions(String address, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/ethereum/transaction/" + address + "?pageSize=" + pageSize + "&offset=" + offset : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ethereum/transaction/" + address + "?pageSize=" + pageSize + "&offset=" + offset;
         String balance = Async.get(uri, Env.getTatumApiKey());
         //TO-DO
         return new EthTx[50];

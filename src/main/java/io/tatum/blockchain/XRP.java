@@ -21,7 +21,8 @@ public class XRP {
      * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetFee" target="_blank">Tatum API documentation</a>
      */
     public BigDecimal xrpGetFee() throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/xrp/fee" : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/xrp/fee";
         String base_fee = Async.get(uri, Env.getTatumApiKey());
         return new BigDecimal(base_fee);
     }
@@ -30,7 +31,8 @@ public class XRP {
      * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetAccountInfo" target="_blank">Tatum API documentation</a>
      */
     public IAccount xrpGetAccountInfo(String account) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/xrp/account/" + account : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/xrp/account/" + account;
         String acc = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new Account();
@@ -75,7 +77,8 @@ public class XRP {
      * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetLastClosedLedger" target="_blank">Tatum API documentation</a>
      */
     public BigDecimal xrpGetCurrentLedger() throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/xrp/info" : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/xrp/info";
         String current = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new BigDecimal(current);
@@ -85,7 +88,8 @@ public class XRP {
      * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetLedger" target="_blank">Tatum API documentation</a>
      */
     public String xrpGetLedger(BigDecimal i) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/xrp/ledger/" + i : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/xrp/ledger/" + i;
         String ledger = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return ledger;
@@ -95,7 +99,8 @@ public class XRP {
      * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetAccountBalance" target="_blank">Tatum API documentation</a>
      */
     public String xrpGetAccountBalance(String address) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/xrp/account/" + address + "/balance" : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/xrp/account/" + address + "/balance";
         String balance = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return balance;
@@ -105,7 +110,8 @@ public class XRP {
      * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetTransaction" target="_blank">Tatum API documentation</a>
      */
     public String xrpGetTransaction(String hash) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/xrp/transaction/" + hash : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/xrp/transaction/" + hash;
         String tx = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return tx;
@@ -115,7 +121,8 @@ public class XRP {
      * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetAccountTx" target="_blank">Tatum API documentation</a>
      */
     public String xrpGetAccountTransactions(String address, BigDecimal min, String marker) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/xrp/account/tx" + address + "?min=" + min + "&marker=" + marker : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/xrp/account/tx" + address + "?min=" + min + "&marker=" + marker;
         String tx = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return tx;
