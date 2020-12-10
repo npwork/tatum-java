@@ -33,7 +33,25 @@ public class Async {
                 .timeout(Duration.ofMinutes(1))
                 .header("Content-Type", "application/json")
                 .headers("x-api-key", apiKey)
-                .POST(HttpRequest.BodyPublishers.ofString("{}"))
+                .GET()
+                .build();
+
+        var client = HttpClient.newHttpClient();
+        return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(response -> {
+                    System.out.println(response.statusCode());
+                    return response;
+                })
+                .thenApply(HttpResponse::body).get();
+    }
+
+    public static String delete(String uri, String apiKey) throws ExecutionException, InterruptedException {
+        var request = HttpRequest.newBuilder()
+                .uri(URI.create(uri))
+                .timeout(Duration.ofMinutes(1))
+                .header("Content-Type", "application/json")
+                .headers("x-api-key", apiKey)
+                .DELETE()
                 .build();
 
         var client = HttpClient.newHttpClient();
