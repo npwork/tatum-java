@@ -23,7 +23,7 @@ public class LedgerCustomer {
     public Customer getCustomer(String id) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ledger/customer" + id;
-        var customer = Async.get(uri, Env.getTatumApiKey());
+        String account = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new Customer();
     }
@@ -34,7 +34,7 @@ public class LedgerCustomer {
     public Customer[] getAllCustomers(Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ledger/customer?pageSize=" + pageSize + "&offset=" + offset;
-        var tx = Async.get(uri, Env.getTatumApiKey());
+        String tx = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new Customer[]{};
     }
