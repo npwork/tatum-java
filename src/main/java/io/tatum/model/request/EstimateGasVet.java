@@ -1,41 +1,30 @@
 package io.tatum.model.request;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Optional;
 
 public class EstimateGasVet {
 
-//    @IsNotEmpty()
-//    @Length(66, 66)
     @NotEmpty
     @Size(min = 66, max = 66)
     private String from;
 
-//    @IsNotEmpty()
-//    @Length(42, 42)
     @NotEmpty
     @Size(min = 42, max = 42)
     private String to;
 
-//    @IsNotEmpty()
-//    @IsNumberString()
-//    @Matches(/^[+]?((\d+(\.\d*)?)|(\.\d+))$/)
     @NotEmpty
+    @Pattern(regexp = "\\d+") // number string
     @Pattern(regexp="^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$")
     private String value;
 
 //    @IsOptional()
-//    @MaxLength(10000)
     @Size(max = 10000)
     private Optional<String> data;
 
-//    @Min(0)
 //    @IsOptional()
-//    @IsInt()
     @Min(0)
+    @PositiveOrZero
     private Optional<Integer> nonce;
 
     public String getFrom() {

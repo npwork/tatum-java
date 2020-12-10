@@ -20,7 +20,8 @@ public final class Litecoin {
      * For more details, see <a href="https://tatum.io/apidoc#operation/LtcBroadcast" target="_blank">Tatum API documentation</a>
      */
     public TransactionHash ltcBroadcast(String txData, String signatureId) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiKey()) ? TATUM_API_URL + "/v3/litecoin/broadcast" : Env.getTatumApiKey();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/litecoin/broadcast";
 
         var values = new HashMap<String, String>() {{
             put("txData", txData);
@@ -38,7 +39,8 @@ public final class Litecoin {
      * For more details, see <a href="https://tatum.io/apidoc#operation/LtcGetBlockChainInfo" target="_blank">Tatum API documentation</a>
      */
     public IChainInfo ltcGetCurrentBlock() throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/litecoin/info" : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/litecoin/info";
         String block = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new LtcInfo();
@@ -48,7 +50,8 @@ public final class Litecoin {
      * For more details, see <a href="https://tatum.io/apidoc#operation/LtcGetBlock" target="_blank">Tatum API documentation</a>
      */
     public ILtcBlock ltcGetBlock(String hash) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/litecoin/block/" + hash : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/litecoin/block/" + hash;
         String block = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new LtcBlock();
@@ -58,7 +61,8 @@ public final class Litecoin {
      * For more details, see <a href="https://tatum.io/apidoc#operation/LtcGetBlockHash" target="_blank">Tatum API documentation</a>
      */
     public IBlockHash ltcGetBlockHash(BigDecimal i) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/litecoin/block/hash/" + i : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/litecoin/block/hash/" + i;
         String hash = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new BlockHash();
@@ -68,7 +72,8 @@ public final class Litecoin {
      * For more details, see <a href="https://tatum.io/apidoc#operation/LtcGetUTXO" target="_blank">Tatum API documentation</a>
      */
     public IUTXO ltcGetUTXO(String hash, BigDecimal i) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/litecoin/utxo/" + hash + "/" + i : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/litecoin/utxo/" + hash + "/" + i;
         String utxo = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new LtcUTXO();
@@ -78,7 +83,8 @@ public final class Litecoin {
      * For more details, see <a href="https://tatum.io/apidoc#operation/LtcGetTxByAddress" target="_blank">Tatum API documentation</a>
      */
     public ILtcTx[] ltcGetTxForAccount(String address, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/litecoin/transaction/address/" + address + "?pageSize=" + pageSize + "&offset=" + offset : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/litecoin/transaction/address/" + address + "?pageSize=" + pageSize + "&offset=" + offset;
         String tx = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new LtcTx[]{};
@@ -88,7 +94,8 @@ public final class Litecoin {
      * For more details, see <a href="https://tatum.io/apidoc#operation/LtcGetRawTransaction" target="_blank">Tatum API documentation</a>
      */
     public ILtcTx ltcGetTransaction(String hash) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/litecoin/transaction/" + hash : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/litecoin/transaction/" + hash;
         String tx = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new LtcTx();

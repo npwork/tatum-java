@@ -22,7 +22,8 @@ public final class Bcash {
      * For more details, see <a href="https://tatum.io/apidoc#operation/BchBroadcast" target="_blank">Tatum API documentation</a>
      */
     public TransactionHash bcashBroadcast(String txData, String signatureId) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiKey()) ? TATUM_API_URL + "/v3/bcash/broadcast" : Env.getTatumApiKey();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/bcash/broadcast";
 
         var values = new HashMap<String, String>() {{
             put("txData", txData);
@@ -40,7 +41,8 @@ public final class Bcash {
      * For more details, see <a href="https://tatum.io/apidoc#operation/BchGetBlockChainInfo" target="_blank">Tatum API documentation</a>
      */
     public IBchInfo bcashGetCurrentBlock() throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/bcash/info" : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/bcash/info";
         String block = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new BchInfo();
@@ -50,7 +52,8 @@ public final class Bcash {
      * For more details, see <a href="https://tatum.io/apidoc#operation/BchGetBlock" target="_blank">Tatum API documentation</a>
      */
     public IBchBlock bcashGetBlock(String hash) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/bcash/block/" + hash : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/bcash/block/" + hash;
         String block = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new BchBlock();
@@ -60,7 +63,8 @@ public final class Bcash {
      * For more details, see <a href="https://tatum.io/apidoc#operation/BchGetBlockHash" target="_blank">Tatum API documentation</a>
      */
     public IBlockHash bcashGetBlockHash(BigDecimal i) throws IOException, ExecutionException, InterruptedException {
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/bcash/block/hash/" + i : Env.getTatumApiUrl();
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/bcash/block/hash/" + i;
         String hash = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new BlockHash();
@@ -71,6 +75,8 @@ public final class Bcash {
      * For more details, see <a href="https://tatum.io/apidoc#operation/BchGetTxByAddress" target="_blank">Tatum API documentation</a>
      */
     public IBchTx[] bcashGetTxForAccount(String address, BigDecimal skip) throws IOException, ExecutionException, InterruptedException {
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/bcash/transaction/address/" + address + "?skip=" + skip;
         String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/bcash/transaction/address/" + address + "?skip=" + skip : Env.getTatumApiUrl();
         String tx = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
@@ -81,6 +87,8 @@ public final class Bcash {
      * For more details, see <a href="https://tatum.io/apidoc#operation/BchGetRawTransaction" target="_blank">Tatum API documentation</a>
      */
     public IBchTx bcashGetTransaction(String hash) throws IOException, ExecutionException, InterruptedException {
+        String tatumApiUrl = Env.getTatumApiUrl();
+        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/bcash/transaction/" + hash;
         String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/bcash/transaction/" + hash : Env.getTatumApiUrl();
         String tx = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
