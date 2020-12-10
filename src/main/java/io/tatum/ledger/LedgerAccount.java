@@ -83,8 +83,8 @@ public class LedgerAccount {
         var objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(block);
 
-        String blockId = Async.post(uri, Env.getTatumApiKey(), requestBody);
-        return blockId;
+        String amount = Async.post(uri, Env.getTatumApiKey(), requestBody);
+        return amount;
     }
 
     /**
@@ -173,7 +173,7 @@ public class LedgerAccount {
     public AccountBalance getAccountBalance(String id) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ledger/account/" + id + "/balance";
-        String accounts = Async.get(uri, Env.getTatumApiKey());
+        String balance = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new AccountBalance();
     }

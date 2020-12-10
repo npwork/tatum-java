@@ -8,7 +8,6 @@ import io.tatum.utils.Async;
 import io.tatum.utils.Env;
 
 import java.io.IOException;
-import java.net.http.HttpResponse;
 import java.util.concurrent.ExecutionException;
 
 import static io.tatum.constants.Constant.TATUM_API_URL;
@@ -21,7 +20,7 @@ public class OrderBook {
     public OrderBookResponse[] getHistoricalTrades(Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/trade/history?pageSize=" + pageSize + "&offset=" + offset;
-        var trades = Async.get(uri, Env.getTatumApiKey());
+        String trades = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new OrderBookResponse[]{};
     }
@@ -32,7 +31,7 @@ public class OrderBook {
     public OrderBookResponse[] getActiveBuyTrades(String id, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/trade/buy?id=" + id + "&pageSize=" + pageSize + "&offset=" + offset;
-        var trades = Async.get(uri, Env.getTatumApiKey());
+        String trades = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new OrderBookResponse[]{};
     }
@@ -43,7 +42,7 @@ public class OrderBook {
     public OrderBookResponse[] getActiveSellTrades(String id, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/trade/sell?id=" + id + "&pageSize=" + pageSize + "&offset=" + offset;
-        var trades = Async.get(uri, Env.getTatumApiKey());
+        String trades = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new OrderBookResponse[]{};
     }
@@ -57,9 +56,8 @@ public class OrderBook {
         var objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(data);
 
-        HttpResponse id = Async.post(uri, Env.getTatumApiKey(), requestBody);
-        // TO-DO
-        return id.toString();
+        String id = Async.post(uri, Env.getTatumApiKey(), requestBody);
+        return id;
     }
 
     /**
@@ -68,7 +66,7 @@ public class OrderBook {
     public OrderBookResponse getTradeById(String id) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/trade/" + id;
-        var trade = Async.get(uri, Env.getTatumApiKey());
+        String trade = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new OrderBookResponse();
     }

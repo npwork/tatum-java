@@ -1,18 +1,9 @@
 package io.tatum.model.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-@EqualsAndHashCode
 public class OrderBookRequest {
 
     @NotEmpty
@@ -55,5 +46,4 @@ public class OrderBookRequest {
     @NotEmpty
     @Size(min = 24, max = 24)
     private Optional<String> feeAccountId;
-
 }
