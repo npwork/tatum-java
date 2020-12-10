@@ -23,7 +23,7 @@ public class LedgerCustomer {
     public Customer getCustomer(String id) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ledger/customer" + id;
-        String account = Async.get(uri, Env.getTatumApiKey());
+        String customer = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new Customer();
     }
