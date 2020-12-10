@@ -1,6 +1,6 @@
 package io.tatum.model.response.ledger;
 
-public class Account {
+public class BookkeepingAccount {
 
     /**
      * For bookkeeping to distinct account purpose.
