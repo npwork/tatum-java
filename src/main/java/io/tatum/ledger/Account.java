@@ -7,6 +7,7 @@ import io.tatum.model.request.CreateAccount;
 import io.tatum.model.request.CreateAccountsBatch;
 import io.tatum.model.response.ledger.AccountBalance;
 import io.tatum.model.response.ledger.Blockage;
+import io.tatum.model.response.ledger.BookkeepingAccount;
 import io.tatum.utils.Async;
 import io.tatum.utils.Env;
 
@@ -20,18 +21,18 @@ public class Account {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getAccountByAccountId" target="_blank">Tatum API documentation</a>
      */
-    public io.tatum.model.response.ledger.Account getAccountById(String id) throws IOException, ExecutionException, InterruptedException {
+    public BookkeepingAccount getAccountById(String id) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ledger/account" + id;
         String account = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
-        return new io.tatum.model.response.ledger.Account();
+        return new BookkeepingAccount();
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/createAccount" target="_blank">Tatum API documentation</a>
      */
-    public io.tatum.model.response.ledger.Account createAccount(CreateAccount account) throws IOException, ExecutionException, InterruptedException {
+    public BookkeepingAccount createAccount(CreateAccount account) throws IOException, ExecutionException, InterruptedException {
 //        await validateOrReject(account);
 //        TO-DO
         String tatumApiUrl = Env.getTatumApiUrl();
@@ -42,13 +43,13 @@ public class Account {
 
         String acc = Async.post(uri, Env.getTatumApiKey(), requestBody);
         // TO-DO
-        return new io.tatum.model.response.ledger.Account();
+        return new BookkeepingAccount();
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/createAccountBatch" target="_blank">Tatum API documentation</a>
      */
-    public io.tatum.model.response.ledger.Account[] createAccounts(CreateAccountsBatch accounts) throws IOException, ExecutionException, InterruptedException {
+    public BookkeepingAccount[] createAccounts(CreateAccountsBatch accounts) throws IOException, ExecutionException, InterruptedException {
 //        await validateOrReject(accounts);
 //        TO-DO
         String tatumApiUrl = Env.getTatumApiUrl();
@@ -58,7 +59,7 @@ public class Account {
 
         String acc = Async.post(uri, Env.getTatumApiKey(), requestBody);
         // TO-DO
-        return new io.tatum.model.response.ledger.Account[]{};
+        return new BookkeepingAccount[]{};
     }
 
     /**
@@ -147,23 +148,23 @@ public class Account {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getAccountsByCustomerId" target="_blank">Tatum API documentation</a>
      */
-    public io.tatum.model.response.ledger.Account[] getAccountsByCustomerId(String id, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
+    public BookkeepingAccount[] getAccountsByCustomerId(String id, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ledger/account/customer/" + id + "?pageSize=" + pageSize + "&offset=" + offset;
         String accounts = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
-        return new io.tatum.model.response.ledger.Account[]{};
+        return new BookkeepingAccount[]{};
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getAllAccounts" target="_blank">Tatum API documentation</a>
      */
-    public io.tatum.model.response.ledger.Account[] getAllAccounts(Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
+    public BookkeepingAccount[] getAllAccounts(Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ledger/account?pageSize=" + pageSize + "&offset=" + offset;
         String accounts = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
-        return new io.tatum.model.response.ledger.Account[]{};
+        return new BookkeepingAccount[]{};
     }
 
     /**
