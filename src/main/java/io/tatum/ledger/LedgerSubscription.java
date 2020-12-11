@@ -11,7 +11,6 @@ import io.tatum.utils.Async;
 import io.tatum.utils.Env;
 
 import java.io.IOException;
-import java.net.http.HttpResponse;
 import java.util.concurrent.ExecutionException;
 
 import static io.tatum.constants.Constant.TATUM_API_URL;
@@ -29,9 +28,9 @@ public class LedgerSubscription {
         var objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(data);
 
-        HttpResponse res = Async.post(uri, Env.getTatumApiKey(), requestBody);
+        String subscription = Async.post(uri, Env.getTatumApiKey(), requestBody);
         // TO-DO
-        return "subscription";
+        return subscription;
     }
 
     /**
@@ -40,7 +39,7 @@ public class LedgerSubscription {
     public Subscription[] listActiveSubscriptions(Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/subscription?pageSize=" + pageSize + "&offset=" + offset;
-        var tx = Async.get(uri, Env.getTatumApiKey());
+        String tx = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new Subscription[]{};
     }
@@ -60,7 +59,7 @@ public class LedgerSubscription {
     public <T> T obtainReportForSubscription(String id) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/subscription/report" + id;
-        var tx = Async.get(uri, Env.getTatumApiKey());
+        String tx = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return (T) new Object();
     }
