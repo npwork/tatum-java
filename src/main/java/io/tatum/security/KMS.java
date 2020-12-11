@@ -19,7 +19,7 @@ public class KMS {
     public TransactionKMS getTransactionKMS(String id) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/kms/" + id;
-        var tx = Async.get(uri, Env.getTatumApiKey());
+        String tx = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new TransactionKMS();
     }
@@ -51,7 +51,7 @@ public class KMS {
     public TransactionKMS[] getPendingTransactionsKMSByChain(Currency chain) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/kms/pending/" + chain.getCurrency();
-        var tx = Async.get(uri, Env.getTatumApiKey());
+        String tx = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new TransactionKMS[]{};
     }
