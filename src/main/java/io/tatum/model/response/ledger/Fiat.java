@@ -1,6 +1,8 @@
 package io.tatum.model.response.ledger;
 
-public enum Fiat {
+import io.tatum.model.response.common.Money;
+
+public enum Fiat implements Money {
 
     AED("AED"),
     AFN("AFN"),

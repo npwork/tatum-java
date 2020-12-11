@@ -77,7 +77,6 @@ public final class Bcash {
     public IBchTx[] bcashGetTxForAccount(String address, BigDecimal skip) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/bcash/transaction/address/" + address + "?skip=" + skip;
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/bcash/transaction/address/" + address + "?skip=" + skip : Env.getTatumApiUrl();
         String tx = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new IBchTx[]{};
@@ -89,7 +88,6 @@ public final class Bcash {
     public IBchTx bcashGetTransaction(String hash) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/bcash/transaction/" + hash;
-        String uri = Strings.isNullOrEmpty(Env.getTatumApiUrl()) ? TATUM_API_URL + "/v3/bcash/transaction/" + hash : Env.getTatumApiUrl();
         String tx = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new BchTx();
