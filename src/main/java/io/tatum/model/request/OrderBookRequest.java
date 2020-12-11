@@ -46,4 +46,68 @@ public class OrderBookRequest {
     @NotEmpty
     @Size(min = 24, max = 24)
     private Optional<String> feeAccountId;
+
+    public TradeType getType() {
+        return type;
+    }
+
+    public void setType(TradeType type) {
+        this.type = type;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public String getPair() {
+        return pair;
+    }
+
+    public void setPair(String pair) {
+        this.pair = pair;
+    }
+
+    public String getCurrency1AccountId() {
+        return currency1AccountId;
+    }
+
+    public void setCurrency1AccountId(String currency1AccountId) {
+        this.currency1AccountId = currency1AccountId;
+    }
+
+    public String getCurrency2AccountId() {
+        return currency2AccountId;
+    }
+
+    public void setCurrency2AccountId(String currency2AccountId) {
+        this.currency2AccountId = currency2AccountId;
+    }
+
+    public Optional<BigDecimal> getFee() {
+        return fee;
+    }
+
+    public void setFee(Optional<BigDecimal> fee) {
+        this.fee = fee;
+    }
+
+    public Optional<String> getFeeAccountId() {
+        return feeAccountId;
+    }
+
+    public void setFeeAccountId(Optional<String> feeAccountId) {
+        this.feeAccountId = feeAccountId;
+    }
 }

@@ -15,14 +15,12 @@ public class EstimateGasVet {
 
     @NotEmpty
     @Pattern(regexp = "\\d+") // number string
-    @Pattern(regexp="^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$")
+    @Pattern(regexp = "^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$")
     private String value;
 
-//    @IsOptional()
     @Size(max = 10000)
     private Optional<String> data;
 
-//    @IsOptional()
     @Min(0)
     @PositiveOrZero
     private Optional<Integer> nonce;
