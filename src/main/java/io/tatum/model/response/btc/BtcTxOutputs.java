@@ -1,42 +1,21 @@
 package io.tatum.model.response.btc;
 
 import io.tatum.model.response.common.ITxOutputs;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@EqualsAndHashCode
 public class BtcTxOutputs implements ITxOutputs {
 
     private BigDecimal value;
     private String script;
     private String address;
 
-    @Override
-    public BigDecimal getValue() {
-        return value;
-    }
-
-    @Override
-    public void setValue(BigDecimal value) {
-        this.value = value;
-    }
-
-    @Override
-    public String getScript() {
-        return script;
-    }
-
-    @Override
-    public void setScript(String script) {
-        this.script = script;
-    }
-
-    @Override
-    public String getAddress() {
-        return address;
-    }
-
-    @Override
-    public void setAddress(String address) {
-        this.address = address;
-    }
 }

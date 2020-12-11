@@ -1,8 +1,17 @@
 package io.tatum.model.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 import javax.validation.constraints.*;
 import java.util.Optional;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@EqualsAndHashCode
 public class EstimateGasVet {
 
     @NotEmpty
@@ -25,43 +34,4 @@ public class EstimateGasVet {
     @PositiveOrZero
     private Optional<Integer> nonce;
 
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    public void setTo(String to) {
-        this.to = to;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public Optional<String> getData() {
-        return data;
-    }
-
-    public void setData(Optional<String> data) {
-        this.data = data;
-    }
-
-    public Optional<Integer> getNonce() {
-        return nonce;
-    }
-
-    public void setNonce(Optional<Integer> nonce) {
-        this.nonce = nonce;
-    }
 }

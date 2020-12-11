@@ -1,11 +1,19 @@
 package io.tatum.model.request;
 
 import io.tatum.model.response.ledger.Fiat;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Optional;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@EqualsAndHashCode
 public class CreateAccount {
 
     @NotEmpty
@@ -28,59 +36,4 @@ public class CreateAccount {
 
     private Optional<CustomerUpdate> customer;
 
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public Optional<String> getXpub() {
-        return xpub;
-    }
-
-    public void setXpub(Optional<String> xpub) {
-        this.xpub = xpub;
-    }
-
-    public Optional<Boolean> getCompliant() {
-        return compliant;
-    }
-
-    public void setCompliant(Optional<Boolean> compliant) {
-        this.compliant = compliant;
-    }
-
-    public Optional<Fiat> getAccountingCurrency() {
-        return accountingCurrency;
-    }
-
-    public void setAccountingCurrency(Optional<Fiat> accountingCurrency) {
-        this.accountingCurrency = accountingCurrency;
-    }
-
-    public Optional<String> getAccountCode() {
-        return accountCode;
-    }
-
-    public void setAccountCode(Optional<String> accountCode) {
-        this.accountCode = accountCode;
-    }
-
-    public Optional<String> getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(Optional<String> accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    public Optional<CustomerUpdate> getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Optional<CustomerUpdate> customer) {
-        this.customer = customer;
-    }
 }
