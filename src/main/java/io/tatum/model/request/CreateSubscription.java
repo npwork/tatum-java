@@ -9,6 +9,9 @@ public class CreateSubscription {
     @NotEmpty
     private SubscriptionType type;
 
+    @NotEmpty
+    public ISubscriptionAttr attr;
+
     public SubscriptionType getType() {
         return type;
     }
@@ -16,9 +19,6 @@ public class CreateSubscription {
     public void setType(SubscriptionType type) {
         this.type = type;
     }
-
-    @NotEmpty
-    public ISubscriptionAttr attr;
 
     public ISubscriptionAttr getAttr() {
         return attr;
