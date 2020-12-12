@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
-public class BlockHash implements IBlockHash {
+public class BlockHash {
     private String hash;
 }

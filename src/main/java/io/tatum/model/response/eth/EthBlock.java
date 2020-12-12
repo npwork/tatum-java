@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
-public class EthBlock implements IEthBlock {
+public class EthBlock {
 
     private String difficulty;
     private String extraData;

@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
-public class BtcTx implements IBtcTx {
+public class BtcTx {
 
     private String hash;
     private String witnessHash;

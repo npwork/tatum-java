@@ -12,6 +12,7 @@ import io.tatum.utils.Async;
 import io.tatum.utils.Env;
 
 import java.io.IOException;
+import java.net.http.HttpResponse;
 import java.util.concurrent.ExecutionException;
 
 import static io.tatum.constants.Constant.TATUM_API_URL;
@@ -24,7 +25,7 @@ public class LedgerAccount {
     public Account getAccountById(String id) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ledger/account" + id;
-        String account = Async.get(uri, Env.getTatumApiKey());
+        var account = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new Account();
     }
@@ -41,7 +42,7 @@ public class LedgerAccount {
         var objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(account);
 
-        String acc = Async.post(uri, Env.getTatumApiKey(), requestBody);
+        HttpResponse res = Async.post(uri, Env.getTatumApiKey(), requestBody);
         // TO-DO
         return new Account();
     }
@@ -57,7 +58,7 @@ public class LedgerAccount {
         var objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(accounts);
 
-        String acc = Async.post(uri, Env.getTatumApiKey(), requestBody);
+        HttpResponse res = Async.post(uri, Env.getTatumApiKey(), requestBody);
         // TO-DO
         return new Account[]{};
     }
@@ -68,7 +69,7 @@ public class LedgerAccount {
     public Blockage[] getBlockedAmountsByAccountId(String id, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ledger/account/block/" + id + "?pageSize=" + pageSize + "&offset=" + offset;
-        String tx = Async.get(uri, Env.getTatumApiKey());
+        var tx = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new Blockage[]{};
     }
@@ -83,8 +84,8 @@ public class LedgerAccount {
         var objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(block);
 
-        String amount = Async.post(uri, Env.getTatumApiKey(), requestBody);
-        return amount;
+        HttpResponse amount = Async.post(uri, Env.getTatumApiKey(), requestBody);
+        return "amount";
     }
 
     /**
@@ -151,7 +152,7 @@ public class LedgerAccount {
     public Account[] getAccountsByCustomerId(String id, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ledger/account/customer/" + id + "?pageSize=" + pageSize + "&offset=" + offset;
-        String accounts = Async.get(uri, Env.getTatumApiKey());
+        var accounts = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new Account[]{};
     }
@@ -162,7 +163,7 @@ public class LedgerAccount {
     public Account[] getAllAccounts(Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ledger/account?pageSize=" + pageSize + "&offset=" + offset;
-        String accounts = Async.get(uri, Env.getTatumApiKey());
+        var accounts = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new Account[]{};
     }
@@ -173,7 +174,7 @@ public class LedgerAccount {
     public AccountBalance getAccountBalance(String id) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ledger/account/" + id + "/balance";
-        String balance = Async.get(uri, Env.getTatumApiKey());
+        var balance = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new AccountBalance();
     }

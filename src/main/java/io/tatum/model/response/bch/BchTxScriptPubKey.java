@@ -1,5 +1,6 @@
 package io.tatum.model.response.bch;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,7 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
-public class BchTxScriptPubKey implements IBchTxScriptPubKey {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class BchTxScriptPubKey {
 
     private String hex;
     private String asm;

@@ -10,6 +10,7 @@ import io.tatum.utils.Env;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.http.HttpResponse;
 import java.util.concurrent.ExecutionException;
 
 import static io.tatum.constants.Constant.TATUM_API_URL;
@@ -22,7 +23,7 @@ public class LedgerTransaction {
     public Transaction[] getTransactionsByReference(String reference) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ledger/transaction/reference/" + reference;
-        String tx = Async.get(uri, Env.getTatumApiKey());
+        var tx = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new Transaction[]{};
     }
@@ -38,9 +39,9 @@ public class LedgerTransaction {
         var objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(transaction);
 
-        String ref = Async.post(uri, Env.getTatumApiKey(), requestBody);
+        HttpResponse ref = Async.post(uri, Env.getTatumApiKey(), requestBody);
         // TO-DO reference: string
-        return ref;
+        return ref.toString();
     }
 
     /**
@@ -54,7 +55,7 @@ public class LedgerTransaction {
         var objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(filter);
 
-        String tx = Async.post(uri, Env.getTatumApiKey(), requestBody);
+        HttpResponse tx = Async.post(uri, Env.getTatumApiKey(), requestBody);
         // TO-DO
         return new Transaction[]{};
     }
@@ -70,7 +71,7 @@ public class LedgerTransaction {
         var objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(filter);
 
-        String tx = Async.post(uri, Env.getTatumApiKey(), requestBody);
+        HttpResponse tx = Async.post(uri, Env.getTatumApiKey(), requestBody);
         // TO-DO
         return new Transaction[]{};
     }
@@ -86,7 +87,7 @@ public class LedgerTransaction {
         var objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(filter);
 
-        String tx = Async.post(uri, Env.getTatumApiKey(), requestBody);
+        HttpResponse tx = Async.post(uri, Env.getTatumApiKey(), requestBody);
         // TO-DO
         return new Transaction[]{};
     }
@@ -102,9 +103,9 @@ public class LedgerTransaction {
         var objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(filter);
 
-        String count = Async.post(uri, Env.getTatumApiKey(), requestBody);
+        HttpResponse count = Async.post(uri, Env.getTatumApiKey(), requestBody);
         // TO-DO
-        return new BigDecimal(count);
+        return new BigDecimal(0);
     }
 
     /**
@@ -118,9 +119,9 @@ public class LedgerTransaction {
         var objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(filter);
 
-        String count = Async.post(uri, Env.getTatumApiKey(), requestBody);
+        HttpResponse count = Async.post(uri, Env.getTatumApiKey(), requestBody);
         // TO-DO
-        return new BigDecimal(count);
+        return new BigDecimal(0);
     }
 
     /**
@@ -134,8 +135,8 @@ public class LedgerTransaction {
         var objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(filter);
 
-        String count = Async.post(uri, Env.getTatumApiKey(), requestBody);
+        HttpResponse count = Async.post(uri, Env.getTatumApiKey(), requestBody);
         // TO-DO
-        return new BigDecimal(count);
+        return new BigDecimal(0);
     }
 }

@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
-public class BtcBlock implements IBtcBlock {
+public class BtcBlock {
 
     private String hash;
     private BigDecimal height;
@@ -22,6 +22,6 @@ public class BtcBlock implements IBtcBlock {
     private BigDecimal time;
     private BigDecimal bits;
     private BigDecimal nonce;
-    private IBtcTx[] txs;
+    private BtcTx[] txs;
 
 }

@@ -1,5 +1,11 @@
 package io.tatum.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.tatum.model.response.vet.VetBlock;
+
+import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -7,9 +13,11 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.concurrent.ExecutionException;
 
-public class Async {
+public class Async implements Serializable {
 
-    public static String post(String uri, String apiKey, String requestBody) throws ExecutionException, InterruptedException {
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    public static HttpResponse post(String uri, String apiKey, String requestBody) throws ExecutionException, InterruptedException {
         var request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
                 .timeout(Duration.ofSeconds(20))
@@ -23,8 +31,13 @@ public class Async {
                 .thenApply(response -> {
                     System.out.println(response.statusCode());
                     return response;
-                })
-                .thenApply(HttpResponse::body).get();
+                }).get();
+    }
+
+    public static HttpResponse post(String uri, String apiKey, Object body) throws ExecutionException, InterruptedException, IOException {
+        var objectMapper = new ObjectMapper();
+        String requestBody = objectMapper.writeValueAsString(body);
+        return Async.post(uri, apiKey, requestBody);
     }
 
     public static String put(String uri, String apiKey, String requestBody) throws ExecutionException, InterruptedException {
@@ -45,7 +58,33 @@ public class Async {
                 .thenApply(HttpResponse::body).get();
     }
 
-    public static String get(String uri, String apiKey) throws ExecutionException, InterruptedException {
+    public static <T> T get(String uri, String apiKey, Class<T> valueType) throws ExecutionException, InterruptedException {
+        var request = HttpRequest.newBuilder()
+                .uri(URI.create(uri))
+                .timeout(Duration.ofSeconds(20))
+                .header("Content-Type", "application/json")
+                .headers("x-api-key", apiKey)
+                .GET()
+                .build();
+
+        var client = HttpClient.newHttpClient();
+        return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(response -> {
+                    System.out.println(response.statusCode());
+//                    System.out.println(response.body());
+                    if (response.statusCode() == 200) {
+                        try {
+                            return objectMapper.readValue(response.body(), valueType);
+                        } catch (JsonProcessingException e) {
+                            e.printStackTrace();
+                            return null;
+                        }
+                    }
+                    return null;
+                }).get();
+    }
+
+    public static HttpResponse get(String uri, String apiKey) throws ExecutionException, InterruptedException {
         var request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
                 .timeout(Duration.ofSeconds(20))
@@ -59,8 +98,7 @@ public class Async {
                 .thenApply(response -> {
                     System.out.println(response.statusCode());
                     return response;
-                })
-                .thenApply(HttpResponse::body).get();
+                }).get();
     }
 
     public static String delete(String uri, String apiKey) throws ExecutionException, InterruptedException {

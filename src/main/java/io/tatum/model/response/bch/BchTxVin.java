@@ -11,11 +11,11 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
-public class BchTxVin implements IBchTxVin {
+public class BchTxVin {
 
     private String txid;
     private BigDecimal vout;
-    private IBchTxScriptSig scriptSig;
+    private BchTxScriptSig scriptSig;
     private String coinbase;
     private BigDecimal sequence;
 
