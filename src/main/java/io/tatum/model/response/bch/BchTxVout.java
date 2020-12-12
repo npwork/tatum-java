@@ -1,40 +1,20 @@
 package io.tatum.model.response.bch;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 
-public class BchTxVout implements IBchTxVout {
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@EqualsAndHashCode
+public class BchTxVout {
 
     private String value;
     private BigDecimal n;
-    private IBchTxScriptPubKey scriptPubKey;
+    private BchTxScriptPubKey scriptPubKey;
 
-    @Override
-    public String getValue() {
-        return value;
-    }
-
-    @Override
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    @Override
-    public BigDecimal getN() {
-        return n;
-    }
-
-    @Override
-    public void setN(BigDecimal n) {
-        this.n = n;
-    }
-
-    @Override
-    public IBchTxScriptPubKey getScriptPubKey() {
-        return scriptPubKey;
-    }
-
-    @Override
-    public void setScriptPubKey(IBchTxScriptPubKey scriptPubKey) {
-        this.scriptPubKey = scriptPubKey;
-    }
 }

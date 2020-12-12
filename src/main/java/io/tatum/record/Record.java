@@ -19,7 +19,7 @@ public class Record {
     public Rate getLogRecord(Currency chain, String id) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/record?chain=" + chain.getCurrency() + "&id=" + id;
-        String record = Async.get(uri, Env.getTatumApiKey());
+        var record = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         return new Rate();
     }
