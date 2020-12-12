@@ -1,6 +1,5 @@
 package io.tatum.model.response.btc;
 
-import io.tatum.model.response.common.IUTXO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,7 +11,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
-public class BtcUTXO implements IUTXO {
+public class BtcUTXO {
 
     private BigDecimal version;
     private BigDecimal height;

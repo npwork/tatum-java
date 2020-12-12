@@ -1,5 +1,6 @@
 package io.tatum.model.response.bch;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,12 +12,13 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
-public class BchTx implements IBchTx {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class BchTx {
 
     private String txid;
     private BigDecimal version;
     private BigDecimal locktime;
-    private IBchTxVin[] vin;
-    private IBchTxVout[] vout;
+    private BchTxVin[] vin;
+    private BchTxVout[] vout;
 
 }

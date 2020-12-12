@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
-public class BchTxScriptSig implements IBchTxScriptSig {
+public class BchTxScriptSig {
 
     private String hex;
     private String asm;

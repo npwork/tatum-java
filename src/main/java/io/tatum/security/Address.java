@@ -18,7 +18,7 @@ public class Address {
     public String checkMaliciousAddress(String address) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/security/address" + address;
-        String addr = Async.get(uri, Env.getTatumApiKey());
+        var addr = Async.get(uri, Env.getTatumApiKey());
         // TO-DO
         // { status: string }
         return "status";

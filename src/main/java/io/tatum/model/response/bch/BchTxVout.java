@@ -11,10 +11,10 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
-public class BchTxVout implements IBchTxVout {
+public class BchTxVout {
 
     private String value;
     private BigDecimal n;
-    private IBchTxScriptPubKey scriptPubKey;
+    private BchTxScriptPubKey scriptPubKey;
 
 }

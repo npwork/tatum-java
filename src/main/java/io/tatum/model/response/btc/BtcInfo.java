@@ -1,6 +1,5 @@
 package io.tatum.model.response.btc;
 
-import io.tatum.model.response.common.IChainInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,7 +11,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
-public class BtcInfo implements IChainInfo {
+public class BtcInfo {
 
     private String chain;
     private BigDecimal blocks;
