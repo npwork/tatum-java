@@ -2,21 +2,15 @@ package io.tatum.ledger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Strings;
 import io.tatum.model.request.CreateSubscription;
 import io.tatum.model.response.ledger.Account;
 import io.tatum.model.response.ledger.Subscription;
 import io.tatum.model.response.ledger.Transaction;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
-import io.tatum.utils.Env;
 
 import java.io.IOException;
-import java.net.http.HttpResponse;
-import java.util.Base64;
 import java.util.concurrent.ExecutionException;
-
-import static io.tatum.constants.Constant.TATUM_API_URL;
 
 public class LedgerSubscription {
 

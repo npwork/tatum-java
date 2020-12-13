@@ -1,17 +1,14 @@
 package io.tatum.security;
 
-import com.google.common.base.Strings;
 import io.tatum.model.request.Currency;
 import io.tatum.model.response.kms.TransactionKMS;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
-import io.tatum.utils.Env;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import static io.tatum.constants.Constant.EMPTY_BODY;
-import static io.tatum.constants.Constant.TATUM_API_URL;
 
 public class KMS {
 
