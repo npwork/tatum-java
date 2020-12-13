@@ -71,7 +71,12 @@ public class Async implements Serializable {
         return Async.post(uri, requestBody, valueType);
     }
 
-    public static String put(String uri, String apiKey, String requestBody) throws ExecutionException, InterruptedException {
+    public static String put(String uri, Object body) throws JsonProcessingException, ExecutionException, InterruptedException {
+        String requestBody = objectMapper.writeValueAsString(body);
+        return Async.put(uri, requestBody);
+    }
+
+    public static String put(String uri, String requestBody) throws ExecutionException, InterruptedException {
         var request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
                 .timeout(Duration.ofSeconds(20))

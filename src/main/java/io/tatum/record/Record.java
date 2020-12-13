@@ -3,8 +3,8 @@ package io.tatum.record;
 import com.google.common.base.Strings;
 import io.tatum.model.request.Currency;
 import io.tatum.model.response.common.Rate;
-import io.tatum.model.response.ledger.Blockage;
 import io.tatum.utils.Async;
+import io.tatum.utils.BaseUrl;
 import io.tatum.utils.Env;
 
 import java.io.IOException;
@@ -17,10 +17,7 @@ public class Record {
      * For more details, see <a href="https://tatum.io/apidoc#operation/GetLog" target="_blank">Tatum API documentation</a>
      */
     public Rate getLogRecord(Currency chain, String id) throws IOException, ExecutionException, InterruptedException {
-        String tatumApiUrl = Env.getTatumApiUrl();
-        String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/record?chain=" + chain.getCurrency() + "&id=" + id;
-        var record = Async.get(uri, Env.getTatumApiKey());
-        // TO-DO
-        return new Rate();
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/record?chain=" + chain.getCurrency() + "&id=" + id;
+        return Async.get(uri, Rate.class);
     }
 }
