@@ -18,6 +18,6 @@ public class CreateSubscription {
     private SubscriptionType type;
 
     @NotEmpty
-    public ISubscriptionAttr attr;
+    private Object attr;
 
 }

@@ -27,9 +27,9 @@ public final class Bitcoin {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/BtcGetBlockChainInfo" target="_blank">Tatum API documentation</a>
      */
-    public BtcInfo btcGetCurrentBlock() throws IOException, ExecutionException, InterruptedException {
+    public BtcInfo btcGetCurrentBlock() throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/bitcoin/info";
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), BtcInfo.class);
+        return Async.get(uri, BtcInfo.class);
     }
 
     /**
@@ -37,7 +37,7 @@ public final class Bitcoin {
      */
     public BtcBlock btcGetBlock(String hash) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/bitcoin/block/" + hash;
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), BtcBlock.class);
+        return Async.get(uri, BtcBlock.class);
     }
 
     /**
@@ -45,30 +45,32 @@ public final class Bitcoin {
      */
     public BlockHash btcGetBlockHash(BigDecimal i) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/bitcoin/block/hash/" + i;
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), BlockHash.class);
+        return Async.get(uri, BlockHash.class);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/BtcGetUTXO" target="_blank">Tatum API documentation</a>
      */
-    public BtcUTXO btcGetUTXO(String hash, BigDecimal i) throws IOException, ExecutionException, InterruptedException {
+    public BtcUTXO btcGetUTXO(String hash, BigDecimal i) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/bitcoin/utxo/" + hash + "/" + i;
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), BtcUTXO.class);
+        return Async.get(uri, BtcUTXO.class);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/BtcGetTxByAddress" target="_blank">Tatum API documentation</a>
      */
-    public BtcTx[] btcGetTxForAccount(String address, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().getUrl() + "/v3/bitcoin/transaction/address/" + address + "?pageSize=" + pageSize + "&offset=" + offset;
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), BtcTx[].class);
+    public BtcTx[] btcGetTxForAccount(String address, Integer pageSize, Integer offset) throws ExecutionException, InterruptedException {
+        Integer _pageSize = (pageSize == null || pageSize < 0 || pageSize > 50) ? 50 : pageSize;
+        Integer _offset = (offset == null || offset < 0) ? 0 : offset;
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/bitcoin/transaction/address/" + address + "?pageSize=" + _pageSize + "&offset=" + _offset;
+        return Async.get(uri, BtcTx[].class);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/BtcGetRawTransaction" target="_blank">Tatum API documentation</a>
      */
-    public BtcTx btcGetTransaction(String hash) throws IOException, ExecutionException, InterruptedException {
+    public BtcTx btcGetTransaction(String hash) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/bitcoin/transaction/" + hash;
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), BtcTx.class);
+        return Async.get(uri, BtcTx.class);
     }
 }

@@ -19,37 +19,37 @@ import java.math.BigDecimal;
 public class TransactionFilter {
 
     @Size(min = 1, max = 50)
-    private Optional<String> id;
+    private String id;
 
     @Min(0)
-    private Optional<BigDecimal> from;
+    private BigDecimal from;
 
     @Min(0)
-    private Optional<BigDecimal> to;
+    private BigDecimal to;
 
     @Size(min = 1, max = 50)
-    private Optional<String> account;
+    private String account;
 
     @Size(min = 1, max = 50)
-    private Optional<String> counterAccount;
+    private String counterAccount;
 
     @Size(min = 1, max = 50)
-    private Optional<String> currency;
+    private String currency;
 
     @Size(min = 1, max = 100)
-    private Optional<String> paymentId;
+    private String paymentId;
 
     @Size(min = 1, max = 100)
-    private Optional<String> transactionCode;
+    private String transactionCode;
 
     @Size(min = 1, max = 500)
-    private Optional<String> senderNote;
+    private String senderNote;
 
     @Size(min = 1, max = 500)
-    private Optional<String> recipientNote;
+    private String recipientNote;
 
-    private Optional<OperationType> opType;
+    private OperationType opType;
 
-    private Optional<TransactionType> transactionType;
+    private TransactionType transactionType;
 
 }
