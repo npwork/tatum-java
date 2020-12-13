@@ -1,7 +1,16 @@
 package io.tatum.model.response.vet;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@EqualsAndHashCode
 public class VetEstimateGas {
 
     /**
@@ -11,28 +20,12 @@ public class VetEstimateGas {
      */
     private String from;
 
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
     /**
      * Recipient
      * @type {string}
      * @memberof VetEstimateGas
      */
     private String to;
-
-    public String getTo() {
-        return to;
-    }
-
-    public void setTo(String to) {
-        this.to = to;
-    }
 
     /**
      * Amount to send
@@ -41,28 +34,12 @@ public class VetEstimateGas {
      */
     private String value;
 
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
     /**
      * Data to send to Smart Contract
      * @type {string}
      * @memberof VetEstimateGas
      */
     private String data;
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
 
     /**
      * Nonce
@@ -71,11 +48,4 @@ public class VetEstimateGas {
      */
     private BigDecimal nonce;
 
-    public BigDecimal getNonce() {
-        return nonce;
-    }
-
-    public void setNonce(BigDecimal nonce) {
-        this.nonce = nonce;
-    }
 }

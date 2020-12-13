@@ -1,7 +1,16 @@
 package io.tatum.model.response.vet;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@EqualsAndHashCode
 public class VetTxReceiptOutputs {
 
     /**
@@ -11,14 +20,6 @@ public class VetTxReceiptOutputs {
      */
     private List[] events;
 
-    public List[] getEvents() {
-        return events;
-    }
-
-    public void setEvents(List[] events) {
-        this.events = events;
-    }
-
     /**
      *
      * @type {Array<VetTxReceiptTransfers>}
@@ -26,11 +27,4 @@ public class VetTxReceiptOutputs {
      */
     private VetTxReceiptTransfers[] transfers;
 
-    public VetTxReceiptTransfers[] getTransfers() {
-        return transfers;
-    }
-
-    public void setTransfers(VetTxReceiptTransfers[] transfers) {
-        this.transfers = transfers;
-    }
 }

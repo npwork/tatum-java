@@ -1,7 +1,16 @@
 package io.tatum.model.response.vet;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@EqualsAndHashCode
 public class VetTxReceiptMeta {
     /**
      *
@@ -10,28 +19,12 @@ public class VetTxReceiptMeta {
      */
     private String blockID;
 
-    public String getBlockID() {
-        return blockID;
-    }
-
-    public void setBlockID(String blockID) {
-        this.blockID = blockID;
-    }
-
     /**
      *
      * @type {number}
      * @memberof VetTxReceiptMeta
      */
     private BigDecimal blockNumber;
-
-    public BigDecimal getBlockNumber() {
-        return blockNumber;
-    }
-
-    public void setBlockNumber(BigDecimal blockNumber) {
-        this.blockNumber = blockNumber;
-    }
 
     /**
      *
@@ -40,28 +33,12 @@ public class VetTxReceiptMeta {
      */
     private BigDecimal blockTimestamp;
 
-    public BigDecimal getBlockTimestamp() {
-        return blockTimestamp;
-    }
-
-    public void setBlockTimestamp(BigDecimal blockTimestamp) {
-        this.blockTimestamp = blockTimestamp;
-    }
-
     /**
      *
      * @type {string}
      * @memberof VetTxReceiptMeta
      */
     private String txID;
-
-    public String getTxID() {
-        return txID;
-    }
-
-    public void setTxID(String txID) {
-        this.txID = txID;
-    }
 
     /**
      *
@@ -70,11 +47,4 @@ public class VetTxReceiptMeta {
      */
     private String txOrigin;
 
-    public String getTxOrigin() {
-        return txOrigin;
-    }
-
-    public void setTxOrigin(String txOrigin) {
-        this.txOrigin = txOrigin;
-    }
 }

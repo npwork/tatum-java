@@ -2,6 +2,7 @@ package io.tatum.blockchain;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.tatum.model.response.common.TransactionHash;
+import io.tatum.model.response.eth.Balance;
 import io.tatum.model.response.eth.EthBlock;
 import io.tatum.model.response.eth.EthTx;
 import io.tatum.utils.ApiKey;
@@ -29,16 +30,7 @@ public final class Ethereum {
      */
     public BigDecimal ethGetTransactionsCount(String address) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/transaction/count/" + address;
-        HttpResponse res = Async.get(uri, ApiKey.getInstance().getApiKey());
-
-        BigDecimal count = BigDecimal.ZERO;
-        if (res.statusCode() == 200) {
-            var objectMapper = new ObjectMapper();
-            String json = objectMapper.writeValueAsString (res.body());
-            count = new BigDecimal(json);
-        }
-
-        return count;
+        return Async.get(uri, BigDecimal.class);
     }
 
     /**
@@ -46,16 +38,7 @@ public final class Ethereum {
      */
     public BigDecimal ethGetCurrentBlock() throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/block/current";
-        HttpResponse res = Async.get(uri, ApiKey.getInstance().getApiKey());
-
-        BigDecimal block = BigDecimal.ZERO;
-        if (res.statusCode() == 200) {
-            var objectMapper = new ObjectMapper();
-            String json = objectMapper.writeValueAsString (res.body());
-            block = new BigDecimal(json);
-        }
-
-        return block;
+        return Async.get(uri, BigDecimal.class);
     }
 
     /**
@@ -71,15 +54,11 @@ public final class Ethereum {
      */
     public BigDecimal ethGetAccountBalance(String address) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/account/balance" + address;
-        HttpResponse res = Async.get(uri, ApiKey.getInstance().getApiKey());
-
-        BigDecimal balance = BigDecimal.ZERO;
-        if (res.statusCode() == 200) {
-            var jsonObject = new JSONObject(res.body());
-            String bal = jsonObject.getString("balance");
-            balance = new BigDecimal(bal);
+        Balance res = Async.get(uri, Balance.class);
+        if (res != null) {
+            return res.getBalance();
         }
-        return balance;
+        return null;
     }
 
     /**
@@ -87,15 +66,11 @@ public final class Ethereum {
      */
     public BigDecimal ethGetAccountErc20Address(String address, String contractAddress) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/account/balance/erc20/" + address + "?contractAddress=" + contractAddress;
-        HttpResponse res = Async.get(uri, ApiKey.getInstance().getApiKey());
-
-        BigDecimal balance = BigDecimal.ZERO;
-        if (res.statusCode() == 200) {
-            var jsonObject = new JSONObject(res.body());
-            String bal = jsonObject.getString("balance");
-            balance = new BigDecimal(bal);
+        Balance res = Async.get(uri, Balance.class);
+        if (res != null) {
+            return res.getBalance();
         }
-        return balance;
+        return null;
     }
 
     /**

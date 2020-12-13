@@ -1,5 +1,14 @@
 package io.tatum.model.response.vet;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@EqualsAndHashCode
 public class VetTxReceiptTransfers {
 
     /**
@@ -9,28 +18,12 @@ public class VetTxReceiptTransfers {
      */
     private String sender;
 
-    public String getSender() {
-        return sender;
-    }
-
-    public void setSender(String sender) {
-        this.sender = sender;
-    }
-
     /**
      *
      * @type {string}
      * @memberof VetTxReceiptTransfers
      */
     private String recipient;
-
-    public String getRecipient() {
-        return recipient;
-    }
-
-    public void setRecipient(String recipient) {
-        this.recipient = recipient;
-    }
 
     /**
      *
@@ -39,11 +32,4 @@ public class VetTxReceiptTransfers {
      */
     private String amount;
 
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
 }
