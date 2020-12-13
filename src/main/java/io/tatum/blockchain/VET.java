@@ -28,7 +28,7 @@ public class VET {
      * For more details, see <a href="https://tatum.io/apidoc#operation/VetBroadcast" target="_blank">Tatum API documentation</a>
      */
     public TransactionHash vetBroadcast(String txData, String signatureId) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().url + "/v3/vet/broadcast";
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/broadcast";
         TransactionHash hash = BlockchainUtil.broadcast(uri, txData, signatureId);
         return hash;
     }
@@ -39,16 +39,16 @@ public class VET {
     public VetEstimateGas vetEstimateGas(EstimateGasVet body) throws IOException, ExecutionException, InterruptedException {
         // TO-DO
         // await validateOrReject(body);
-        String uri = BaseUrl.getInstance().url + "/v3/vet/broadcast/transaction/gas";
-        return Async.get(uri, ApiKey.getInstance().apiKey, VetEstimateGas.class);
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/broadcast/transaction/gas";
+        return Async.get(uri, ApiKey.getInstance().getApiKey(), VetEstimateGas.class);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/VetGetCurrentBlock" target="_blank">Tatum API documentation</a>
      */
     public BigDecimal vetGetCurrentBlock() throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().url + "/v3/vet/current";
-        var res = Async.get(uri, ApiKey.getInstance().apiKey);
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/current";
+        var res = Async.get(uri, ApiKey.getInstance().getApiKey());
 
         var block = BigDecimal.ZERO;
         if (res.statusCode() == 200) {
@@ -64,16 +64,16 @@ public class VET {
      * For more details, see <a href="https://tatum.io/apidoc#operation/VetGetBlock" target="_blank">Tatum API documentation</a>
      */
     public VetBlock vetGetBlock(String hash) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().url + "/v3/vet/block/" + hash;
-        return Async.get(uri, ApiKey.getInstance().apiKey, VetBlock.class);
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/block/" + hash;
+        return Async.get(uri, ApiKey.getInstance().getApiKey(), VetBlock.class);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/VetGetBalance" target="_blank">Tatum API documentation</a>
      */
     public BigDecimal vetGetAccountBalance(String address) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().url + "/v3/vet/account/balance/" + address;
-        var res = Async.get(uri, ApiKey.getInstance().apiKey);
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/account/balance/" + address;
+        var res = Async.get(uri, ApiKey.getInstance().getApiKey());
 
         var balance = BigDecimal.ZERO;
         if (res.statusCode() == 200) {
@@ -90,8 +90,8 @@ public class VET {
      * For more details, see <a href="https://tatum.io/apidoc#operation/VetGetEnergy" target="_blank">Tatum API documentation</a>
      */
     public BigDecimal vetGetAccountEnergy(String address) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().url + "/v3/vet/account/energy/" + address;
-        var energy = Async.get(uri, ApiKey.getInstance().apiKey);
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/account/energy/" + address;
+        var energy = Async.get(uri, ApiKey.getInstance().getApiKey());
         // TO-DO
         return new BigDecimal(0);
 
@@ -101,16 +101,16 @@ public class VET {
      * For more details, see <a href="https://tatum.io/apidoc#operation/VetGetTransaction" target="_blank">Tatum API documentation</a>
      */
     public VetTx vetGetTransaction(String hash) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().url + "/v3/vet/transaction/" + hash;
-        return Async.get(uri, ApiKey.getInstance().apiKey, VetTx.class);
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/transaction/" + hash;
+        return Async.get(uri, ApiKey.getInstance().getApiKey(), VetTx.class);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/VetGetTransactionReceipt" target="_blank">Tatum API documentation</a>
      */
     public VetTxReceipt vetGetTransactionReceipt(String hash) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().url + "/v3/vet/transaction/" + hash + "/receipt";
-        return Async.get(uri, ApiKey.getInstance().apiKey, VetTxReceipt.class);
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/transaction/" + hash + "/receipt";
+        return Async.get(uri, ApiKey.getInstance().getApiKey(), VetTxReceipt.class);
     }
 
 }
