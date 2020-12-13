@@ -1,7 +1,16 @@
 package io.tatum.model.response.vet;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@EqualsAndHashCode
 public class VetTxMeta {
 
     /**
@@ -11,28 +20,12 @@ public class VetTxMeta {
      */
     private String blockID;
 
-    public String getBlockID() {
-        return blockID;
-    }
-
-    public void setBlockID(String blockID) {
-        this.blockID = blockID;
-    }
-
     /**
      *
      * @type {number}
      * @memberof VetTxMeta
      */
     private BigDecimal blockNumber;
-
-    public BigDecimal getBlockNumber() {
-        return blockNumber;
-    }
-
-    public void setBlockNumber(BigDecimal blockNumber) {
-        this.blockNumber = blockNumber;
-    }
 
     /**
      *
@@ -41,11 +34,4 @@ public class VetTxMeta {
      */
     private BigDecimal blockTimestamp;
 
-    public BigDecimal getBlockTimestamp() {
-        return blockTimestamp;
-    }
-
-    public void setBlockTimestamp(BigDecimal blockTimestamp) {
-        this.blockTimestamp = blockTimestamp;
-    }
 }

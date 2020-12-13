@@ -4,11 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import io.tatum.model.request.EstimateGasVet;
 import io.tatum.model.response.common.TransactionHash;
+import io.tatum.model.response.eth.Balance;
 import io.tatum.model.response.ltc.LtcInfo;
-import io.tatum.model.response.vet.VetBlock;
-import io.tatum.model.response.vet.VetEstimateGas;
-import io.tatum.model.response.vet.VetTx;
-import io.tatum.model.response.vet.VetTxReceipt;
+import io.tatum.model.response.vet.*;
 import io.tatum.utils.ApiKey;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
@@ -48,16 +46,11 @@ public class VET {
      */
     public BigDecimal vetGetCurrentBlock() throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/current";
-        var res = Async.get(uri, ApiKey.getInstance().getApiKey());
-
-        var block = BigDecimal.ZERO;
-        if (res.statusCode() == 200) {
-            var objectMapper = new ObjectMapper();
-            var value =  objectMapper.writeValueAsString(res.body());
-            block = new BigDecimal(value);
+        var res = Async.get(uri, String.class);
+        if (res != null) {
+            return new BigDecimal(res);
         }
-
-        return block;
+        return null;
     }
 
     /**
@@ -73,17 +66,11 @@ public class VET {
      */
     public BigDecimal vetGetAccountBalance(String address) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/account/balance/" + address;
-        var res = Async.get(uri, ApiKey.getInstance().getApiKey());
-
-        var balance = BigDecimal.ZERO;
-        if (res.statusCode() == 200) {
-            var objectMapper = new ObjectMapper();
-            var json = objectMapper.writeValueAsString(res.body());
-            JSONObject jsonObject = new JSONObject(json);
-            balance = new BigDecimal(jsonObject.getString("balance"));
+        Balance res = Async.get(uri, Balance.class);
+        if (res != null) {
+            return res.getBalance();
         }
-
-        return balance;
+        return null;
     }
 
     /**
@@ -91,9 +78,11 @@ public class VET {
      */
     public BigDecimal vetGetAccountEnergy(String address) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/account/energy/" + address;
-        var energy = Async.get(uri, ApiKey.getInstance().getApiKey());
-        // TO-DO
-        return new BigDecimal(0);
+        var energy = Async.get(uri, Energy.class);
+        if (energy != null) {
+            return energy.getEnergy();
+        }
+        return null;
 
     }
 
