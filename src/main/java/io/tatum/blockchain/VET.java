@@ -1,24 +1,15 @@
 package io.tatum.blockchain;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Strings;
 import io.tatum.model.request.EstimateGasVet;
 import io.tatum.model.response.common.TransactionHash;
 import io.tatum.model.response.eth.Balance;
-import io.tatum.model.response.ltc.LtcInfo;
 import io.tatum.model.response.vet.*;
-import io.tatum.utils.ApiKey;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
-import io.tatum.utils.Env;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.http.HttpResponse;
 import java.util.concurrent.ExecutionException;
-
-import static io.tatum.constants.Constant.TATUM_API_URL;
 
 public class VET {
 

@@ -1,18 +1,12 @@
 package io.tatum.ledger;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Strings;
 import io.tatum.model.request.OrderBookRequest;
 import io.tatum.model.response.ledger.OrderBookResponse;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
-import io.tatum.utils.Env;
 
 import java.io.IOException;
-import java.net.http.HttpResponse;
 import java.util.concurrent.ExecutionException;
-
-import static io.tatum.constants.Constant.TATUM_API_URL;
 
 public class OrderBook {
 

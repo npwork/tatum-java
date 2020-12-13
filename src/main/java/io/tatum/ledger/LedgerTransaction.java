@@ -1,21 +1,15 @@
 package io.tatum.ledger;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Strings;
 import io.tatum.model.request.CreateTransaction;
 import io.tatum.model.request.TransactionFilter;
 import io.tatum.model.response.ledger.Reference;
 import io.tatum.model.response.ledger.Transaction;
-import io.tatum.utils.ApiKey;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
-import io.tatum.utils.Env;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.concurrent.ExecutionException;
-
-import static io.tatum.constants.Constant.TATUM_API_URL;
 
 public class LedgerTransaction {
 
