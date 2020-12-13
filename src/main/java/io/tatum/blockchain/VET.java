@@ -40,7 +40,7 @@ public class VET {
         // TO-DO
         // await validateOrReject(body);
         String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/broadcast/transaction/gas";
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), VetEstimateGas.class);
+        return Async.get(uri, VetEstimateGas.class);
     }
 
     /**
@@ -65,7 +65,7 @@ public class VET {
      */
     public VetBlock vetGetBlock(String hash) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/block/" + hash;
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), VetBlock.class);
+        return Async.get(uri, VetBlock.class);
     }
 
     /**
@@ -102,7 +102,7 @@ public class VET {
      */
     public VetTx vetGetTransaction(String hash) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/transaction/" + hash;
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), VetTx.class);
+        return Async.get(uri, VetTx.class);
     }
 
     /**
@@ -110,7 +110,7 @@ public class VET {
      */
     public VetTxReceipt vetGetTransactionReceipt(String hash) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/transaction/" + hash + "/receipt";
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), VetTxReceipt.class);
+        return Async.get(uri, VetTxReceipt.class);
     }
 
 }

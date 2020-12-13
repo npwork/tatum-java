@@ -29,7 +29,7 @@ public final class Litecoin {
      */
     public LtcInfo ltcGetCurrentBlock() throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/litecoin/info";
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), LtcInfo.class);
+        return Async.get(uri, LtcInfo.class);
     }
 
     /**
@@ -37,7 +37,7 @@ public final class Litecoin {
      */
     public LtcBlock ltcGetBlock(String hash) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/litecoin/block/" + hash;
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), LtcBlock.class);
+        return Async.get(uri, LtcBlock.class);
     }
 
     /**
@@ -45,7 +45,7 @@ public final class Litecoin {
      */
     public BlockHash ltcGetBlockHash(BigDecimal i) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/litecoin/block/hash/" + i;
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), BlockHash.class);
+        return Async.get(uri, BlockHash.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public final class Litecoin {
      */
     public LtcUTXO ltcGetUTXO(String hash, BigDecimal i) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/litecoin/utxo/" + hash + "/" + i;
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), LtcUTXO.class);
+        return Async.get(uri, LtcUTXO.class);
     }
 
     /**
@@ -61,7 +61,7 @@ public final class Litecoin {
      */
     public LtcTx[] ltcGetTxForAccount(String address, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/litecoin/transaction/address/" + address + "?pageSize=" + pageSize + "&offset=" + offset;
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), LtcTx[].class);
+        return Async.get(uri, LtcTx[].class);
     }
 
     /**
@@ -69,7 +69,7 @@ public final class Litecoin {
      */
     public LtcTx ltcGetTransaction(String hash) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/litecoin/transaction/" + hash;
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), LtcTx.class);
+        return Async.get(uri, LtcTx.class);
     }
 
 }

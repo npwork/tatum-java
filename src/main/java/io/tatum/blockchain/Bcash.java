@@ -28,7 +28,7 @@ public final class Bcash {
      */
     public BchInfo bcashGetCurrentBlock() throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/bcash/info";
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), BchInfo.class);
+        return Async.get(uri, BchInfo.class);
     }
 
     /**
@@ -36,7 +36,7 @@ public final class Bcash {
      */
     public BchBlock bcashGetBlock(String hash) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/bcash/block/" + hash;
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), BchBlock.class);
+        return Async.get(uri, BchBlock.class);
     }
 
     /**
@@ -44,7 +44,7 @@ public final class Bcash {
      */
     public BlockHash bcashGetBlockHash(BigDecimal i) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/bcash/block/hash/" + i;
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), BlockHash.class);
+        return Async.get(uri, BlockHash.class);
     }
 
     /**
@@ -52,7 +52,7 @@ public final class Bcash {
      */
     public BchTx[] bcashGetTxForAccount(String address, BigDecimal skip) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/bcash/transaction/address/" + address + "?skip=" + skip;
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), BchTx[].class);
+        return Async.get(uri, BchTx[].class);
     }
 
     /**
@@ -60,7 +60,7 @@ public final class Bcash {
      */
     public BchTx bcashGetTransaction(String hash) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/bcash/transaction/" + hash;
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), BchTx.class);
+        return Async.get(uri, BchTx.class);
     }
 
 }

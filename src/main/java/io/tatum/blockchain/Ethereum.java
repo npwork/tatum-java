@@ -63,7 +63,7 @@ public final class Ethereum {
      */
     public EthBlock ethGetBlock(String hash) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/block/" + hash;
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), EthBlock.class);
+        return Async.get(uri, EthBlock.class);
     }
 
     /**
@@ -103,7 +103,7 @@ public final class Ethereum {
      */
     public EthTx ethGetTransaction(String hash) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/transaction/" + hash;
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), EthTx.class);
+        return Async.get(uri, EthTx.class);
     }
 
     /**
@@ -111,6 +111,6 @@ public final class Ethereum {
      */
     public EthTx[] ethGetAccountTransactions(String address, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/transaction/" + address + "?pageSize=" + pageSize + "&offset=" + offset;
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), EthTx[].class);
+        return Async.get(uri, EthTx[].class);
     }
 }

@@ -26,7 +26,7 @@ public class XLM {
      */
     public Account xlmGetAccountInfo(String account) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/account/" + account;
-        return Async.get(uri, ApiKey.getInstance().getApiKey(), Account.class);
+        return Async.get(uri, Account.class);
 
     }
 

@@ -94,7 +94,7 @@ public class LedgerAccount {
     public void deleteBlockedAmount(String id) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ledger/account/block/" + id;
-        Async.delete(uri, Env.getTatumApiKey());
+        Async.delete(uri);
     }
 
     /**
@@ -103,7 +103,7 @@ public class LedgerAccount {
     public void deleteBlockedAmountForAccount(String id) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/ledger/account/block/acoount/" + id;
-        Async.delete(uri, Env.getTatumApiKey());
+        Async.delete(uri);
     }
 
     /**

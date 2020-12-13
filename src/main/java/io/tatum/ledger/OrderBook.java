@@ -79,7 +79,7 @@ public class OrderBook {
     public void deleteTrade(String id) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/trade/" + id;
-        Async.delete(uri, Env.getTatumApiKey());
+        Async.delete(uri);
     }
 
     /**
@@ -88,6 +88,6 @@ public class OrderBook {
     public void deleteAccountTrades(String id) throws IOException, ExecutionException, InterruptedException {
         String tatumApiUrl = Env.getTatumApiUrl();
         String uri = (Strings.isNullOrEmpty(tatumApiUrl) ? TATUM_API_URL : tatumApiUrl) + "/v3/trade/account/" + id;
-        Async.delete(uri, Env.getTatumApiKey());
+        Async.delete(uri);
     }
 }

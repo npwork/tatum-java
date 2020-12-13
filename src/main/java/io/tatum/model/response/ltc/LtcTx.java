@@ -1,7 +1,7 @@
 package io.tatum.model.response.ltc;
 
-import io.tatum.model.response.common.ITxInputs;
-import io.tatum.model.response.common.ITxOutputs;
+import io.tatum.model.response.btc.BtcTxInputs;
+import io.tatum.model.response.btc.BtcTxOutputs;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,9 +24,9 @@ public class LtcTx {
     private String block;
     private BigDecimal ts;
     private BigDecimal index;
-    private ITxOutputs[] outputs;
+    private BtcTxOutputs[] outputs;
     private BigDecimal flag;
-    private ITxInputs[] inputs;
+    private BtcTxInputs[] inputs;
     private BigDecimal version;
     private BigDecimal locktime;
 
