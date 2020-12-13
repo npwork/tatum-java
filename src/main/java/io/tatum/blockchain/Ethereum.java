@@ -7,7 +7,6 @@ import io.tatum.model.response.eth.EthTx;
 import io.tatum.utils.ApiKey;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
-import io.tatum.utils.Env;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -21,7 +20,7 @@ public final class Ethereum {
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthBroadcast" target="_blank">Tatum API documentation</a>
      */
     public TransactionHash ethBroadcast(final String txData, final String signatureId) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().url + "/v3/ethereum/broadcast";
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/broadcast";
         return BlockchainUtil.broadcast(uri, txData, signatureId);
     }
 
@@ -29,8 +28,8 @@ public final class Ethereum {
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetTransactionCount" target="_blank">Tatum API documentation</a>
      */
     public BigDecimal ethGetTransactionsCount(String address) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().url + "/v3/ethereum/transaction/count/" + address;
-        HttpResponse res = Async.get(uri, ApiKey.getInstance().apiKey);
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/transaction/count/" + address;
+        HttpResponse res = Async.get(uri, ApiKey.getInstance().getApiKey());
 
         BigDecimal count = BigDecimal.ZERO;
         if (res.statusCode() == 200) {
@@ -46,8 +45,8 @@ public final class Ethereum {
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetCurrentBlock" target="_blank">Tatum API documentation</a>
      */
     public BigDecimal ethGetCurrentBlock() throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().url + "/v3/ethereum/block/current";
-        HttpResponse res = Async.get(uri, ApiKey.getInstance().apiKey);
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/block/current";
+        HttpResponse res = Async.get(uri, ApiKey.getInstance().getApiKey());
 
         BigDecimal block = BigDecimal.ZERO;
         if (res.statusCode() == 200) {
@@ -63,16 +62,16 @@ public final class Ethereum {
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetBlock" target="_blank">Tatum API documentation</a>
      */
     public EthBlock ethGetBlock(String hash) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().url + "/v3/ethereum/block/" + hash;
-        return Async.get(uri, ApiKey.getInstance().apiKey, EthBlock.class);
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/block/" + hash;
+        return Async.get(uri, ApiKey.getInstance().getApiKey(), EthBlock.class);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetBalance" target="_blank">Tatum API documentation</a>
      */
     public BigDecimal ethGetAccountBalance(String address) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().url + "/v3/ethereum/account/balance" + address;
-        HttpResponse res = Async.get(uri, ApiKey.getInstance().apiKey);
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/account/balance" + address;
+        HttpResponse res = Async.get(uri, ApiKey.getInstance().getApiKey());
 
         BigDecimal balance = BigDecimal.ZERO;
         if (res.statusCode() == 200) {
@@ -87,8 +86,8 @@ public final class Ethereum {
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthErc20GetBalance" target="_blank">Tatum API documentation</a>
      */
     public BigDecimal ethGetAccountErc20Address(String address, String contractAddress) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().url + "/v3/ethereum/account/balance/erc20/" + address + "?contractAddress=" + contractAddress;
-        HttpResponse res = Async.get(uri, ApiKey.getInstance().apiKey);
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/account/balance/erc20/" + address + "?contractAddress=" + contractAddress;
+        HttpResponse res = Async.get(uri, ApiKey.getInstance().getApiKey());
 
         BigDecimal balance = BigDecimal.ZERO;
         if (res.statusCode() == 200) {
@@ -103,15 +102,15 @@ public final class Ethereum {
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetTransaction" target="_blank">Tatum API documentation</a>
      */
     public EthTx ethGetTransaction(String hash) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().url + "/v3/ethereum/transaction/" + hash;
-        return Async.get(uri, ApiKey.getInstance().apiKey, EthTx.class);
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/transaction/" + hash;
+        return Async.get(uri, ApiKey.getInstance().getApiKey(), EthTx.class);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetTransactionByAddress" target="_blank">Tatum API documentation</a>
      */
     public EthTx[] ethGetAccountTransactions(String address, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().url + "/v3/ethereum/transaction/" + address + "?pageSize=" + pageSize + "&offset=" + offset;
-        return Async.get(uri, ApiKey.getInstance().apiKey, EthTx[].class);
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/transaction/" + address + "?pageSize=" + pageSize + "&offset=" + offset;
+        return Async.get(uri, ApiKey.getInstance().getApiKey(), EthTx[].class);
     }
 }

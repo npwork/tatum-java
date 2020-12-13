@@ -8,13 +8,13 @@ public class ApiKey {
 
     private static ApiKey instance;
 
-    public String apiKey;
+    private String apiKey;
 
     private ApiKey() {
 
         Properties appProps = new Properties();
         String appConfigPath = "config.properties";
-        InputStream input = Env.class.getClassLoader().getResourceAsStream(appConfigPath);
+        InputStream input = ApiKey.class.getClassLoader().getResourceAsStream(appConfigPath);
         if (input == null) {
             apiKey = null;
         }
@@ -34,4 +34,7 @@ public class ApiKey {
         return instance;
     }
 
+    public String getApiKey() {
+        return apiKey;
+    }
 }

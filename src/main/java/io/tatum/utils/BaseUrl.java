@@ -13,13 +13,13 @@ public class BaseUrl {
 
     private static BaseUrl instance;
 
-    public String url;
+    private String url;
 
     private BaseUrl() {
 
         Properties appProps = new Properties();
         String appConfigPath = "config.properties";
-        InputStream input = Env.class.getClassLoader().getResourceAsStream(appConfigPath);
+        InputStream input = BaseUrl.class.getClassLoader().getResourceAsStream(appConfigPath);
         if (input == null) {
             url = null;
         }
@@ -40,4 +40,7 @@ public class BaseUrl {
         return instance;
     }
 
+    public String getUrl() {
+        return url;
+    }
 }

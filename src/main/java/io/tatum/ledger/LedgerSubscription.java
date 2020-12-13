@@ -3,10 +3,7 @@ package io.tatum.ledger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import io.tatum.model.request.CreateSubscription;
-import io.tatum.model.response.ledger.Account;
-import io.tatum.model.response.ledger.Customer;
 import io.tatum.model.response.ledger.Subscription;
-import io.tatum.model.response.ledger.Transaction;
 import io.tatum.utils.Async;
 import io.tatum.utils.Env;
 
