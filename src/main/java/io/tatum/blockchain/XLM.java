@@ -17,8 +17,7 @@ public class XLM {
      */
     public TransactionHash xlmBroadcast(String txData, String signatureId) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/broadcast";
-        TransactionHash hash = BlockchainUtil.broadcast(uri, txData, signatureId);
-        return hash;
+        return BlockchainUtil.broadcast(uri, txData, signatureId);
     }
 
     /**
@@ -35,19 +34,19 @@ public class XLM {
      */
     public String xlmGetCurrentLedger() throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/info";
-        var info = Async.get(uri, ApiKey.getInstance().getApiKey());
-        // TO-DO
-        return "info";
+        return Async.get(uri, String.class);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XlmGetFee" target="_blank">Tatum API documentation</a>
      */
-    public String xlmGetFee() throws IOException, ExecutionException, InterruptedException {
+    public BigDecimal xlmGetFee() throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/fee";
-        var fee = Async.get(uri, ApiKey.getInstance().getApiKey());
-        // TO-DO
-        return "fee";
+        var fee = Async.get(uri, String.class);
+        if (fee != null) {
+            return new BigDecimal(fee);
+        }
+        return null;
     }
 
     /**
@@ -55,9 +54,7 @@ public class XLM {
      */
     public String xlmGetLedger(BigDecimal i) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/ledger/" + i;
-        var ledger = Async.get(uri, ApiKey.getInstance().getApiKey());
-        // TO-DO
-        return "ledger";
+        return Async.get(uri, String.class);
     }
 
     /**
@@ -75,9 +72,7 @@ public class XLM {
      */
     public String xlmGetTransaction(String hash) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/transaction/" + hash;
-        var tx = Async.get(uri, ApiKey.getInstance().getApiKey());
-        // TO-DO
-        return "tx";
+        return Async.get(uri, String.class);
     }
 
     /**
@@ -85,8 +80,6 @@ public class XLM {
      */
     public String xlmGetAccountTransactions(String address) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/account/tx/" + address;
-        var tx = Async.get(uri, ApiKey.getInstance().getApiKey());
-        // TO-DO
-        return "tx";
+        return Async.get(uri, String.class);
     }
 }
