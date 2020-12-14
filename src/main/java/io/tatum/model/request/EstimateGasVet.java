@@ -28,10 +28,10 @@ public class EstimateGasVet {
     private String value;
 
     @Size(max = 10000)
-    private Optional<String> data;
+    private String data;
 
     @Min(0)
     @PositiveOrZero
-    private Optional<Integer> nonce;
+    private Integer nonce;
 
 }

@@ -1,5 +1,6 @@
 package io.tatum.model.response.ltc;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.tatum.model.response.btc.BtcTxInputs;
 import io.tatum.model.response.btc.BtcTxOutputs;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class LtcTx {
 
     private String hash;

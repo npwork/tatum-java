@@ -16,7 +16,7 @@ public class LtcUTXO {
     private BigDecimal version;
     private BigDecimal height;
     private BigDecimal value;
-    private BigDecimal script;
+    private String script;
     private String address;
     private Boolean coinbase;
     private String hash;

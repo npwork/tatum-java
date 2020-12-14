@@ -1,5 +1,6 @@
 package io.tatum.model.response.eth;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class EthBlock {
 
     private String difficulty;
@@ -30,7 +32,7 @@ public class EthBlock {
     private String stateRoot;
     private BigDecimal timestamp;
     private String totalDifficulty;
-    private IEthTx[] transactions;
+    private EthTx[] transactions;
     private String transactionsRoot;
 
 }

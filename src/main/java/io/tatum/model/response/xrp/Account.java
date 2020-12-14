@@ -1,5 +1,6 @@
 package io.tatum.model.response.xrp;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,8 +12,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Account {
 
     private BigDecimal ledgerCurrentIndex;
-    private BigDecimal sequence;
+    private BigDecimal accountData;
 }

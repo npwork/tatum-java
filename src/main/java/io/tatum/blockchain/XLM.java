@@ -26,7 +26,6 @@ public class XLM {
     public Account xlmGetAccountInfo(String account) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/account/" + account;
         return Async.get(uri, Account.class);
-
     }
 
     /**
@@ -34,7 +33,7 @@ public class XLM {
      */
     public String xlmGetCurrentLedger() throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/info";
-        return Async.get(uri, String.class);
+        return Async.get(uri);
     }
 
     /**
@@ -42,44 +41,38 @@ public class XLM {
      */
     public BigDecimal xlmGetFee() throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/fee";
-        var fee = Async.get(uri, String.class);
-        if (fee != null) {
-            return new BigDecimal(fee);
-        }
-        return null;
+        return Async.get(uri, BigDecimal.class);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XlmGetLedger" target="_blank">Tatum API documentation</a>
      */
-    public String xlmGetLedger(BigDecimal i) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/ledger/" + i;
-        return Async.get(uri, String.class);
+    public String xlmGetLedger(BigDecimal sequence) throws ExecutionException, InterruptedException {
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/ledger/" + sequence;
+        return Async.get(uri);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XlmGetLedgerTx" target="_blank">Tatum API documentation</a>
      */
-    public String xlmGetLedgerTx(BigDecimal i) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/ledger/" + i + "/transaction";
-        var tx = Async.get(uri, ApiKey.getInstance().getApiKey());
-        // TO-DO
-        return "tx";
+    public String xlmGetLedgerTx(BigDecimal sequence) throws IOException, ExecutionException, InterruptedException {
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/ledger/" + sequence + "/transaction";
+        return Async.get(uri);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XlmGetTransaction" target="_blank">Tatum API documentation</a>
      */
-    public String xlmGetTransaction(String hash) throws IOException, ExecutionException, InterruptedException {
+    public String xlmGetTransaction(String hash) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/transaction/" + hash;
-        return Async.get(uri, String.class);
+        return Async.get(uri);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XlmGetAccountTx" target="_blank">Tatum API documentation</a>
      */
-    public String xlmGetAccountTransactions(String address) throws IOException, ExecutionException, InterruptedException {
+    public String xlmGetAccountTransactions(String address) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/account/tx/" + address;
-        return Async.get(uri, String.class);
+        return Async.get(uri);
     }
 }

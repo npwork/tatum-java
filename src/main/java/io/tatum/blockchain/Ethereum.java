@@ -53,7 +53,7 @@ public final class Ethereum {
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetBalance" target="_blank">Tatum API documentation</a>
      */
     public BigDecimal ethGetAccountBalance(String address) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/account/balance" + address;
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/account/balance/" + address;
         Balance res = Async.get(uri, Balance.class);
         if (res != null) {
             return res.getBalance();
@@ -84,8 +84,10 @@ public final class Ethereum {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetTransactionByAddress" target="_blank">Tatum API documentation</a>
      */
-    public EthTx[] ethGetAccountTransactions(String address, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/transaction/" + address + "?pageSize=" + pageSize + "&offset=" + offset;
+    public EthTx[] ethGetAccountTransactions(String address, Integer pageSize, Integer offset) throws ExecutionException, InterruptedException {
+        Integer _pageSize = (pageSize == null || pageSize < 0 || pageSize > 50) ? 50 : pageSize;
+        Integer _offset = (offset == null || offset < 0) ? 0 : offset;
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/account/transaction/" + address + "?pageSize=" + _pageSize + "&offset=" + _offset;
         return Async.get(uri, EthTx[].class);
     }
 }

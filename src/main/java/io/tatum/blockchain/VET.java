@@ -25,18 +25,18 @@ public class VET {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/VetEstimateGas" target="_blank">Tatum API documentation</a>
      */
-    public VetEstimateGas vetEstimateGas(EstimateGasVet body) throws IOException, ExecutionException, InterruptedException {
+    public VetEstimateGas vetEstimateGas(EstimateGasVet body) throws ExecutionException, InterruptedException, IOException {
         // TO-DO
         // await validateOrReject(body);
-        String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/broadcast/transaction/gas";
-        return Async.get(uri, VetEstimateGas.class);
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/transaction/gas";
+        return Async.post(uri, body, VetEstimateGas.class);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/VetGetCurrentBlock" target="_blank">Tatum API documentation</a>
      */
-    public BigDecimal vetGetCurrentBlock() throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/current";
+    public BigDecimal vetGetCurrentBlock() throws ExecutionException, InterruptedException {
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/block/current";
         var res = Async.get(uri, String.class);
         if (res != null) {
             return new BigDecimal(res);
@@ -88,8 +88,8 @@ public class VET {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/VetGetTransactionReceipt" target="_blank">Tatum API documentation</a>
      */
-    public VetTxReceipt vetGetTransactionReceipt(String hash) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/transaction/" + hash + "/receipt";
+    public VetTxReceipt vetGetTransactionReceipt(String txHash) throws IOException, ExecutionException, InterruptedException {
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/transaction/" + txHash + "/receipt";
         return Async.get(uri, VetTxReceipt.class);
     }
 

@@ -107,7 +107,7 @@ public class Async implements Serializable {
         return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(response -> {
                     System.out.println(response.statusCode());
-//                    System.out.println(response.body());
+                    System.out.println(response.body());
                     if (response.statusCode() == 200) {
                         try {
                             return objectMapper.readValue(response.body(), valueType);
@@ -115,6 +115,27 @@ public class Async implements Serializable {
                             e.printStackTrace();
                             return null;
                         }
+                    }
+                    return null;
+                }).get();
+    }
+
+    public static String get(String uri) throws ExecutionException, InterruptedException {
+        var request = HttpRequest.newBuilder()
+                .uri(URI.create(uri))
+                .timeout(Duration.ofSeconds(20))
+                .header("Content-Type", "application/json")
+                .headers("x-api-key", apiKey)
+                .GET()
+                .build();
+
+        var client = HttpClient.newHttpClient();
+        return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(response -> {
+                    System.out.println(response.statusCode());
+                    System.out.println(response.body());
+                    if (response.statusCode() == 200) {
+                        return response.body();
                     }
                     return null;
                 }).get();
@@ -137,7 +158,7 @@ public class Async implements Serializable {
                 }).get();
     }
 
-    public static HttpResponse get(String uri) throws ExecutionException, InterruptedException {
+    /*public static HttpResponse get(String uri) throws ExecutionException, InterruptedException {
         var request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
                 .timeout(Duration.ofSeconds(20))
@@ -153,7 +174,7 @@ public class Async implements Serializable {
                     System.out.println(response);
                     return response;
                 }).get();
-    }
+    }*/
 
     public static String delete(String uri) throws ExecutionException, InterruptedException {
         var request = HttpRequest.newBuilder()
