@@ -1,9 +1,7 @@
 package io.tatum.blockchain;
 
-import com.google.common.base.Utf8;
 import io.tatum.model.response.common.TransactionHash;
 import io.tatum.model.response.xrp.Account;
-import io.tatum.utils.ApiKey;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
 import org.json.JSONObject;
