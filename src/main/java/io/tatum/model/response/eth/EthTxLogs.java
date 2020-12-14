@@ -1,5 +1,6 @@
 package io.tatum.model.response.eth;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,7 +12,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
-public class EthTxLogs implements IEthTxLogs {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class EthTxLogs {
 
     private String address;
     private String[] topic;
