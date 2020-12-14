@@ -134,4 +134,5 @@ public class LedgerAccount {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/" + id + "/balance";
         return Async.get(uri, AccountBalance.class);
     }
+
 }

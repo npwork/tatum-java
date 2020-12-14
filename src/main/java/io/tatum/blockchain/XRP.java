@@ -2,13 +2,13 @@ package io.tatum.blockchain;
 
 import io.tatum.model.response.common.TransactionHash;
 import io.tatum.model.response.xrp.Account;
-import io.tatum.utils.ApiKey;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.concurrent.ExecutionException;
 
 public class XRP {
@@ -24,13 +24,13 @@ public class XRP {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetFee" target="_blank">Tatum API documentation</a>
      */
-    public BigDecimal xrpGetFee() throws IOException, ExecutionException, InterruptedException {
+    public BigDecimal xrpGetFee() throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/fee";
-        var res = Async.get(uri, String.class);
+        var res = Async.get(uri);
         if (res != null) {
             JSONObject jsonObject = new JSONObject(res);
-            String drops = jsonObject.getString("drops");
-            return new JSONObject(drops).getBigDecimal("base_fee");
+            JSONObject drops = jsonObject.getJSONObject("drops");
+            return drops.getBigDecimal("base_fee");
         }
         return null;
     }
@@ -38,17 +38,26 @@ public class XRP {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetAccountInfo" target="_blank">Tatum API documentation</a>
      */
-    public Account xrpGetAccountInfo(String account) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/account/" + account;
+    public Account xrpGetAccountInfo(String address) throws IOException, ExecutionException, InterruptedException {
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/account/" + address;
+        var res = Async.get(uri);
+        if (res != null) {
+            Account account = new Account();
+            JSONObject jsonObject = new JSONObject(res);
+            JSONObject account_data = jsonObject.getJSONObject("account_data");
+            account.setAccountData(account_data.getBigDecimal("Sequence"));
+            account.setLedgerCurrentIndex(jsonObject.getBigDecimal("ledger_current_index"));
+            return account;
+        }
         return Async.get(uri, Account.class);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetLastClosedLedger" target="_blank">Tatum API documentation</a>
      */
-    public BigDecimal xrpGetCurrentLedger() throws IOException, ExecutionException, InterruptedException {
+    public BigDecimal xrpGetCurrentLedger() throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/info";
-        var res = Async.get(uri, String.class);
+        var res = Async.get(uri);
         if (res != null) {
             JSONObject jsonObject = new JSONObject(res);
             return jsonObject.getBigDecimal("ledger_index");
@@ -59,22 +68,17 @@ public class XRP {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetLedger" target="_blank">Tatum API documentation</a>
      */
-    public BigDecimal xrpGetLedger(BigDecimal i) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/ledger/" + i;
-        var res = Async.get(uri, String.class);
-        if (res != null) {
-            JSONObject jsonObject = new JSONObject(res);
-            return jsonObject.getBigDecimal("ledger_index");
-        }
-        return null;
+    public String xrpGetLedger(BigDecimal ledgerIndex) throws ExecutionException, InterruptedException {
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/ledger/" + ledgerIndex;
+        return Async.get(uri);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetAccountBalance" target="_blank">Tatum API documentation</a>
      */
-    public BigDecimal xrpGetAccountBalance(String address) throws IOException, ExecutionException, InterruptedException {
+    public BigDecimal xrpGetAccountBalance(String address) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/account/" + address + "/balance";
-        var res = Async.get(uri, String.class);
+        var res = Async.get(uri);
         if (res != null) {
             JSONObject jsonObject = new JSONObject(res);
             return jsonObject.getBigDecimal("balance");
@@ -87,15 +91,16 @@ public class XRP {
      */
     public String xrpGetTransaction(String hash) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/transaction/" + hash;
-        return Async.get(uri, String.class);
+        return Async.get(uri);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetAccountTx" target="_blank">Tatum API documentation</a>
      */
     public String xrpGetAccountTransactions(String address, BigDecimal min, String marker) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/account/tx" + address + "?min=" + min + "&marker=" + marker;
-        return Async.get(uri, String.class);
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/account/tx/" + address + "?min=" + min + "&marker=" + URLEncoder.encode(marker, "UTF-8");
+        System.out.println(uri);
+        return Async.get(uri);
     }
 
 }

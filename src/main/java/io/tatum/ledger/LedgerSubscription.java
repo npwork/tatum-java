@@ -46,16 +46,16 @@ public class LedgerSubscription {
     public Object[] obtainReportForSubscription(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/subscription/report/" + id;
         var res = Async.get(uri);
-        if (res.statusCode() == 200) {
+        if (res != null) {
             var objectMapper = new ObjectMapper();
             try {
-                Transaction[] transactions = objectMapper.readValue((String) res.body(), Transaction[].class);
+                Transaction[] transactions = objectMapper.readValue(res, Transaction[].class);
                 return transactions;
             } catch (JsonProcessingException e) {
             }
 
             try {
-                Account[] accounts = objectMapper.readValue((String) res.body(), Account[].class);
+                Account[] accounts = objectMapper.readValue(res, Account[].class);
                 return accounts;
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
