@@ -1,18 +1,14 @@
 package io.tatum.blockchain;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.tatum.model.response.common.TransactionHash;
 import io.tatum.model.response.eth.Balance;
 import io.tatum.model.response.eth.EthBlock;
 import io.tatum.model.response.eth.EthTx;
-import io.tatum.utils.ApiKey;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.http.HttpResponse;
 import java.util.concurrent.ExecutionException;
 
 public final class Ethereum {
