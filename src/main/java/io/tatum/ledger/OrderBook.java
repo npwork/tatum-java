@@ -13,7 +13,7 @@ public class OrderBook {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getHistoricalTrades" target="_blank">Tatum API documentation</a>
      */
-    public OrderBookResponse[] getHistoricalTrades(Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
+    public OrderBookResponse[] getHistoricalTrades(Integer pageSize, Integer offset) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/trade/history?pageSize=" + pageSize + "&offset=" + offset;
         return Async.get(uri, OrderBookResponse[].class);
     }
@@ -21,7 +21,7 @@ public class OrderBook {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getBuyTrades" target="_blank">Tatum API documentation</a>
      */
-    public OrderBookResponse[] getActiveBuyTrades(String id, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
+    public OrderBookResponse[] getActiveBuyTrades(String id, Integer pageSize, Integer offset) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/trade/buy?id=" + id + "&pageSize=" + pageSize + "&offset=" + offset;
         return Async.get(uri, OrderBookResponse[].class);
     }
@@ -29,7 +29,7 @@ public class OrderBook {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getSellTrades" target="_blank">Tatum API documentation</a>
      */
-    public OrderBookResponse[] getActiveSellTrades(String id, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
+    public OrderBookResponse[] getActiveSellTrades(String id, Integer pageSize, Integer offset) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/trade/sell?id=" + id + "&pageSize=" + pageSize + "&offset=" + offset;
         return Async.get(uri, OrderBookResponse[].class);
     }
@@ -45,7 +45,7 @@ public class OrderBook {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getTradeById" target="_blank">Tatum API documentation</a>
      */
-    public OrderBookResponse getTradeById(String id) throws IOException, ExecutionException, InterruptedException {
+    public OrderBookResponse getTradeById(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/trade/" + id;
         return Async.get(uri, OrderBookResponse.class);
     }
@@ -53,7 +53,7 @@ public class OrderBook {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/deleteTrade" target="_blank">Tatum API documentation</a>
      */
-    public void deleteTrade(String id) throws IOException, ExecutionException, InterruptedException {
+    public void deleteTrade(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/trade/" + id;
         Async.delete(uri);
     }
