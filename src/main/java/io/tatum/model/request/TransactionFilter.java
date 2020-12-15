@@ -1,6 +1,5 @@
 package io.tatum.model.request;
 
-import com.google.common.base.Optional;
 import io.tatum.model.response.ledger.OperationType;
 import io.tatum.model.response.ledger.TransactionType;
 import lombok.AllArgsConstructor;

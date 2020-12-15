@@ -1,5 +1,6 @@
 package io.tatum.model.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,12 +9,12 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.Optional;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BlockAmount {
 
     @NotEmpty
@@ -27,6 +28,6 @@ public class BlockAmount {
     private String type;
 
     @Size(min = 1, max = 300)
-    private Optional<String> description;
+    private String description;
 
 }

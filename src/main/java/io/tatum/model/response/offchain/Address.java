@@ -1,17 +1,18 @@
 package io.tatum.model.response.offchain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Address {
     /**
      * Blockchain address.
@@ -35,7 +36,7 @@ public class Address {
      * @type {number}
      * @memberof Address
      */
-    private Optional<BigDecimal> derivationKey;
+    private BigDecimal derivationKey;
 
     /**
      * Extended public key to derive address from. In case of XRP, this is account address,
@@ -44,7 +45,7 @@ public class Address {
      * @type {string}
      * @memberof Address
      */
-    private Optional<String> xpub;
+    private String xpub;
 
     /**
      * In case of XRP, destinationTag is the distinguisher of the account.
@@ -52,7 +53,7 @@ public class Address {
      * @type {number}
      * @memberof Address
      */
-    private Optional<BigDecimal> destinatinTag;
+    private BigDecimal destinatinTag;
 
     /**
      * In case of XLM, message is the distinguisher of the account.
@@ -60,5 +61,5 @@ public class Address {
      * @type {string}
      * @memberof Address
      */
-    private Optional<String> message;
+    private String message;
 }

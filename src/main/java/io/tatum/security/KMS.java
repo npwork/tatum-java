@@ -26,7 +26,7 @@ public class KMS {
     public void deleteTransactionKMS(String id, Boolean revert) throws IOException, ExecutionException, InterruptedException {
         // TO-DO
         // revert = true
-        String uri = BaseUrl.getInstance().getUrl() + "/v3/kms/" + id + "/" + revert;
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/kms/" + id + "/?revert=" + revert;
         Async.get(uri);
     }
 

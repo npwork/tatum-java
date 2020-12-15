@@ -10,7 +10,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.util.Optional;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,22 +32,22 @@ public class CreateTransaction {
     private String amount;
 
     @Size(min = 1, max = 100)
-    private Optional<String> paymentId;
+    private String paymentId;
 
     @Size(min = 1, max = 100)
-    private Optional<String> transactionCode;
+    private String transactionCode;
 
     @Size(min = 1, max = 500)
-    private Optional<String> senderNote;
+    private String senderNote;
 
     @Size(min = 1, max = 500)
-    private Optional<String> recipientNote;
+    private String recipientNote;
 
     @Min(0)
-    private Optional<BigDecimal> baseRate;
+    private BigDecimal baseRate;
 
-    private Optional<Boolean> anonymous;
+    private Boolean anonymous;
 
-    private Optional<Boolean> compliant;
+    private Boolean compliant;
 
 }

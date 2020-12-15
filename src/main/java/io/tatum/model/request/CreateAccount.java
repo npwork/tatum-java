@@ -1,5 +1,6 @@
 package io.tatum.model.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.tatum.model.response.ledger.Fiat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,12 +9,12 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.Optional;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CreateAccount {
 
     @NotEmpty

@@ -1,8 +1,18 @@
 package io.tatum.model.response.ledger;
 
-import java.math.BigDecimal;
-import java.util.Optional;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@EqualsAndHashCode
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MarketValue {
     /**
      * Value of transaction in given base pair.
@@ -12,29 +22,13 @@ public class MarketValue {
      */
     private String amount;
 
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
-
     /**
      * Base pair.
      *
      * @type {string}
      * @memberof MarketValue
      */
-    private Optional<Fiat> currency;
-
-    public Optional<Fiat> getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Optional<Fiat> currency) {
-        this.currency = currency;
-    }
+    private Fiat currency;
 
     /**
      * Date of validity of rate in UTC.
@@ -42,15 +36,7 @@ public class MarketValue {
      * @type {number}
      * @memberof MarketValue
      */
-    private Optional<BigDecimal> sourceDate;
-
-    public Optional<BigDecimal> getSourceDate() {
-        return sourceDate;
-    }
-
-    public void setSourceDate(Optional<BigDecimal> sourceDate) {
-        this.sourceDate = sourceDate;
-    }
+    private BigDecimal sourceDate;
 
     /**
      * Source of base pair.
@@ -58,13 +44,6 @@ public class MarketValue {
      * @type {string}
      * @memberof MarketValue
      */
-    private Optional<String> source;
+    private String source;
 
-    public Optional<String> getSource() {
-        return source;
-    }
-
-    public void setSource(Optional<String> source) {
-        this.source = source;
-    }
 }
