@@ -23,7 +23,7 @@ public class XLM {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XlmGetAccountInfo" target="_blank">Tatum API documentation</a>
      */
-    public Account xlmGetAccountInfo(String account) throws IOException, ExecutionException, InterruptedException {
+    public Account xlmGetAccountInfo(String account) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/account/" + account;
         return Async.get(uri, Account.class);
     }
@@ -31,7 +31,7 @@ public class XLM {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XlmGetLastClosedLedger" target="_blank">Tatum API documentation</a>
      */
-    public String xlmGetCurrentLedger() throws IOException, ExecutionException, InterruptedException {
+    public String xlmGetCurrentLedger() throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/info";
         return Async.get(uri);
     }
@@ -39,7 +39,7 @@ public class XLM {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XlmGetFee" target="_blank">Tatum API documentation</a>
      */
-    public BigDecimal xlmGetFee() throws IOException, ExecutionException, InterruptedException {
+    public BigDecimal xlmGetFee() throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/fee";
         return Async.get(uri, BigDecimal.class);
     }
@@ -55,7 +55,7 @@ public class XLM {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XlmGetLedgerTx" target="_blank">Tatum API documentation</a>
      */
-    public String xlmGetLedgerTx(BigDecimal sequence) throws IOException, ExecutionException, InterruptedException {
+    public String xlmGetLedgerTx(BigDecimal sequence) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/ledger/" + sequence + "/transaction";
         return Async.get(uri);
     }

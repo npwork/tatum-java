@@ -23,15 +23,7 @@ public class BlockchainUtil {
 
         var objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(values);
-        HttpResponse res = Async.post(uri, ApiKey.getInstance().getApiKey(), requestBody);
-
-        if (res.statusCode() == 200) {
-            JSONObject jsonObj = new JSONObject(res.body());
-            String txId = jsonObj.getString("txId");
-            return new TransactionHash(txId);
-        }
-
-        return null;
+        return Async.post(uri, requestBody, TransactionHash.class);
     }
 
 }

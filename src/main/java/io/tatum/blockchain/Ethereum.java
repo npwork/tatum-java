@@ -24,7 +24,7 @@ public final class Ethereum {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetTransactionCount" target="_blank">Tatum API documentation</a>
      */
-    public BigDecimal ethGetTransactionsCount(String address) throws IOException, ExecutionException, InterruptedException {
+    public BigDecimal ethGetTransactionsCount(String address) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/transaction/count/" + address;
         return Async.get(uri, BigDecimal.class);
     }
@@ -32,7 +32,7 @@ public final class Ethereum {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetCurrentBlock" target="_blank">Tatum API documentation</a>
      */
-    public BigDecimal ethGetCurrentBlock() throws IOException, ExecutionException, InterruptedException {
+    public BigDecimal ethGetCurrentBlock() throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/block/current";
         return Async.get(uri, BigDecimal.class);
     }
@@ -40,7 +40,7 @@ public final class Ethereum {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetBlock" target="_blank">Tatum API documentation</a>
      */
-    public EthBlock ethGetBlock(String hash) throws IOException, ExecutionException, InterruptedException {
+    public EthBlock ethGetBlock(String hash) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/block/" + hash;
         return Async.get(uri, EthBlock.class);
     }
@@ -48,7 +48,7 @@ public final class Ethereum {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetBalance" target="_blank">Tatum API documentation</a>
      */
-    public BigDecimal ethGetAccountBalance(String address) throws IOException, ExecutionException, InterruptedException {
+    public BigDecimal ethGetAccountBalance(String address) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/account/balance/" + address;
         Balance res = Async.get(uri, Balance.class);
         if (res != null) {

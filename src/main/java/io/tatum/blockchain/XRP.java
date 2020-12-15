@@ -38,7 +38,7 @@ public class XRP {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetAccountInfo" target="_blank">Tatum API documentation</a>
      */
-    public Account xrpGetAccountInfo(String address) throws IOException, ExecutionException, InterruptedException {
+    public Account xrpGetAccountInfo(String address) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/account/" + address;
         var res = Async.get(uri);
         if (res != null) {
