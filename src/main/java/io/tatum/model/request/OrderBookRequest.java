@@ -50,10 +50,10 @@ public class OrderBookRequest {
     @Pattern(regexp = "\\d+")
     @Min(0)
     @Max(100)
-    private Optional<BigDecimal> fee;
+    private BigDecimal fee;
 
     @NotEmpty
     @Size(min = 24, max = 24)
-    private Optional<String> feeAccountId;
+    private String feeAccountId;
 
 }
