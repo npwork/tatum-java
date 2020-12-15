@@ -8,13 +8,11 @@ import io.tatum.model.response.ledger.AccountBalance;
 import io.tatum.model.response.ledger.Blockage;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
-import io.tatum.utils.BeanValidation;
+import io.tatum.utils.ObjectValidator;
 import lombok.extern.log4j.Log4j2;
 import org.json.JSONObject;
 
-import javax.validation.ConstraintViolation;
 import java.io.IOException;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import static io.tatum.constants.Constant.EMPTY_BODY;
@@ -34,11 +32,7 @@ public class LedgerAccount {
      * For more details, see <a href="https://tatum.io/apidoc#operation/createAccount" target="_blank">Tatum API documentation</a>
      */
     public Account createAccount(CreateAccount account) throws IOException, ExecutionException, InterruptedException {
-//        await validateOrReject(account);
-//        TO-DO
-        Set<ConstraintViolation<CreateAccount>> violations = BeanValidation.getValidator().validate(account);
-        for (ConstraintViolation<CreateAccount> violation : violations) {
-            log.error(violation.getMessage());
+        if (!ObjectValidator.isValidated(account)) {
             return null;
         }
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account";

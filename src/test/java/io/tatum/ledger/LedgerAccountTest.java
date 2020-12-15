@@ -5,10 +5,10 @@ import io.tatum.model.response.ledger.Account;
 import io.tatum.model.response.ledger.AccountBalance;
 import io.tatum.model.response.ledger.Blockage;
 import io.tatum.model.response.ledger.Fiat;
+import io.tatum.utils.ObjectValidator;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.util.concurrent.ExecutionException;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -23,13 +23,15 @@ public class LedgerAccountTest {
 
     @Test
     public void createAccountTest() throws InterruptedException, ExecutionException, IOException {
-        LedgerAccount ledgerAccount = new LedgerAccount();
         CreateAccount createAccount = createAccount();
+        assertTrue(ObjectValidator.isValidated(createAccount));
 
+        LedgerAccount ledgerAccount = new LedgerAccount();
         Account account = ledgerAccount.createAccount(createAccount);
         System.out.println(account);
         System.out.println(account.getBalance());
         assertThat(account, hasProperty("id", notNullValue()));
+
         // result
         // Account(accountCode=test12345, id=5fd77feea8acfcccef97a98b, balance=AccountBalance(accountBalance=0, availableBalance=0), created=null, currency=ETH, customerId=5fd77f556f58f2797356a683, frozen=false, active=true, xpub=xpub6DYE4EtQyRirEhSujw8fCtpAHK4jxNepFiVWBy85x5Nes6vC2b2uS2dgMo22pULAHt7k79DDJnAa3DhXQnKEvc8j1s45cMC42Co7pXpnVQd)
         // AccountBalance(accountBalance=0, availableBalance=0)

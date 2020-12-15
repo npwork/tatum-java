@@ -27,7 +27,7 @@ public class CreateAccount {
 
     private Boolean compliant;
 
-    @NotNull(message = "accountingCurrency must not be null")
+    @NotNull
     private Fiat accountingCurrency;
 
     @Size(min = 1, max = 50)
