@@ -13,6 +13,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
+import static io.tatum.constants.Constant.EMPTY_BODY;
+
 public class LedgerAccount {
 
     /**
@@ -86,28 +88,25 @@ public class LedgerAccount {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/activateAccount" target="_blank">Tatum API documentation</a>
      */
-    public void activateAccount(String id) throws IOException, ExecutionException, InterruptedException {
+    public void activateAccount(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/" + id + "/activate";
-        String requestBody = "{}";
-        Async.put(uri, requestBody);
+        Async.put(uri, EMPTY_BODY);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/deactivateAccount" target="_blank">Tatum API documentation</a>
      */
-    public void deactivateAccount(String id) throws IOException, ExecutionException, InterruptedException {
+    public void deactivateAccount(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/" + id + "/deactivate";
-        String requestBody = "{}";
-        Async.put(uri, requestBody);
+        Async.put(uri, EMPTY_BODY);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/freezeAccount" target="_blank">Tatum API documentation</a>
      */
-    public void freezeAccount(String id) throws IOException, ExecutionException, InterruptedException {
+    public void freezeAccount(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/" + id + "/freeze";
-        String requestBody = "{}";
-        Async.put(uri, requestBody);
+        Async.put(uri, EMPTY_BODY);
     }
 
     /**
@@ -115,30 +114,33 @@ public class LedgerAccount {
      */
     public void unfreezeAccount(String id) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/" + id + "/unfreeze";
-        String requestBody = "{}";
-        Async.put(uri, requestBody);
+        Async.put(uri, EMPTY_BODY);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getAccountsByCustomerId" target="_blank">Tatum API documentation</a>
      */
-    public Account[] getAccountsByCustomerId(String id, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/customer/" + id + "?pageSize=" + pageSize + "&offset=" + offset;
+    public Account[] getAccountsByCustomerId(String id, Integer pageSize, Integer offset) throws ExecutionException, InterruptedException {
+        Integer _pageSize = (pageSize == null || pageSize < 0 || pageSize > 50) ? 50 : pageSize;
+        Integer _offset = (offset == null || offset < 0) ? 0 : offset;
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/customer/" + id + "?pageSize=" + _pageSize + "&offset=" + _offset;
         return Async.get(uri, Account[].class);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getAllAccounts" target="_blank">Tatum API documentation</a>
      */
-    public Account[] getAllAccounts(Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account?pageSize=" + pageSize + "&offset=" + offset;
+    public Account[] getAllAccounts(Integer pageSize, Integer offset) throws ExecutionException, InterruptedException {
+        Integer _pageSize = (pageSize == null || pageSize < 0 || pageSize > 50) ? 50 : pageSize;
+        Integer _offset = (offset == null || offset < 0) ? 0 : offset;
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account?pageSize=" + _pageSize + "&offset=" + _offset;
         return Async.get(uri, Account[].class);
     }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getAccountBalance" target="_blank">Tatum API documentation</a>
      */
-    public AccountBalance getAccountBalance(String id) throws IOException, ExecutionException, InterruptedException {
+    public AccountBalance getAccountBalance(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/" + id + "/balance";
         return Async.get(uri, AccountBalance.class);
     }

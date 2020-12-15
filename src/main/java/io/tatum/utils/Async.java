@@ -114,6 +114,7 @@ public class Async implements Serializable {
         return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(response -> {
                     System.out.println(response.statusCode());
+                    System.out.println(response.body());
                     return response;
                 })
                 .thenApply(HttpResponse::body).get();
