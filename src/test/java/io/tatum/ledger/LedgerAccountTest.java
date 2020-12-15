@@ -41,6 +41,7 @@ public class LedgerAccountTest {
         CustomerUpdate customerUpdate = new CustomerUpdate(Country.SZ, Fiat.EUR, Country.SZ, "test");
         createAccount.setCustomer(customerUpdate);
 
+        createAccount.setAccountingCurrency(Fiat.EUR);
         createAccount.setCurrency("ETH");
         createAccount.setXpub(TESTNET_XPUB_OF_MNEM_15);
         createAccount.setAccountCode("test12345");
