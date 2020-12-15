@@ -16,11 +16,11 @@ import java.util.Optional;
 public class CustomerUpdate {
 
     @Size(min = 2, max = 2)
-    private Optional<Country> customerCountry;
+    private Country customerCountry;
 
-    private Optional<Fiat> accountingCurrency;
+    private Fiat accountingCurrency;
 
-    private Optional<Country>  providerCountry;
+    private Country providerCountry;
 
     @Size(min = 1, max = 100)
     private String externalId;

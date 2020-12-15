@@ -35,6 +35,31 @@ public class Async implements Serializable {
                 }).get();
     }
 
+    public static String post(String uri, Object body) throws ExecutionException, InterruptedException, IOException {
+        String requestBody = objectMapper.writeValueAsString(body);
+        return Async.post(uri, requestBody);
+    }
+
+    public static String post(String uri, String requestBody) throws ExecutionException, InterruptedException {
+        var request = HttpRequest.newBuilder()
+                .uri(URI.create(uri))
+                .timeout(Duration.ofSeconds(20))
+                .header("Content-Type", "application/json")
+                .headers("x-api-key", apiKey)
+                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                .build();
+
+        var client = HttpClient.newHttpClient();
+        return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(response -> {
+                    System.out.println(response.statusCode());
+                    if (response.statusCode() == 200) {
+                        return response.body();
+                    }
+                    return null;
+                }).get();
+    }
+
     public static <T> T post(String uri, String requestBody, Class<T> valueType) throws ExecutionException, InterruptedException {
         var request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
