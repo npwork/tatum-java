@@ -1,7 +1,18 @@
 package io.tatum.model.response.ledger;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 import java.util.Optional;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@EqualsAndHashCode
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Blockage {
 
     /**
@@ -37,45 +48,6 @@ public class Blockage {
      * @type {string}
      * @memberof Blockage
      */
-    private Optional<String> description;
+    private String description;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
-    }
-
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Optional<String> getDescription() {
-        return description;
-    }
-
-    public void setDescription(Optional<String> description) {
-        this.description = description;
-    }
 }
