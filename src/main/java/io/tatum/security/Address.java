@@ -12,8 +12,8 @@ public class Address {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/CheckMalicousAddress" target="_blank">Tatum API documentation</a>
      */
-    public String checkMaliciousAddress(String address) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().getUrl() + "/v3/security/address" + address;
+    public String checkMaliciousAddress(String address) throws ExecutionException, InterruptedException {
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/security/address/" + address;
         var status = Async.get(uri, Status.class);
         if (status != null) {
             return status.getStatus();
