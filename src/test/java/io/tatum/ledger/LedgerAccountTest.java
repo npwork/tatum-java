@@ -115,8 +115,8 @@ public class LedgerAccountTest {
         Blockage[] blockages = ledgerAccount.getBlockedAmountsByAccountId(id, null, null);
         System.out.println(blockages[0]);
         assertThat(blockages[0], hasProperty("accountId", notNullValue()));
-        assertThat(blockages[0], hasProperty("amount", equalTo("1234")));
-        assertThat(blockages[0], hasProperty("type", equalTo("123ABC")));
+        assertThat(blockages[0], hasProperty("amount", notNullValue()));
+        assertThat(blockages[0], hasProperty("type", notNullValue()));
         assertThat(blockages[0], hasProperty("accountId", equalTo(id)));
     }
 

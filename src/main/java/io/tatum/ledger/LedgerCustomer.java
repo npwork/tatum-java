@@ -44,7 +44,7 @@ public class LedgerCustomer {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/activateAccount" target="_blank">Tatum API documentation</a>
      */
-    public void activateCustomer(String id) throws IOException, ExecutionException, InterruptedException {
+    public void activateCustomer(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/customer/" + id + "/activate";
         Async.put(uri, EMPTY_BODY);
     }
@@ -60,7 +60,7 @@ public class LedgerCustomer {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/enableCustomer" target="_blank">Tatum API documentation</a>
      */
-    public void enableCustomer(String id) throws IOException, ExecutionException, InterruptedException {
+    public void enableCustomer(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/customer/" + id + "/enable";
         Async.put(uri, EMPTY_BODY);
     }
@@ -68,7 +68,7 @@ public class LedgerCustomer {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/disableCustomer" target="_blank">Tatum API documentation</a>
      */
-    public void disableCustomer(String id) throws IOException, ExecutionException, InterruptedException {
+    public void disableCustomer(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/customer/" + id + "/disable";
         Async.put(uri, EMPTY_BODY);
     }
