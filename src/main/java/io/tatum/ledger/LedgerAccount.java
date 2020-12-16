@@ -119,7 +119,7 @@ public class LedgerAccount {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/unfreezeAccount" target="_blank">Tatum API documentation</a>
      */
-    public void unfreezeAccount(String id) throws IOException, ExecutionException, InterruptedException {
+    public void unfreezeAccount(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/" + id + "/unfreeze";
         Async.put(uri, EMPTY_BODY);
     }

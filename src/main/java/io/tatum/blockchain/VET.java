@@ -18,8 +18,7 @@ public class VET {
      */
     public TransactionHash vetBroadcast(String txData, String signatureId) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/broadcast";
-        TransactionHash hash = BlockchainUtil.broadcast(uri, txData, signatureId);
-        return hash;
+        return BlockchainUtil.broadcast(uri, txData, signatureId);
     }
 
     /**

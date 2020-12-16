@@ -2,12 +2,9 @@ package io.tatum.blockchain;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.tatum.model.response.common.TransactionHash;
-import io.tatum.utils.ApiKey;
 import io.tatum.utils.Async;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 

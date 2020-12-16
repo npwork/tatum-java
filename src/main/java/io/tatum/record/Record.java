@@ -1,12 +1,10 @@
 package io.tatum.record;
 
 import io.tatum.model.request.Currency;
-import io.tatum.model.response.common.Rate;
 import io.tatum.model.response.eth.Log;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 public class Record {

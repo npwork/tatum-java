@@ -5,7 +5,6 @@ import io.tatum.model.response.ledger.Account;
 import io.tatum.model.response.ledger.AccountBalance;
 import io.tatum.model.response.ledger.Blockage;
 import io.tatum.model.response.ledger.Fiat;
-import io.tatum.utils.ObjectValidator;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -100,7 +99,7 @@ public class LedgerAccountTest {
     }
 
     @Test
-    public void getAccountByIdTest() throws InterruptedException, ExecutionException, IOException {
+    public void getAccountByIdTest() throws InterruptedException, ExecutionException {
         LedgerAccount ledgerAccount = new LedgerAccount();
         String id = "5fd77feea8acfcccef97a98b";
         Account account = ledgerAccount.getAccountById(id);
@@ -294,7 +293,7 @@ public class LedgerAccountTest {
 
         ledgerAccount.deactivateAccount(id);
         account = ledgerAccount.getAccountById(id);
-        assertEquals(account, null);
+        assertNull(account);
 
         ledgerAccount.activateAccount(id);
         account = ledgerAccount.getAccountById(id);
@@ -316,7 +315,7 @@ public class LedgerAccountTest {
         ledgerAccount.deactivateAccount(id);
 
         account = ledgerAccount.getAccountById(id);
-        assertEquals(account, null);
+        assertNull(account);
     }
 
     @Test

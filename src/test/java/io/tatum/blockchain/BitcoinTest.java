@@ -24,7 +24,7 @@ public class BitcoinTest {
     }
 
     @Test
-    public void btcGetCurrentBlockTest() throws InterruptedException, ExecutionException, IOException {
+    public void btcGetCurrentBlockTest() throws InterruptedException, ExecutionException {
         BtcInfo btcInfo = new Bitcoin().btcGetCurrentBlock();
         assertThat(btcInfo, hasProperty("chain"));
         assertThat(btcInfo, hasProperty("blocks"));
@@ -33,13 +33,13 @@ public class BitcoinTest {
     }
 
     @Test
-    public void btcGetBlockTest() throws InterruptedException, ExecutionException, IOException {
+    public void btcGetBlockTest() throws InterruptedException, ExecutionException {
         // https://explorer.bitcoin.com/btc/block/0000000000000000000e775008c6749deb78f666b88fb285b5951ecb7894367f
         BtcBlock btcBlock = new Bitcoin().btcGetBlock("0000000000000000000e775008c6749deb78f666b88fb285b5951ecb7894367f");
     }
 
     @Test
-    public void btcGetBlockHashTest() throws InterruptedException, ExecutionException, IOException {
+    public void btcGetBlockHashTest() throws InterruptedException, ExecutionException {
         BlockHash blockHash = new Bitcoin().btcGetBlockHash(new BigDecimal(1580));
         if (blockHash != null) {
             System.out.println(blockHash.toString());
@@ -48,27 +48,25 @@ public class BitcoinTest {
     }
 
     @Test
-    public void btcGetUTXOTest() throws InterruptedException, ExecutionException, IOException {
+    public void btcGetUTXOTest() throws InterruptedException, ExecutionException {
         String hash = "0000000000000000000e775008c6749deb78f666b88fb285b5951ecb7894367f";
         Bitcoin bitcoin = new Bitcoin();
         BtcUTXO btcUTXO = bitcoin.btcGetUTXO(hash, new BigDecimal(5));
     }
 
     @Test
-    public void btcGetTxForAccountTest() throws InterruptedException, ExecutionException, IOException {
+    public void btcGetTxForAccountTest() throws InterruptedException, ExecutionException {
         Bitcoin bitcoin = new Bitcoin();
         // https://www.blockchain.com/btc/address/bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh
         BtcTx[] btcTxes = bitcoin.btcGetTxForAccount("bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh", null, null);
         System.out.println(btcTxes[0]);
-        if (btcTxes != null && btcTxes.length > 0) {
-            assertThat(btcTxes[0], hasProperty("hash"));
-            assertThat(btcTxes[0], hasProperty("fee"));
-            assertThat(btcTxes[0], hasProperty("inputs"));
-            assertThat(btcTxes[0], hasProperty("rate"));
+        assertThat(btcTxes[0], hasProperty("hash"));
+        assertThat(btcTxes[0], hasProperty("fee"));
+        assertThat(btcTxes[0], hasProperty("inputs"));
+        assertThat(btcTxes[0], hasProperty("rate"));
 
-            assertThat(btcTxes[0].getInputs()[0], hasProperty("prevout"));
-            assertThat(btcTxes[0].getInputs()[0], hasProperty("witness"));
-        }
+        assertThat(btcTxes[0].getInputs()[0], hasProperty("prevout"));
+        assertThat(btcTxes[0].getInputs()[0], hasProperty("witness"));
     }
 
     @Test

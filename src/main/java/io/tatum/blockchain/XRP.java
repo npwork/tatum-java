@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutionException;
 
 public class XRP {
@@ -89,7 +90,7 @@ public class XRP {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetTransaction" target="_blank">Tatum API documentation</a>
      */
-    public String xrpGetTransaction(String hash) throws IOException, ExecutionException, InterruptedException {
+    public String xrpGetTransaction(String hash) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/transaction/" + hash;
         return Async.get(uri);
     }
@@ -97,8 +98,8 @@ public class XRP {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetAccountTx" target="_blank">Tatum API documentation</a>
      */
-    public String xrpGetAccountTransactions(String address, BigDecimal min, String marker) throws IOException, ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/account/tx/" + address + "?min=" + min + "&marker=" + URLEncoder.encode(marker, "UTF-8");
+    public String xrpGetAccountTransactions(String address, BigDecimal min, String marker) throws ExecutionException, InterruptedException {
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/account/tx/" + address + "?min=" + min + "&marker=" + URLEncoder.encode(marker, StandardCharsets.UTF_8);
         System.out.println(uri);
         return Async.get(uri);
     }

@@ -60,7 +60,7 @@ public final class Ethereum {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthErc20GetBalance" target="_blank">Tatum API documentation</a>
      */
-    public BigDecimal ethGetAccountErc20Address(String address, String contractAddress) throws IOException, ExecutionException, InterruptedException {
+    public BigDecimal ethGetAccountErc20Address(String address, String contractAddress) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/account/balance/erc20/" + address + "?contractAddress=" + contractAddress;
         Balance res = Async.get(uri, Balance.class);
         if (res != null) {
@@ -72,7 +72,7 @@ public final class Ethereum {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetTransaction" target="_blank">Tatum API documentation</a>
      */
-    public EthTx ethGetTransaction(String hash) throws IOException, ExecutionException, InterruptedException {
+    public EthTx ethGetTransaction(String hash) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/transaction/" + hash;
         return Async.get(uri, EthTx.class);
     }

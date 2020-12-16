@@ -14,9 +14,6 @@ public class TypeOfValidator implements ConstraintValidator<TypeOf, Object> {
 
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context) {
-        if (obj.getClass().getInterfaces()[0].equals(this.type)) {
-            return true;
-        }
-        return false;
+        return obj.getClass().getInterfaces()[0].equals(this.type);
     }
 }

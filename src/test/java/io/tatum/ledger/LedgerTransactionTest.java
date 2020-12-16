@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 public class LedgerTransactionTest {
@@ -27,7 +28,7 @@ public class LedgerTransactionTest {
         Integer pageSize = 51;
         Integer offset = 0;
         Transaction[] transactions = new LedgerTransaction().getTransactionsByAccount(filter, pageSize, offset);
-        System.out.println(transactions);
+        System.out.println(Arrays.toString(transactions));
     }
 
     @Test
@@ -37,7 +38,7 @@ public class LedgerTransactionTest {
         Integer pageSize = 51;
         Integer offset = 0;
         Transaction[] transactions = new LedgerTransaction().getTransactionsByCustomer(filter, pageSize, offset);
-        System.out.println(transactions);
+        System.out.println(Arrays.toString(transactions));
     }
 
     @Test
@@ -47,7 +48,7 @@ public class LedgerTransactionTest {
         Integer pageSize = 51;
         Integer offset = 0;
         Transaction[] transactions = new LedgerTransaction().getTransactionsByLedger(filter, pageSize, offset);
-        System.out.println(transactions);
+        System.out.println(Arrays.toString(transactions));
     }
 
     @Test

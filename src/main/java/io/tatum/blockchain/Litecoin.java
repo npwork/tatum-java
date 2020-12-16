@@ -6,7 +6,6 @@ import io.tatum.model.response.ltc.LtcBlock;
 import io.tatum.model.response.ltc.LtcInfo;
 import io.tatum.model.response.ltc.LtcTx;
 import io.tatum.model.response.ltc.LtcUTXO;
-import io.tatum.utils.ApiKey;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
 

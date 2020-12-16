@@ -2,7 +2,6 @@ package io.tatum.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.tatum.model.response.vet.VetBlock;
 
 import java.io.IOException;
 import java.io.Serializable;

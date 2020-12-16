@@ -17,7 +17,7 @@ public class LedgerTransaction {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getTransactionsByReference" target="_blank">Tatum API documentation</a>
      */
-    public Transaction[] getTransactionsByReference(String reference) throws IOException, ExecutionException, InterruptedException {
+    public Transaction[] getTransactionsByReference(String reference) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/transaction/reference/" + reference;
         return Async.get(uri, Transaction[].class);
     }

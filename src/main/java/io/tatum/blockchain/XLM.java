@@ -2,7 +2,6 @@ package io.tatum.blockchain;
 
 import io.tatum.model.response.common.TransactionHash;
 import io.tatum.model.response.xlm.Account;
-import io.tatum.utils.ApiKey;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
 

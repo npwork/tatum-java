@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.util.concurrent.ExecutionException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 
 public class XRPTest {
@@ -20,7 +19,7 @@ public class XRPTest {
     }
 
     @Test
-    public void xrpGetAccountInfoTest() throws InterruptedException, ExecutionException, IOException {
+    public void xrpGetAccountInfoTest() throws InterruptedException, ExecutionException {
         XRP xrp = new XRP();
         // https://xrpscan.com/account/rQ3fNyLjbvcDaPNS4EAJY8aT9zR3uGk17c
         String address = "rQ3fNyLjbvcDaPNS4EAJY8aT9zR3uGk17c";
@@ -31,7 +30,7 @@ public class XRPTest {
     }
 
     @Test
-    public void xrpGetCurrentLedgerTest() throws InterruptedException, ExecutionException, IOException {
+    public void xrpGetCurrentLedgerTest() throws InterruptedException, ExecutionException {
         XRP xrp = new XRP();
         BigDecimal current = xrp.xrpGetCurrentLedger();
         System.out.println(current);

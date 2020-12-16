@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.hasProperty;
 public class LitecoinTest {
 
     @Test
-    public void ltcGetCurrentBlockTest() throws InterruptedException, ExecutionException, IOException {
+    public void ltcGetCurrentBlockTest() throws InterruptedException, ExecutionException {
         Litecoin litecoin = new Litecoin();
         LtcInfo ltcInfo = litecoin.ltcGetCurrentBlock();
         System.out.println(ltcInfo);
@@ -29,7 +29,7 @@ public class LitecoinTest {
     }
 
     @Test
-    public void ltcGetBlockTest() throws InterruptedException, ExecutionException, IOException {
+    public void ltcGetBlockTest() throws InterruptedException, ExecutionException {
         Litecoin litecoin = new Litecoin();
         // https://live.blockcypher.com/ltc/block/3a3150fbc4c520719af42b6311c19430c054e787989e3ce32ab8c873720424fe/
         String hash = "3a3150fbc4c520719af42b6311c19430c054e787989e3ce32ab8c873720424fe";
@@ -42,7 +42,7 @@ public class LitecoinTest {
     }
 
     @Test
-    public void ltcGetBlockHashTest() throws InterruptedException, ExecutionException, IOException {
+    public void ltcGetBlockHashTest() throws InterruptedException, ExecutionException {
         Litecoin litecoin = new Litecoin();
         // https://live.blockcypher.com/ltc/block/3a3150fbc4c520719af42b6311c19430c054e787989e3ce32ab8c873720424fe/
         BigDecimal i = new BigDecimal(1964370);
@@ -52,7 +52,7 @@ public class LitecoinTest {
     }
 
     @Test
-    public void ltcGetUTXOTest() throws InterruptedException, ExecutionException, IOException {
+    public void ltcGetUTXOTest() throws InterruptedException, ExecutionException {
 
         Litecoin litecoin = new Litecoin();
         // https://live.blockcypher.com/ltc/tx/5d417e7f8d22a591cc8454a59f0c208225a0c6966bb891803f3b2c2761660581/
@@ -84,7 +84,7 @@ public class LitecoinTest {
     }
 
     @Test
-    public void ltcGetTransactionTest() throws InterruptedException, ExecutionException, IOException {
+    public void ltcGetTransactionTest() throws InterruptedException, ExecutionException {
         Litecoin litecoin = new Litecoin();
         String txHash = "5d417e7f8d22a591cc8454a59f0c208225a0c6966bb891803f3b2c2761660581";
         LtcTx ltcTx = litecoin.ltcGetTransaction(txHash);

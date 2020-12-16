@@ -1,7 +1,6 @@
 package io.tatum.record;
 
 import io.tatum.model.request.Currency;
-import io.tatum.model.response.common.Rate;
 import io.tatum.model.response.eth.Log;
 import org.junit.Test;
 

@@ -36,7 +36,7 @@ public class VETTest {
     }
 
     @Test
-    public void vetGetBlockTest() throws ExecutionException, InterruptedException, IOException {
+    public void vetGetBlockTest() throws ExecutionException, InterruptedException {
         VET vet = new VET();
         // https://explore.vechain.org/blocks/0x007626454021a171f4afc50af1a46418320fa761536eace78ee8c4f252a51389/
         String hash = "0x007626454021a171f4afc50af1a46418320fa761536eace78ee8c4f252a51389";
@@ -49,7 +49,7 @@ public class VETTest {
     }
 
     @Test
-    public void vetGetAccountBalanceTest() throws ExecutionException, InterruptedException, IOException {
+    public void vetGetAccountBalanceTest() throws ExecutionException, InterruptedException {
         VET vet = new VET();
         // https://explore.vechain.org/accounts/0x0f296031669698427aff5df1e186794d182a583d/
         String address = "0x0F296031669698427aFF5Df1e186794d182a583D";
@@ -58,7 +58,7 @@ public class VETTest {
     }
 
     @Test
-    public void vetGetAccountEnergyTest() throws ExecutionException, InterruptedException, IOException {
+    public void vetGetAccountEnergyTest() throws ExecutionException, InterruptedException {
         VET vet = new VET();
         // https://explore.vechain.org/accounts/0x0f296031669698427aff5df1e186794d182a583d/
         String address = "0x0F296031669698427aFF5Df1e186794d182a583D";
@@ -67,7 +67,7 @@ public class VETTest {
     }
 
     @Test
-    public void vetGetTransactionTest() throws ExecutionException, InterruptedException, IOException {
+    public void vetGetTransactionTest() throws ExecutionException, InterruptedException {
         VET vet = new VET();
         // https://explore.vechain.org/transactions/0x226c64b8622997b8f88fda3935588d34d0b744fab16e5710a7722889317f4872#info
         String tx = "0x226c64b8622997b8f88fda3935588d34d0b744fab16e5710a7722889317f4872";
@@ -80,7 +80,7 @@ public class VETTest {
     }
 
     @Test
-    public void vetGetTransactionReceiptTest() throws ExecutionException, InterruptedException, IOException {
+    public void vetGetTransactionReceiptTest() throws ExecutionException, InterruptedException {
         VET vet = new VET();
         // https://explore.vechain.org/transactions/0x226c64b8622997b8f88fda3935588d34d0b744fab16e5710a7722889317f4872#info
         String txHash = "0x226c64b8622997b8f88fda3935588d34d0b744fab16e5710a7722889317f4872";

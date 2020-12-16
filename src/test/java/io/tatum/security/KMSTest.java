@@ -2,7 +2,6 @@ package io.tatum.security;
 
 import io.tatum.model.request.Currency;
 import io.tatum.model.response.kms.TransactionKMS;
-import org.checkerframework.checker.units.qual.K;
 import org.junit.Test;
 
 import java.io.IOException;

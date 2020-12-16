@@ -4,7 +4,6 @@ import io.tatum.model.response.security.Status;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 public class Address {

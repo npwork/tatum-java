@@ -6,7 +6,6 @@ import io.tatum.model.response.bch.BchInfo;
 import io.tatum.model.response.bch.BchTx;
 import io.tatum.model.response.common.BlockHash;
 import io.tatum.model.response.common.TransactionHash;
-import io.tatum.utils.ApiKey;
 import org.junit.Before;
 import org.junit.Test;
 

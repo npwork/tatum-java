@@ -66,7 +66,7 @@ public class LedgerSubscriptionTest {
     }
 
     @Test
-    public void obtainReportForSubscriptionTest() throws InterruptedException, ExecutionException, IOException {
+    public void obtainReportForSubscriptionTest() throws InterruptedException, ExecutionException {
         Object[] objects = new LedgerSubscription().obtainReportForSubscription("5e68c66581f2ee32bc354087");
         if (objects instanceof Transaction[]) {
             Transaction[] transactions = (Transaction[]) objects;

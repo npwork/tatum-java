@@ -6,7 +6,6 @@ import io.tatum.model.response.btc.BtcTx;
 import io.tatum.model.response.btc.BtcUTXO;
 import io.tatum.model.response.common.BlockHash;
 import io.tatum.model.response.common.TransactionHash;
-import io.tatum.utils.ApiKey;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
 
