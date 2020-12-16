@@ -1,6 +1,5 @@
 package io.tatum.model.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,20 +13,14 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class BlockAmount {
+public class SubscriptionAttrAccountBalanceLimit implements SubscriptionAttr {
 
     @NotEmpty
     @Size(max = 38)
-    @Pattern(regexp = "\\d+") // number string
-    @Pattern(regexp="^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$")
-    private String amount;
+    @Pattern(regexp = "^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$")
+    private String limit;
 
     @NotEmpty
-    @Size(min = 1, max = 100)
-    private String type;
-
-    @Size(min = 1, max = 300)
-    private String description;
-
+    @Pattern(regexp = "'account'|'available'", flags = Pattern.Flag.CASE_INSENSITIVE)
+    private String typeOfBalance;
 }

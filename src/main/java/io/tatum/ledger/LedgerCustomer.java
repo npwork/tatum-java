@@ -5,6 +5,7 @@ import io.tatum.model.response.common.Id;
 import io.tatum.model.response.ledger.Customer;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
+import io.tatum.utils.ObjectValidator;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -35,8 +36,9 @@ public class LedgerCustomer {
      * For more details, see <a href="https://tatum.io/apidoc#operation/updateCustomer" target="_blank">Tatum API documentation</a>
      */
     public Id updateCustomer(String id, CustomerUpdate data) throws IOException, ExecutionException, InterruptedException {
-//        await validateOrReject(data);
-//        TO-DO
+        if (!ObjectValidator.isValidated(data)) {
+            return null;
+        }
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/customer/" + id;
         return Async.put(uri, data, Id.class);
     }

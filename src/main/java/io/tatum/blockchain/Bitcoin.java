@@ -6,7 +6,6 @@ import io.tatum.model.response.btc.BtcTx;
 import io.tatum.model.response.btc.BtcUTXO;
 import io.tatum.model.response.common.BlockHash;
 import io.tatum.model.response.common.TransactionHash;
-import io.tatum.utils.ApiKey;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
 
@@ -35,7 +34,7 @@ public final class Bitcoin {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/BtcGetBlock" target="_blank">Tatum API documentation</a>
      */
-    public BtcBlock btcGetBlock(String hash) throws IOException, ExecutionException, InterruptedException {
+    public BtcBlock btcGetBlock(String hash) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/bitcoin/block/" + hash;
         return Async.get(uri, BtcBlock.class);
     }
@@ -43,7 +42,7 @@ public final class Bitcoin {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/BtcGetBlockHash" target="_blank">Tatum API documentation</a>
      */
-    public BlockHash btcGetBlockHash(BigDecimal i) throws IOException, ExecutionException, InterruptedException {
+    public BlockHash btcGetBlockHash(BigDecimal i) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/bitcoin/block/hash/" + i;
         return Async.get(uri, BlockHash.class);
     }

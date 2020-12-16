@@ -2,12 +2,9 @@ package io.tatum.blockchain;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.tatum.model.response.common.TransactionHash;
-import io.tatum.utils.ApiKey;
 import io.tatum.utils.Async;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
@@ -23,15 +20,7 @@ public class BlockchainUtil {
 
         var objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(values);
-        HttpResponse res = Async.post(uri, ApiKey.getInstance().getApiKey(), requestBody);
-
-        if (res.statusCode() == 200) {
-            JSONObject jsonObj = new JSONObject(res.body());
-            String txId = jsonObj.getString("txId");
-            return new TransactionHash(txId);
-        }
-
-        return null;
+        return Async.post(uri, requestBody, TransactionHash.class);
     }
 
 }

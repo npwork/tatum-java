@@ -1,12 +1,14 @@
 package io.tatum.model.request;
 
+import io.tatum.annotation.TypeOf;
 import io.tatum.model.response.ledger.SubscriptionType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,10 +16,11 @@ import javax.validation.constraints.NotEmpty;
 @EqualsAndHashCode
 public class CreateSubscription {
 
-    @NotEmpty
+    @NotNull
     private SubscriptionType type;
 
-    @NotEmpty
+    @NotNull
+    @Valid
+    @TypeOf(SubscriptionAttr.class)
     private Object attr;
-
 }

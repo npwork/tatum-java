@@ -11,11 +11,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 import static io.tatum.ledger.LedgerAccountTest.TESTNET_XPUB_OF_MNEM_15;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
@@ -56,7 +54,7 @@ public class LedgerCustomerTest {
     }
 
     @Test
-    public void getAllCustomersTest() throws InterruptedException, ExecutionException, IOException {
+    public void getAllCustomersTest() throws InterruptedException, ExecutionException {
 
         LedgerCustomer ledgerCustomer = new LedgerCustomer();
         Customer[] customers = ledgerCustomer.getAllCustomers(null, null);

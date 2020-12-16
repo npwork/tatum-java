@@ -1,5 +1,6 @@
 package io.tatum.model.response.common;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.tatum.model.response.ledger.Fiat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Rate {
 
     private Money id;

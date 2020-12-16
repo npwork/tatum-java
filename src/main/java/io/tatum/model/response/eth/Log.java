@@ -1,4 +1,4 @@
-package io.tatum.model.response.vet;
+package io.tatum.model.response.eth;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Event {
-    private String[] topics;
+public class Log {
+    private String data;
 }

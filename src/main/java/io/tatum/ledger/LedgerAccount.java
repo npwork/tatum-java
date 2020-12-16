@@ -8,6 +8,8 @@ import io.tatum.model.response.ledger.AccountBalance;
 import io.tatum.model.response.ledger.Blockage;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
+import io.tatum.utils.ObjectValidator;
+import lombok.extern.log4j.Log4j2;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -15,6 +17,7 @@ import java.util.concurrent.ExecutionException;
 
 import static io.tatum.constants.Constant.EMPTY_BODY;
 
+@Log4j2
 public class LedgerAccount {
 
     /**
@@ -29,8 +32,9 @@ public class LedgerAccount {
      * For more details, see <a href="https://tatum.io/apidoc#operation/createAccount" target="_blank">Tatum API documentation</a>
      */
     public Account createAccount(CreateAccount account) throws IOException, ExecutionException, InterruptedException {
-//        await validateOrReject(account);
-//        TO-DO
+        if (!ObjectValidator.isValidated(account)) {
+            return null;
+        }
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account";
         return Async.post(uri, account, Account.class);
     }
@@ -39,8 +43,9 @@ public class LedgerAccount {
      * For more details, see <a href="https://tatum.io/apidoc#operation/createAccountBatch" target="_blank">Tatum API documentation</a>
      */
     public Account[] createAccounts(CreateAccountsBatch accounts) throws IOException, ExecutionException, InterruptedException {
-//        await validateOrReject(accounts);
-//        TO-DO
+        if (!ObjectValidator.isValidated(accounts)) {
+            return null;
+        }
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/batch";
         return Async.post(uri, accounts, Account[].class);
     }
@@ -59,7 +64,9 @@ public class LedgerAccount {
      * For more details, see <a href="https://tatum.io/apidoc#operation/blockAmount" target="_blank">Tatum API documentation</a>
      */
     public String blockAmount(String id, BlockAmount block) throws IOException, ExecutionException, InterruptedException {
-//      await validateOrReject(block);
+        if (!ObjectValidator.isValidated(block)) {
+            return null;
+        }
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/block/" + id;
         var res = Async.post(uri, block);
         if (res != null) {
@@ -112,7 +119,7 @@ public class LedgerAccount {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/unfreezeAccount" target="_blank">Tatum API documentation</a>
      */
-    public void unfreezeAccount(String id) throws IOException, ExecutionException, InterruptedException {
+    public void unfreezeAccount(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/" + id + "/unfreeze";
         Async.put(uri, EMPTY_BODY);
     }

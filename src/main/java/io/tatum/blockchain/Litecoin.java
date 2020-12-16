@@ -6,7 +6,6 @@ import io.tatum.model.response.ltc.LtcBlock;
 import io.tatum.model.response.ltc.LtcInfo;
 import io.tatum.model.response.ltc.LtcTx;
 import io.tatum.model.response.ltc.LtcUTXO;
-import io.tatum.utils.ApiKey;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
 
@@ -69,7 +68,7 @@ public final class Litecoin {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/LtcGetRawTransaction" target="_blank">Tatum API documentation</a>
      */
-    public LtcTx ltcGetTransaction(String hash) throws IOException, ExecutionException, InterruptedException {
+    public LtcTx ltcGetTransaction(String hash) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/litecoin/transaction/" + hash;
         return Async.get(uri, LtcTx.class);
     }

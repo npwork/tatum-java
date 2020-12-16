@@ -1,10 +1,10 @@
 package io.tatum.model.request;
 
-import io.tatum.model.response.ledger.Fiat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -13,16 +13,14 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
-public class CustomerUpdate {
+public class SubscriptionAttrIncomingBlockchainTx implements SubscriptionAttr {
 
-    private Country customerCountry;
+    @Size(min=24, max=24)
+    @NotEmpty()
+    private String id;
 
-    private Fiat accountingCurrency;
-
-    private Country providerCountry;
-
-    @Size(min = 1, max = 100)
-    @NotEmpty
-    private String externalId;
-
+    @URL()
+    @NotEmpty()
+    @Size(max=500)
+    private String url;
 }

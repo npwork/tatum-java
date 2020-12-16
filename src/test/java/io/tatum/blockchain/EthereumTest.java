@@ -14,7 +14,7 @@ import static org.hamcrest.Matchers.hasProperty;
 public class EthereumTest {
 
     @Test
-    public void ethGetTransactionsCountTest() throws InterruptedException, ExecutionException, IOException {
+    public void ethGetTransactionsCountTest() throws InterruptedException, ExecutionException {
         Ethereum ethereum = new Ethereum();
         // https://etherscan.io/address/0xec5a91b107775d267879e8474ced81a70bcfd7a9
         String address = "0xec5a91b107775d267879e8474ced81a70bcfd7a9";
@@ -23,14 +23,14 @@ public class EthereumTest {
     }
 
     @Test
-    public void ethGetCurrentBlockTest() throws InterruptedException, ExecutionException, IOException {
+    public void ethGetCurrentBlockTest() throws InterruptedException, ExecutionException {
         Ethereum ethereum = new Ethereum();
         BigDecimal block = ethereum.ethGetCurrentBlock();
         System.out.println(block);
     }
 
     @Test
-    public void ethGetBlockTest() throws InterruptedException, ExecutionException, IOException {
+    public void ethGetBlockTest() throws InterruptedException, ExecutionException {
         Ethereum ethereum = new Ethereum();
         // https://etherscan.io/block/11449144
         EthBlock block = ethereum.ethGetBlock("0x9f1f62a40f084b054400bbeaac766a4205a194761fa48297fd8b147cca6585e4");
@@ -42,7 +42,7 @@ public class EthereumTest {
     }
 
     @Test
-    public void ethGetAccountBalanceTest() throws InterruptedException, ExecutionException, IOException {
+    public void ethGetAccountBalanceTest() throws InterruptedException, ExecutionException {
         Ethereum ethereum = new Ethereum();
         String address = "0x8d056d457a52c4daf71cef45f540a040c143ea05";
         BigDecimal balance = ethereum.ethGetAccountBalance(address);

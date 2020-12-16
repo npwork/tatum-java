@@ -1,5 +1,6 @@
 package io.tatum.model.response.kms;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.tatum.model.request.Currency;
 import io.tatum.model.response.offchain.WithdrawalResponseData;
 import lombok.AllArgsConstructor;
@@ -8,12 +9,12 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TransactionKMS {
 
     private String id;
@@ -24,11 +25,11 @@ public class TransactionKMS {
 
     private String[] hashes;
 
-    private Optional<String> txId;
+    private String txId;
 
-    private Optional<String> withdrawalId;
+    private String withdrawalId;
 
-    private Optional<BigDecimal> index;
+    private BigDecimal index;
 
-    private Optional<WithdrawalResponseData[]> withdrawalResponses;
+    private WithdrawalResponseData[] withdrawalResponses;
 }
