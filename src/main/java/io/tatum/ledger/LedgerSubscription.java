@@ -3,11 +3,13 @@ package io.tatum.ledger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.tatum.model.request.CreateSubscription;
+import io.tatum.model.response.common.Id;
 import io.tatum.model.response.ledger.Account;
 import io.tatum.model.response.ledger.Subscription;
 import io.tatum.model.response.ledger.Transaction;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
+import io.tatum.utils.ObjectValidator;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -17,9 +19,12 @@ public class LedgerSubscription {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/createSubscription" target="_blank">Tatum API documentation</a>
      */
-    public String createNewSubscription(CreateSubscription data) throws IOException, ExecutionException, InterruptedException {
+    public Id createNewSubscription(CreateSubscription data) throws IOException, ExecutionException, InterruptedException {
+        if (!ObjectValidator.isValidated(data)) {
+            return null;
+        }
         String uri = BaseUrl.getInstance().getUrl() + "/v3/subscription";
-        return Async.post(uri, data, String.class);
+        return Async.post(uri, data, Id.class);
     }
 
     /**

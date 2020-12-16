@@ -353,12 +353,12 @@ public class LedgerAccountTest {
     public void getAccountsByCustomerIdTest() throws InterruptedException, ExecutionException, IOException {
         LedgerAccount ledgerAccount = new LedgerAccount();
         // Create account
-        Account account = ledgerAccount.createAccount(createAccountWithCurrencyOnly());
+        Account account = ledgerAccount.createAccount(createAccount());
         String customerId = account.getCustomerId();
         System.out.println(account);
         System.out.println(customerId);
 
-        account = ledgerAccount.createAccount(createAccountWithCurrencyOnly());
+        account = ledgerAccount.createAccount(createAccount());
         customerId = account.getCustomerId();
         System.out.println(account);
         System.out.println(customerId);

@@ -24,8 +24,6 @@ public class KMS {
      * For more details, see <a href="https://tatum.io/apidoc#operation/DeletePendingTransactionToSign" target="_blank">Tatum API documentation</a>
      */
     public void deleteTransactionKMS(String id, Boolean revert) throws IOException, ExecutionException, InterruptedException {
-        // TO-DO
-        // revert = true
         String uri = BaseUrl.getInstance().getUrl() + "/v3/kms/" + id + "/?revert=" + revert;
         Async.get(uri);
     }
@@ -35,7 +33,6 @@ public class KMS {
      */
     public void completePendingTransactionKMS(String id, String txId) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/kms/" + id + "/" + txId;
-        String requestBody = "{}";
         Async.put(uri, EMPTY_BODY);
     }
 

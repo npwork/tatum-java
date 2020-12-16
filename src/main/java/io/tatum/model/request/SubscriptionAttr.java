@@ -1,4 +1,4 @@
 package io.tatum.model.request;
 
-public class SubscriptionAttr {
+public interface SubscriptionAttr {
 }
