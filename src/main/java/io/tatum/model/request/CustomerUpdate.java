@@ -14,7 +14,6 @@ import javax.validation.constraints.Size;
 @EqualsAndHashCode
 public class CustomerUpdate {
 
-    @Size(min = 2, max = 2)
     private Country customerCountry;
 
     private Fiat accountingCurrency;

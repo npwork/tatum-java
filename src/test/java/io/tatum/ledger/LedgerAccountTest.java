@@ -23,11 +23,15 @@ public class LedgerAccountTest {
 
     @Test
     public void createAccountTest() throws InterruptedException, ExecutionException, IOException {
-        CreateAccount createAccount = createAccount();
-        assertTrue(ObjectValidator.isValidated(createAccount));
-
         LedgerAccount ledgerAccount = new LedgerAccount();
+        CreateAccount createAccount = createAccountWithCurrencyOnly();
         Account account = ledgerAccount.createAccount(createAccount);
+        System.out.println(account);
+        System.out.println(account.getBalance());
+        assertThat(account, hasProperty("id", notNullValue()));
+
+        createAccount = createAccount();
+        account = ledgerAccount.createAccount(createAccount);
         System.out.println(account);
         System.out.println(account.getBalance());
         assertThat(account, hasProperty("id", notNullValue()));
@@ -37,9 +41,30 @@ public class LedgerAccountTest {
         // AccountBalance(accountBalance=0, availableBalance=0)
     }
 
+    @Test
+    public void createAccountFailedTest() throws InterruptedException, ExecutionException, IOException {
+        LedgerAccount ledgerAccount = new LedgerAccount();
+        CreateAccount createAccount = createAccountFailed();
+        Account account = ledgerAccount.createAccount(createAccount);
+        assertNull(account);
+    }
+
+    @Test
+    public void createAccountNestedFailedTest() throws InterruptedException, ExecutionException, IOException {
+        LedgerAccount ledgerAccount = new LedgerAccount();
+        CreateAccount createAccount = createAccountNestedFailed();
+        Account account = ledgerAccount.createAccount(createAccount);
+        assertNull(account);
+    }
+
+    private CreateAccount createAccountWithCurrencyOnly() {
+        CreateAccount createAccount = new CreateAccount();
+        createAccount.setCurrency("ETH");
+        return createAccount;
+    }
+
     private CreateAccount createAccount() {
         CreateAccount createAccount = new CreateAccount();
-
         CustomerUpdate customerUpdate = new CustomerUpdate(Country.SZ, Fiat.EUR, Country.SZ, "test");
         createAccount.setCustomer(customerUpdate);
 
@@ -47,6 +72,30 @@ public class LedgerAccountTest {
         createAccount.setCurrency("ETH");
         createAccount.setXpub(TESTNET_XPUB_OF_MNEM_15);
         createAccount.setAccountCode("test12345");
+        return createAccount;
+    }
+
+    private CreateAccount createAccountFailed() {
+        CreateAccount createAccount = new CreateAccount();
+        CustomerUpdate customerUpdate = new CustomerUpdate(Country.SZ, Fiat.EUR, Country.SZ, "test");
+        createAccount.setCustomer(customerUpdate);
+
+        createAccount.setAccountingCurrency(Fiat.EUR);
+        createAccount.setCurrency("ETH");
+        createAccount.setXpub("xpub6DYE4EtQyRirEhSujw8fCtpAHK4jxNepFiVWBy85x5Nes6vC2b2uS2dgMo22pULAHt7k79DDJnAa3DhXQnKEvc8j1s45cMC42Co7pXpnVQdxpub6DYE4EtQyRirEhSujw8fCtpAHK4jxNepFiVWBy85x5Nes6vC2b2uS2dgMo22pULAHt7k79DDJnAa3DhXQnKEvc8j1s45cMC42Co7pXpnVQd");
+        createAccount.setAccountCode("test12345");
+        return createAccount;
+    }
+
+    private CreateAccount createAccountNestedFailed() {
+        CreateAccount createAccount = new CreateAccount();
+        CustomerUpdate customerUpdate = new CustomerUpdate(Country.SZ, Fiat.EUR, Country.SZ, "test");
+        createAccount.setCustomer(customerUpdate);
+
+        createAccount.setAccountingCurrency(Fiat.EUR);
+        createAccount.setCurrency("ETH");
+        createAccount.setXpub("xpub6DYE4EtQyRirEhSujw8fCtpAHK4jxNepFiVWBy85x5Nes6vC2b2uS2dgMo22pULAHt7k79DDJnAa3DhXQnKEvc8j1s45cMC42Co7pXpnVQdxpub6DYE4EtQyRirEhSujw8fCtpAHK4jxNepFiVWBy85x5Nes6vC2b2uS2dgMo22pULAHt7k79DDJnAa3DhXQnKEvc8j1s45cMC42Co7pXpnVQd");
+        createAccount.setAccountCode("");
         return createAccount;
     }
 
@@ -155,7 +204,7 @@ public class LedgerAccountTest {
     public void deleteBlockedAmountForAccountTest() throws InterruptedException, ExecutionException, IOException {
         LedgerAccount ledgerAccount = new LedgerAccount();
         // Create account
-        Account account = ledgerAccount.createAccount(createAccount());
+        Account account = ledgerAccount.createAccount(createAccountWithCurrencyOnly());
         String id = account.getId();
 
         // Create blocked amount
@@ -175,7 +224,7 @@ public class LedgerAccountTest {
     public void activateAccountTest() throws InterruptedException, ExecutionException, IOException {
         LedgerAccount ledgerAccount = new LedgerAccount();
         // Create account
-        Account account = ledgerAccount.createAccount(createAccount());
+        Account account = ledgerAccount.createAccount(createAccountWithCurrencyOnly());
         assertNotEquals(account, null);
         String id = account.getId();
 
@@ -192,7 +241,7 @@ public class LedgerAccountTest {
     public void deactivateAccountTest() throws InterruptedException, ExecutionException, IOException {
         LedgerAccount ledgerAccount = new LedgerAccount();
         // Create account
-        Account account = ledgerAccount.createAccount(createAccount());
+        Account account = ledgerAccount.createAccount(createAccountWithCurrencyOnly());
         assertThat(account, hasProperty("active", equalTo(true)));
         String id = account.getId();
         System.out.println(id);
@@ -210,7 +259,7 @@ public class LedgerAccountTest {
     public void freezeAccountTest() throws InterruptedException, ExecutionException, IOException {
         LedgerAccount ledgerAccount = new LedgerAccount();
         // Create account
-        Account account = ledgerAccount.createAccount(createAccount());
+        Account account = ledgerAccount.createAccount(createAccountWithCurrencyOnly());
         assertThat(account, hasProperty("frozen", equalTo(false)));
         String id = account.getId();
 
@@ -223,7 +272,7 @@ public class LedgerAccountTest {
     public void unfreezeAccountTest() throws InterruptedException, ExecutionException, IOException {
         LedgerAccount ledgerAccount = new LedgerAccount();
         // Create account
-        Account account = ledgerAccount.createAccount(createAccount());
+        Account account = ledgerAccount.createAccount(createAccountWithCurrencyOnly());
         assertThat(account, hasProperty("frozen", equalTo(false)));
         String id = account.getId();
 
@@ -240,12 +289,12 @@ public class LedgerAccountTest {
     public void getAccountsByCustomerIdTest() throws InterruptedException, ExecutionException, IOException {
         LedgerAccount ledgerAccount = new LedgerAccount();
         // Create account
-        Account account = ledgerAccount.createAccount(createAccount());
+        Account account = ledgerAccount.createAccount(createAccountWithCurrencyOnly());
         String customerId = account.getCustomerId();
         System.out.println(account);
         System.out.println(customerId);
 
-        account = ledgerAccount.createAccount(createAccount());
+        account = ledgerAccount.createAccount(createAccountWithCurrencyOnly());
         customerId = account.getCustomerId();
         System.out.println(account);
         System.out.println(customerId);
@@ -258,12 +307,12 @@ public class LedgerAccountTest {
     public void getAllAccountsTest() throws InterruptedException, ExecutionException, IOException {
         LedgerAccount ledgerAccount = new LedgerAccount();
         // Create account
-        Account account = ledgerAccount.createAccount(createAccount());
+        Account account = ledgerAccount.createAccount(createAccountWithCurrencyOnly());
         String customerId = account.getCustomerId();
         System.out.println(account);
         System.out.println(customerId);
 
-        account = ledgerAccount.createAccount(createAccount());
+        account = ledgerAccount.createAccount(createAccountWithCurrencyOnly());
         customerId = account.getCustomerId();
         System.out.println(account);
         System.out.println(customerId);
@@ -277,7 +326,7 @@ public class LedgerAccountTest {
     public void getAccountBalanceTest() throws InterruptedException, ExecutionException, IOException {
         LedgerAccount ledgerAccount = new LedgerAccount();
         // Create account
-        Account account = ledgerAccount.createAccount(createAccount());
+        Account account = ledgerAccount.createAccount(createAccountWithCurrencyOnly());
 
         AccountBalance accountBalance = ledgerAccount.getAccountBalance(account.getId());
         System.out.println(accountBalance);
