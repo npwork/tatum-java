@@ -43,8 +43,9 @@ public class LedgerAccount {
      * For more details, see <a href="https://tatum.io/apidoc#operation/createAccountBatch" target="_blank">Tatum API documentation</a>
      */
     public Account[] createAccounts(CreateAccountsBatch accounts) throws IOException, ExecutionException, InterruptedException {
-//        await validateOrReject(accounts);
-//        TO-DO
+        if (!ObjectValidator.isValidated(accounts)) {
+            return null;
+        }
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/batch";
         return Async.post(uri, accounts, Account[].class);
     }
@@ -63,7 +64,9 @@ public class LedgerAccount {
      * For more details, see <a href="https://tatum.io/apidoc#operation/blockAmount" target="_blank">Tatum API documentation</a>
      */
     public String blockAmount(String id, BlockAmount block) throws IOException, ExecutionException, InterruptedException {
-//      await validateOrReject(block);
+        if (!ObjectValidator.isValidated(block)) {
+            return null;
+        }
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/block/" + id;
         var res = Async.post(uri, block);
         if (res != null) {

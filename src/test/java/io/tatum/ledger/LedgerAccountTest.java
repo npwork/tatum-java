@@ -145,10 +145,74 @@ public class LedgerAccountTest {
     }
 
     @Test
-    public void blockAmountTest() throws ExecutionException, InterruptedException, IOException {
+    public void getCreateAccountsNullFailedTest() throws InterruptedException, ExecutionException, IOException {
+        LedgerAccount ledgerAccount = new LedgerAccount();
+
+        CreateAccountsBatch createAccountsBatch = new CreateAccountsBatch();
+//        CreateAccount[] createAccounts = new CreateAccount[2];
+//        createAccountsBatch.setAccounts(createAccounts);
+        Account[] accounts = ledgerAccount.createAccounts(createAccountsBatch);
+        assertNull(accounts);
+    }
+
+    @Test
+    public void getCreateAccountsEmptyFailedTest() throws InterruptedException, ExecutionException, IOException {
+        LedgerAccount ledgerAccount = new LedgerAccount();
+
+        CreateAccountsBatch createAccountsBatch = new CreateAccountsBatch();
+        CreateAccount[] createAccounts = new CreateAccount[0];
+        createAccountsBatch.setAccounts(createAccounts);
+        Account[] accounts = ledgerAccount.createAccounts(createAccountsBatch);
+        assertNull(accounts);
+    }
+
+    @Test
+    public void getCreateAccountsEmptyElementFailedTest() throws InterruptedException, ExecutionException, IOException {
+        LedgerAccount ledgerAccount = new LedgerAccount();
+
+        CreateAccountsBatch createAccountsBatch = new CreateAccountsBatch();
+        CreateAccount[] createAccounts = new CreateAccount[2];
+        System.out.println(createAccounts.length);
+        createAccountsBatch.setAccounts(createAccounts);
+        Account[] accounts = ledgerAccount.createAccounts(createAccountsBatch);
+        assertNull(accounts);
+    }
+
+    @Test
+    public void getCreateAccountsNestedFailedTest() throws InterruptedException, ExecutionException, IOException {
+        LedgerAccount ledgerAccount = new LedgerAccount();
+
+        CreateAccountsBatch createAccountsBatch = new CreateAccountsBatch();
+        CreateAccount[] createAccounts = new CreateAccount[2];
+
+        CreateAccount createAccount = new CreateAccount();
+        CustomerUpdate customerUpdate = new CustomerUpdate(Country.SZ, Fiat.EUR, Country.SZ, "testA");
+        createAccount.setCustomer(customerUpdate);
+        createAccount.setCurrency("ETH");
+        createAccount.setXpub(TESTNET_XPUB_OF_MNEM_15);
+        createAccount.setAccountCode("test12345");
+
+        createAccounts[0] = createAccount;
+
+        CreateAccount createAccount2 = new CreateAccount();
+        CustomerUpdate customerUpdate2 = new CustomerUpdate(Country.US, Fiat.USD, Country.SZ, "testB");
+        createAccount2.setCustomer(customerUpdate2);
+        createAccount2.setCurrency("BTC");
+        createAccount2.setAccountCode("123456789012345678901234567890123456789012345678901");
+
+        createAccounts[1] = createAccount2;
+
+        createAccountsBatch.setAccounts(createAccounts);
+
+        Account[] accounts = ledgerAccount.createAccounts(createAccountsBatch);
+        assertNull(accounts);
+    }
+
+    @Test
+    public void blockAmountFailedTest() throws ExecutionException, InterruptedException, IOException {
         LedgerAccount ledgerAccount = new LedgerAccount();
         String id = "5fd77feea8acfcccef97a98b";
-        BlockAmount blockAmount = createBlockAmount("1234", "123ABC");
+        BlockAmount blockAmount = createBlockAmount("1234XYZ", "123ABC");
         String result = ledgerAccount.blockAmount(id, blockAmount);
         System.out.println(result);
     }

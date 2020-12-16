@@ -1,6 +1,7 @@
 package io.tatum.utils;
 
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.validation.*;
 import java.util.Set;
@@ -14,10 +15,16 @@ public class ObjectValidator {
     public static Boolean isValidated(Object value) {
         Set<ConstraintViolation<Object>> violations = validator.validate(value);
         for (ConstraintViolation<Object> violation : violations) {
+            String message = null;
             for (Path.Node node : violation.getPropertyPath()) {
-                log.error(String.format("%s %s", node.getName(), violation.getMessage()));
+                message = String.format("%s %s", node.getName(), violation.getMessage());
+            }
+            // nested message
+            if (StringUtils.isNotEmpty(message)) {
+                log.error(message);
                 return false;
             }
+            return false;
         }
         return true;
     }
