@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 
 @AllArgsConstructor
@@ -17,10 +18,13 @@ import java.math.BigDecimal;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TransactionKMS {
 
+    @NotEmpty
     private String id;
 
+    @NotEmpty
     private Currency chain;
 
+    @NotEmpty
     private String serializedTransaction;
 
     private String[] hashes;
