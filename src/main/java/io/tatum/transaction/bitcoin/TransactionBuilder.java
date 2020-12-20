@@ -12,9 +12,9 @@ import java.util.List;
 
 import static org.bitcoinj.core.Utils.HEX;
 
-public class TransactionBuider {
+public class TransactionBuilder {
 
-    private static TransactionBuider instance;
+    private static TransactionBuilder instance;
 
     private NetworkParameters network;
     private Context context;
@@ -23,17 +23,17 @@ public class TransactionBuider {
     private List<ECKey> privateKeysToSign;
     private byte[] bitcoinSerialize;
 
-    private TransactionBuider() {
+    private TransactionBuilder() {
     }
 
-    public static synchronized TransactionBuider getInstance() {
+    public static synchronized TransactionBuilder getInstance() {
         if (instance == null) {
-            instance = new TransactionBuider();
+            instance = new TransactionBuilder();
         }
         return instance;
     }
 
-    public TransactionBuider Init(NetworkParameters network) {
+    public TransactionBuilder Init(NetworkParameters network) {
         this.network = network;
         this.context = new Context(network);
         this.transaction = new Transaction(network);
@@ -42,7 +42,7 @@ public class TransactionBuider {
         return this;
     }
 
-    public TransactionBuider addOutput(String address, BigDecimal value) {
+    public TransactionBuilder addOutput(String address, BigDecimal value) {
         Address p2SHAddress = LegacyAddress.fromBase58(this.network, address);
         Script scriptPubKey = ScriptBuilder.createOutputScript(p2SHAddress);
         BigDecimal satoshis = value.multiply(BigDecimal.valueOf(100000000));
@@ -52,7 +52,7 @@ public class TransactionBuider {
         return this;
     }
 
-    public TransactionBuider addInput(String txHash, long index, String key) {
+    public TransactionBuilder addInput(String txHash, long index, String key) {
         ECKey ecKey = DumpedPrivateKey.fromBase58(network, key).getKey();
         Script p2PKHOutputScript = ScriptBuilder.createP2PKHOutputScript(ecKey);
         byte[] message = HEX.decode(txHash);
@@ -61,7 +61,7 @@ public class TransactionBuider {
         return this;
     }
 
-    private TransactionBuider signInput() {
+    private TransactionBuilder signInput() {
         for (int i = 0; i < privateKeysToSign.size(); i++) {
             ECKey key = privateKeysToSign.get(i);
             Address sourceAddress = Address.fromKey(this.network, key, Script.ScriptType.P2PKH);
@@ -72,7 +72,7 @@ public class TransactionBuider {
         return this;
     }
 
-    public TransactionBuider build() {
+    public TransactionBuilder build() {
         this.signInput();
         this.transaction.verify();
         this.transaction.getConfidence().setSource(TransactionConfidence.Source.SELF);

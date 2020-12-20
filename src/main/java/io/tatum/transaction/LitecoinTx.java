@@ -4,12 +4,10 @@ import io.tatum.blockchain.Litecoin;
 import io.tatum.model.request.transaction.TransferBtcBasedBlockchain;
 import io.tatum.model.response.ltc.LtcTxOutputs;
 import io.tatum.model.response.ltc.LtcUTXO;
-import io.tatum.transaction.bitcoin.TransactionBuider;
+import io.tatum.transaction.bitcoin.TransactionBuilder;
 import io.tatum.utils.ObjectValidator;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.ArrayUtils;
-import org.bitcoinj.core.DumpedPrivateKey;
-import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
 
 import java.util.concurrent.CompletableFuture;
@@ -36,12 +34,12 @@ public class LitecoinTx {
 
             Litecoin litecoin = new Litecoin();
 
-            TransactionBuider transactionBuider = TransactionBuider.getInstance();
-            transactionBuider.Init(network);
+            TransactionBuilder transactionBuilder = TransactionBuilder.getInstance();
+            transactionBuilder.Init(network);
 
             // adding outputs before adding inputs
             for (var item : to) {
-                transactionBuider.addOutput(item.getAddress(), item.getValue());
+                transactionBuilder.addOutput(item.getAddress(), item.getValue());
             }
 
             // adding inputs
@@ -54,21 +52,21 @@ public class LitecoinTx {
                             for (int i = 0; i < outputs.length; i++) {
                                 if (outputs[i].getAddress().equals(item.getAddress())) {
                                     LtcUTXO utxo = litecoin.ltcGetUTXO(tx.getHash(), outputs[i].getValue());
-                                    transactionBuider.addInput(item.getAddress(), utxo.getIndex().longValue(), item.getPrivateKey());
+                                    transactionBuilder.addInput(item.getAddress(), utxo.getIndex().longValue(), item.getPrivateKey());
                                 }
                             }
                         }
                     }
                 } else if (ArrayUtils.isNotEmpty(fromUTXO)) {
                     for (var item : fromUTXO) {
-                        transactionBuider.addInput(item.getTxHash(), item.getIndex().longValue(), item.getPrivateKey());
+                        transactionBuilder.addInput(item.getTxHash(), item.getIndex().longValue(), item.getPrivateKey());
                     }
                 }
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
                 return null;
             }
-            return transactionBuider.build().toHex();
+            return transactionBuilder.build().toHex();
         }).get();
     }
 }

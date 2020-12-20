@@ -5,7 +5,7 @@ import io.tatum.model.request.transaction.TransferBtcBasedBlockchain;
 import io.tatum.model.response.btc.BtcTx;
 import io.tatum.model.response.btc.BtcTxOutputs;
 import io.tatum.model.response.btc.BtcUTXO;
-import io.tatum.transaction.bitcoin.TransactionBuider;
+import io.tatum.transaction.bitcoin.TransactionBuilder;
 import io.tatum.utils.ObjectValidator;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.ArrayUtils;
@@ -35,12 +35,12 @@ public class BitcoinTx {
             var fromAddress = body.getFromAddress();
 
             Bitcoin bitcoin = new Bitcoin();
-            TransactionBuider transactionBuider = TransactionBuider.getInstance();
-            transactionBuider.Init(network);
+            TransactionBuilder transactionBuilder = TransactionBuilder.getInstance();
+            transactionBuilder.Init(network);
 
             // adding outputs before adding inputs
             for (var item : to) {
-                transactionBuider.addOutput(item.getAddress(), item.getValue());
+                transactionBuilder.addOutput(item.getAddress(), item.getValue());
             }
 
             // adding inputs
@@ -53,14 +53,14 @@ public class BitcoinTx {
                             for (int i = 0; i < outputs.length; i++) {
                                 if (outputs[i].getAddress().equals(item.getAddress())) {
                                     BtcUTXO utxo = bitcoin.btcGetUTXO(tx.getHash(), outputs[i].getValue());
-                                    transactionBuider.addInput(tx.getHash(), utxo.getIndex().longValue(), item.getPrivateKey());
+                                    transactionBuilder.addInput(tx.getHash(), utxo.getIndex().longValue(), item.getPrivateKey());
                                 }
                             }
                         }
                     }
                 } else if (ArrayUtils.isNotEmpty(fromUTXO)) {
                     for (var item : fromUTXO) {
-                        transactionBuider.addInput(item.getTxHash(), item.getIndex().longValue(), item.getPrivateKey());
+                        transactionBuilder.addInput(item.getTxHash(), item.getIndex().longValue(), item.getPrivateKey());
                     }
                 }
             } catch (ExecutionException | InterruptedException e) {
@@ -68,7 +68,7 @@ public class BitcoinTx {
                 return null;
             }
 
-            return transactionBuider.build().toHex();
+            return transactionBuilder.build().toHex();
         }).get();
     }
 }
