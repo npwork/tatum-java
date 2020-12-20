@@ -26,9 +26,9 @@ public class LtcTx {
     private String block;
     private BigDecimal ts;
     private BigDecimal index;
-    private BtcTxOutputs[] outputs;
+    private LtcTxOutputs[] outputs;
     private BigDecimal flag;
-    private BtcTxInputs[] inputs;
+    private LtcTxInputs[] inputs;
     private BigDecimal version;
     private BigDecimal locktime;
 
