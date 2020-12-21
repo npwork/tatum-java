@@ -1,7 +1,7 @@
 package io.tatum.blockchain;
 
 import io.tatum.model.response.common.TransactionHash;
-import io.tatum.model.response.xrp.Account;
+import io.tatum.model.response.xrp.AccountData;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
 import org.json.JSONObject;
@@ -39,18 +39,18 @@ public class XRP {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetAccountInfo" target="_blank">Tatum API documentation</a>
      */
-    public Account xrpGetAccountInfo(String address) throws ExecutionException, InterruptedException {
+    public AccountData xrpGetAccountInfo(String address) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/account/" + address;
         var res = Async.get(uri);
         if (res != null) {
-            Account account = new Account();
+            AccountData accountData = new AccountData();
             JSONObject jsonObject = new JSONObject(res);
             JSONObject account_data = jsonObject.getJSONObject("account_data");
-            account.setAccountData(account_data.getBigDecimal("Sequence"));
-            account.setLedgerCurrentIndex(jsonObject.getBigDecimal("ledger_current_index"));
-            return account;
+            accountData.setSequence(account_data.getInt("Sequence"));
+            accountData.setLedgerCurrentIndex(jsonObject.getBigDecimal("ledger_current_index"));
+            return accountData;
         }
-        return Async.get(uri, Account.class);
+        return Async.get(uri, AccountData.class);
     }
 
     /**

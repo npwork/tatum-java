@@ -13,8 +13,7 @@ import java.math.BigDecimal;
 @Data
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Account {
-
+public class AccountData {
     private BigDecimal ledgerCurrentIndex;
-    private BigDecimal accountData;
+    private Integer sequence;
 }

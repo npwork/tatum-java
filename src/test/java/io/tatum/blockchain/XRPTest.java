@@ -1,6 +1,6 @@
 package io.tatum.blockchain;
 
-import io.tatum.model.response.xrp.Account;
+import io.tatum.model.response.xrp.AccountData;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -23,10 +23,10 @@ public class XRPTest {
         XRP xrp = new XRP();
         // https://xrpscan.com/account/rQ3fNyLjbvcDaPNS4EAJY8aT9zR3uGk17c
         String address = "rQ3fNyLjbvcDaPNS4EAJY8aT9zR3uGk17c";
-        Account account = xrp.xrpGetAccountInfo(address);
-        System.out.println(account);
-        assertThat(account, hasProperty("ledgerCurrentIndex"));
-        assertThat(account, hasProperty("accountData"));
+        AccountData accountData = xrp.xrpGetAccountInfo(address);
+        System.out.println(accountData);
+        assertThat(accountData, hasProperty("ledgerCurrentIndex"));
+        assertThat(accountData, hasProperty("accountData"));
     }
 
     @Test
