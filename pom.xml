@@ -102,6 +102,12 @@
             <version>0.15.9</version>
         </dependency>
         <!--<dependency>
+            <groupId>cash.bitcoinj</groupId>
+            <artifactId>bitcoinj-core</artifactId>
+            <version>0.14.5.2</version>
+        </dependency>-->
+
+        <!--<dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.14</version>

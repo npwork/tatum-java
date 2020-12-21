@@ -8,7 +8,7 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.util.concurrent.ExecutionException;
 
-import static io.tatum.constants.Constant.TESTNET_BITCOIN;
+import static io.tatum.constants.Constant.BITCOIN_TESTNET;
 import static org.junit.Assert.assertEquals;
 
 public class BitcoinTxTest {
@@ -41,7 +41,7 @@ public class BitcoinTxTest {
 
         BitcoinTx tx = new BitcoinTx();
 
-        var txData = tx.prepareSignedTransaction(TESTNET_BITCOIN, body);
+        var txData = tx.prepareSignedTransaction(BITCOIN_TESTNET, body);
         assertEquals("02000000" + // version
                 "01" + // num txIn
                 "cc8f0fa58c9ae6954a1611abbd558eb5ae848c4e9a14f520157e21e803a1fa53" + // txHash
