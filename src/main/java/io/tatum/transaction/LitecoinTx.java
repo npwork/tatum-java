@@ -110,9 +110,9 @@ public class LitecoinTx {
      * @param body    content of the transaction to broadcast
      * @returns transaction id of the transaction in the blockchain
      */
-    public TransactionHash sendBitcoinTransaction(NetworkParameters network, TransferBtcBasedBlockchain body) throws ExecutionException, InterruptedException, IOException {
-        Bitcoin bitcoin = new Bitcoin();
-        String txData = new BitcoinTx().prepareSignedTransaction(network, body);
-        return bitcoin.btcBroadcast(txData, null);
+    public TransactionHash sendLitecoinTransaction(NetworkParameters network, TransferBtcBasedBlockchain body) throws ExecutionException, InterruptedException, IOException {
+        Litecoin litecoin = new Litecoin();
+        String txData = new LitecoinTx().prepareSignedTransaction(network, body);
+        return litecoin.ltcBroadcast(txData, null);
     }
 }
