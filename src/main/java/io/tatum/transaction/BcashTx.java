@@ -1,46 +1,70 @@
 package io.tatum.transaction;
 
+import io.tatum.blockchain.Bcash;
+import io.tatum.model.request.transaction.FromUTXO;
+import io.tatum.model.request.transaction.To;
+import io.tatum.model.request.transaction.TransferBchBlockchain;
+import io.tatum.model.response.bch.BchTx;
+import io.tatum.transaction.bcash.TransactionBuilder;
+import io.tatum.utils.ObjectValidator;
+import io.tatum.utils.Promise;
+import org.apache.commons.lang3.ArrayUtils;
+import org.bitcoinj.core.NetworkParameters;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Stream;
+
 public class BcashTx {
 
     /**
      * Sign Bitcoin Cash transaction with private keys locally. Nothing is broadcast to the blockchain.
-     * @param testnet mainnet or testnet version
-     * @param body content of the transaction to broadcast
+     *
+     * @param network mainnet or testnet version
+     * @param body    content of the transaction to broadcast
      * @returns transaction data to be broadcast to blockchain.
      */
-    /*public CompletableFuture<Object> prepareBitcoinCashSignedTransaction(Boolean testnet, TransferBchBlockchain body) {
+    public String prepareBitcoinCashSignedTransaction(NetworkParameters network, TransferBchBlockchain body) throws ExecutionException, InterruptedException {
         if (!ObjectValidator.isValidated(body)) {
             return null;
         }
 
-        FromUTXO[] fromUTXO = body.getFromUTXO();
-        To[] to = body.getTo();
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                FromUTXO[] fromUTXO = body.getFromUTXO();
+                To[] to = body.getTo();
+
+                var transactionBuilder = new TransactionBuilder(network);
+                for (var item : to) {
+                    transactionBuilder.addOutput(item.getAddress(), item.getValue());
+                }
+
+                String[] txHashs = Stream.of(fromUTXO).map(u -> u.getTxHash()).toArray(size -> new String[size]);
+                List<BchTx> txs = getTransactions(txHashs);
 
 
-    var networkType = testnet ? "testnet" : "mainnet";
+                for (int i = 0; i < fromUTXO.length; i++) {
+                    FromUTXO item = fromUTXO[i];
+                    BigDecimal value = new BigDecimal(txs.get(i).getVout()[item.getIndex().intValue()].getValue());
+                    value.setScale(8, RoundingMode.FLOOR);
+                    long satoshis = value.multiply(BigDecimal.valueOf(100000000)).longValue();
+                    transactionBuilder.addInput(item.getTxHash(), item.getIndex().longValue(), item.getPrivateKey(), satoshis);
+                }
 
-    var transactionBuilder = new TransactionBuilder(networkType);
+                return transactionBuilder.build().toHex();
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }).get();
 
-    const privateKeysToSign: string[] = [];
-    const amountToSign: number[] = [];
-    const txs = await getTransactions(fromUTXO.map(u => u.txHash));
-        for (const [i, item] of fromUTXO.entries()) {
-            transactionBuilder.addInput(item.txHash, item.index);
-            privateKeysToSign.push(item.privateKey);
-            amountToSign.push(Number(new BigNumber(txs[i].vout[item.index].value).multipliedBy(100000000).toFixed(0, BigNumber.ROUND_FLOOR)));
-        }
-        for (const item of to) {
-            transactionBuilder.addOutput(item.address, Number(new BigNumber(item.value).multipliedBy(100000000).toFixed(0, BigNumber.ROUND_FLOOR)));
-        }
-
-        for (let i = 0; i < privateKeysToSign.length; i++) {
-        const ecPair = new ECPair().fromWIF(privateKeysToSign[i]);
-            transactionBuilder.sign(i, ecPair, undefined, transactionBuilder.hashTypes.SIGHASH_ALL, amountToSign[i], transactionBuilder.signatureAlgorithms.SCHNORR);
-        }
-        return transactionBuilder.build().toHex();
     }
 
-    public CompletableFuture<List<BchTx>> getTransactions(String[] txHash) {
+    public List<BchTx> getTransactions(String[] txHash) throws ExecutionException, InterruptedException {
         List<CompletableFuture<BchTx>> futures = new ArrayList<>();
         if (ArrayUtils.isEmpty(txHash)) {
             Bcash bcash = new Bcash();
@@ -57,6 +81,6 @@ public class BcashTx {
                 futures.add(future);
             }
         }
-        return Promise.all(futures);
-    }*/
+        return Promise.all(futures).get();
+    }
 }

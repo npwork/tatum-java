@@ -9,8 +9,8 @@ public class Constant {
 
     public static final String EMPTY_BODY = "{}";
 
-    public static final NetworkParameters MAINNET_BITCOIN = MainNetParams.get();
+    public static final NetworkParameters BITCOIN_MAINNET = MainNetParams.get();
 
-    public static final NetworkParameters TESTNET_BITCOIN = TestNet3Params.get();
+    public static final NetworkParameters BITCOIN_TESTNET = TestNet3Params.get();
 
 }
