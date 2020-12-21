@@ -117,6 +117,24 @@
             <artifactId>commons-codec</artifactId>
             <version>1.14</version>
         </dependency>-->
+        <!-- https://mvnrepository.com/artifact/io.xpring/xpring4j -->
+        <dependency>
+            <groupId>io.xpring</groupId>
+            <artifactId>xpring4j</artifactId>
+            <version>6.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>1.6.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>1.6.4</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
