@@ -6,7 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,6 +15,12 @@ import java.math.BigDecimal;
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AccountData {
-    private BigDecimal ledgerCurrentIndex;
+
+    @NotNull
+    @Min(0)
+    private Integer ledgerCurrentIndex;
+
+    @NotNull
+    @Min(0)
     private Integer sequence;
 }
