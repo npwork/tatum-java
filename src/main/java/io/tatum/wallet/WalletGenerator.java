@@ -19,11 +19,11 @@ import static org.bitcoinj.core.Utils.WHITESPACE_SPLITTER;
 public class WalletGenerator {
 
     /**
-     * Generate Bitcoin wallet
+     * Generate Bitcoin io.tatum.wallet
      *
      * @param network testnet or mainnet version of address
      * @param mnem    mnemonic seed to use
-     * @returns wallet
+     * @returns io.tatum.wallet
      */
     public static MnemonicWallet generateBtcWallet(NetworkParameters network, String mnem) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {

@@ -1,8 +1,7 @@
-package wallet;
+package io.tatum.wallet;
 
 import io.tatum.model.wallet.MnemonicWallet;
 import io.tatum.model.wallet.XrpWallet;
-import io.tatum.wallet.WalletGenerator;
 import io.xpring.xrpl.XrpException;
 import org.hamcrest.MatcherAssert;
 import org.junit.Test;
