@@ -7,6 +7,7 @@ import com.google.common.io.BaseEncoding;
 import io.tatum.blockchain.XRP;
 import io.tatum.model.request.Currency;
 import io.tatum.model.request.TransferXrp;
+import io.tatum.model.response.common.TransactionHash;
 import io.tatum.model.response.kms.TransactionKMS;
 import io.tatum.model.response.xrp.AccountData;
 import io.tatum.transaction.xrp.TransactionJSON;
@@ -20,12 +21,30 @@ import org.xrpl.rpc.v1.Common.Account;
 import org.xrpl.rpc.v1.Common.Amount;
 import org.xrpl.rpc.v1.Common.*;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 @Log4j2
 public class XrpTx {
+
+    /**
+     * Send Xrp transaction to the blockchain. This method broadcasts signed transaction to the blockchain.
+     * This operation is irreversible.
+     * @param body content of the transaction to broadcast
+     * @returns transaction id of the transaction in the blockchain
+     */
+    public TransactionHash sendXrpTransaction(TransferXrp body) throws ExecutionException, InterruptedException {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return new XRP().xrpBroadcast(prepareXrpSignedTransaction(body), null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }).get();
+    }
 
     /**
      * Sign Xrp transaction with private keys locally. Nothing is broadcast to the blockchain.
