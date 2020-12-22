@@ -47,7 +47,7 @@ public class XRP {
             JSONObject jsonObject = new JSONObject(res);
             JSONObject account_data = jsonObject.getJSONObject("account_data");
             accountData.setSequence(account_data.getInt("Sequence"));
-            accountData.setLedgerCurrentIndex(jsonObject.getBigDecimal("ledger_current_index"));
+            accountData.setLedgerCurrentIndex(jsonObject.getInt("ledger_current_index"));
             return accountData;
         }
         return Async.get(uri, AccountData.class);
