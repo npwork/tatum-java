@@ -37,4 +37,11 @@ public class AddressTest {
         assertEquals("mjJotvHmzEuyXZJGJXXknS6N3PWQnw6jf5", rs);
     }
 
+    @Test
+    public void generateBtcPrivateKey_Mainnet_Test() throws ExecutionException, InterruptedException {
+        Address address = new Address();
+        String rs = address.generateBtcPrivateKey(false, "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten", 1);
+        assertEquals("KwrYonf8pFfyQR87NTn124Ep9zoJsZMBCoVUi7mjMc1eTHDyLyBN", rs);
+    }
+
 }

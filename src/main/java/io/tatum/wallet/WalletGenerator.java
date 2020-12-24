@@ -26,18 +26,10 @@ public class WalletGenerator {
      */
     public static MnemonicWallet generateBtcWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
-
-            List<String> mnemonicCode = WHITESPACE_SPLITTER.splitToList(mnem);
-            byte[] seed = MnemonicCode.toSeed(mnemonicCode, "");
-            DeterministicKey masterPrivateKey = HDKeyDerivation.createMasterPrivateKey(seed);
-            DeterministicHierarchy dh = new DeterministicHierarchy(masterPrivateKey);
-
-            List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(BTC_DERIVATION_PATH);
             NetworkParameters network = testnet ? BITCOIN_TESTNET : BITCOIN_MAINNET;
-
-            int depth = path.size() - 1;
-            DeterministicKey ehkey = dh.deriveChild(path.subList(0, depth), false, true, path.get(depth));
-            return new MnemonicWallet(mnem, ehkey.serializePubB58(network));
+            List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(BTC_DERIVATION_PATH);
+            WalletBuilder walletBuilder = WalletBuilder.build().network(network).fromSeed(mnem).derivePath(path);
+            return new MnemonicWallet(mnem, walletBuilder.toBase58());
         }).get();
     }
 
@@ -49,19 +41,10 @@ public class WalletGenerator {
      */
     public static MnemonicWallet generateLtcWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
-
-            List<String> mnemonicCode = WHITESPACE_SPLITTER.splitToList(mnem);
-            byte[] seed = MnemonicCode.toSeed(mnemonicCode, "");
-            DeterministicKey masterPrivateKey = HDKeyDerivation.createMasterPrivateKey(seed);
-            DeterministicHierarchy dh = new DeterministicHierarchy(masterPrivateKey);
-
-            List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(LTC_DERIVATION_PATH);
             NetworkParameters network = testnet ? LITECOIN_TESTNET : LITECOIN_MAINNET;
-
-            int depth = path.size() - 1;
-            DeterministicKey ehkey = dh.deriveChild(path.subList(0, depth), false, true, path.get(depth));
-
-            return new MnemonicWallet(mnem, ehkey.serializePubB58(network));
+            List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(LTC_DERIVATION_PATH);
+            WalletBuilder walletBuilder = WalletBuilder.build().network(network).fromSeed(mnem).derivePath(path);
+            return new MnemonicWallet(mnem, walletBuilder.toBase58());
         }).get();
     }
 
@@ -70,9 +53,8 @@ public class WalletGenerator {
      */
     public static XrpWallet generateXrpWallet() throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
-            WalletGenerationResult generationResult = null;
             try {
-                generationResult = Wallet.generateRandomWallet();
+                WalletGenerationResult generationResult = Wallet.generateRandomWallet();
                 return new XrpWallet(generationResult.getWallet().getAddress(), generationResult.getWallet().getPrivateKey());
             } catch (XrpException e) {
                 e.printStackTrace();
