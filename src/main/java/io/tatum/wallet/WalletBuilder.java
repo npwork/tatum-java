@@ -13,7 +13,6 @@ public class WalletBuilder {
 
     private DeterministicHierarchy dh;
     private DeterministicKey ehkey;
-    private DeterministicKey indexPrivKey;
     private NetworkParameters network;
 
     private WalletBuilder() {
