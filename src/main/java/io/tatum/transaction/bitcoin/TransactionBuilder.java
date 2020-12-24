@@ -62,7 +62,7 @@ public class TransactionBuilder {
             ECKey key = privateKeysToSign.get(i);
             Address sourceAddress = Address.fromKey(this.network, key, Script.ScriptType.P2PKH);
             Script scriptPubKey = ScriptBuilder.createOutputScript(sourceAddress);
-            TransactionSignature txSignature = transaction.calculateSignature(0, key, scriptPubKey, Transaction.SigHash.ALL, false);
+            TransactionSignature txSignature = transaction.calculateSignature(i, key, scriptPubKey, Transaction.SigHash.ALL, false);
             this.transaction.getInput(i).setScriptSig(ScriptBuilder.createInputScript(txSignature, key));
         }
     }

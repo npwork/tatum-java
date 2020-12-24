@@ -13,16 +13,13 @@ public class WalletBuilder {
 
     private DeterministicHierarchy dh;
     private DeterministicKey ehkey;
-    private DeterministicKey indexPrivKey;
     private NetworkParameters network;
 
     private WalletBuilder() {
     }
 
-    public static synchronized WalletBuilder build() {
-        if (walletBuilder == null) {
-            walletBuilder = new WalletBuilder();
-        }
+    public static WalletBuilder build() {
+        walletBuilder = new WalletBuilder();
         return walletBuilder;
     }
 
