@@ -8,13 +8,11 @@ import io.xpring.xrpl.XrpException;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.crypto.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import static io.tatum.constants.Constant.*;
-import static org.bitcoinj.core.Utils.HEX;
 import static org.bitcoinj.core.Utils.WHITESPACE_SPLITTER;
 
 public class WalletGenerator {
@@ -22,11 +20,11 @@ public class WalletGenerator {
     /**
      * Generate Bitcoin io.tatum.wallet
      *
-     * @param network testnet or mainnet version of address
+     * @param testnet testnet or mainnet version of address
      * @param mnem    mnemonic seed to use
      * @returns io.tatum.wallet
      */
-    public static MnemonicWallet generateBtcWallet(Boolean network, String mnem) throws ExecutionException, InterruptedException {
+    public static MnemonicWallet generateBtcWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
 
             List<String> mnemonicCode = WHITESPACE_SPLITTER.splitToList(mnem);
@@ -34,22 +32,22 @@ public class WalletGenerator {
             DeterministicKey masterPrivateKey = HDKeyDerivation.createMasterPrivateKey(seed);
             DeterministicHierarchy dh = new DeterministicHierarchy(masterPrivateKey);
 
-            ChildNumber[] path = network ? BTC_DERIVATION_PATH : TESTNET_DERIVATION_PATH;
-            NetworkParameters mainnet = network ? BITCOIN_MAINNET : BITCOIN_TESTNET;
+            List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(BTC_DERIVATION_PATH);
+            NetworkParameters network = testnet ? BITCOIN_TESTNET : BITCOIN_MAINNET;
 
-            int depth = path.length - 1;
-            DeterministicKey ehkey = dh.deriveChild(Arrays.asList(path).subList(0, depth), false, true, path[depth]);
-            return new MnemonicWallet(mnem, ehkey.serializePubB58(mainnet));
+            int depth = path.size() - 1;
+            DeterministicKey ehkey = dh.deriveChild(path.subList(0, depth), false, true, path.get(depth));
+            return new MnemonicWallet(mnem, ehkey.serializePubB58(network));
         }).get();
     }
 
     /**
      * Generate Litecoin wallet
-     * @param network testnet or mainnet version of address
+     * @param testnet testnet or mainnet version of address
      * @param mnem mnemonic seed to use
      * @returns wallet
      */
-    public static MnemonicWallet generateLtcWallet(Boolean network, String mnem) throws ExecutionException, InterruptedException {
+    public static MnemonicWallet generateLtcWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
 
             List<String> mnemonicCode = WHITESPACE_SPLITTER.splitToList(mnem);
@@ -57,20 +55,29 @@ public class WalletGenerator {
             DeterministicKey masterPrivateKey = HDKeyDerivation.createMasterPrivateKey(seed);
             DeterministicHierarchy dh = new DeterministicHierarchy(masterPrivateKey);
 
-            ChildNumber[] path = network ? LTC_DERIVATION_PATH : TESTNET_DERIVATION_PATH;
-            NetworkParameters mainnet = network ? LITECOIN_MAINNET : LITECOIN_TESTNET;
+            List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(LTC_DERIVATION_PATH);
+            NetworkParameters network = testnet ? LITECOIN_TESTNET : LITECOIN_MAINNET;
 
-            int depth = path.length - 1;
-            DeterministicKey ehkey = dh.deriveChild(Arrays.asList(path).subList(0, depth), false, true, path[depth]);
-            return new MnemonicWallet(mnem, ehkey.serializePubB58(mainnet));
+            int depth = path.size() - 1;
+            DeterministicKey ehkey = dh.deriveChild(path.subList(0, depth), false, true, path.get(depth));
+
+            return new MnemonicWallet(mnem, ehkey.serializePubB58(network));
         }).get();
     }
 
     /**
      * Generate Xrp address and secret.
      */
-    public static XrpWallet generateXrpWallet() throws XrpException {
-        WalletGenerationResult generationResult = Wallet.generateRandomWallet();
-        return new XrpWallet(generationResult.getWallet().getAddress(), generationResult.getWallet().getPrivateKey());
+    public static XrpWallet generateXrpWallet() throws ExecutionException, InterruptedException {
+        return CompletableFuture.supplyAsync(() -> {
+            WalletGenerationResult generationResult = null;
+            try {
+                generationResult = Wallet.generateRandomWallet();
+                return new XrpWallet(generationResult.getWallet().getAddress(), generationResult.getWallet().getPrivateKey());
+            } catch (XrpException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }).get();
     }
 }

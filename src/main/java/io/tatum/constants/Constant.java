@@ -3,7 +3,6 @@ package io.tatum.constants;
 import io.tatum.utils.LtcMainNetParams;
 import io.tatum.utils.LtcTestNet3Params;
 import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.crypto.ChildNumber;
 import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.params.TestNet3Params;
 
@@ -22,12 +21,11 @@ public class Constant {
 
 
     // TESTNET_DERIVATION_PATH = 'm/44\'/1\'/0\'/0'
-    public static final ChildNumber[] TESTNET_DERIVATION_PATH = new ChildNumber[]{new ChildNumber(44, true), new ChildNumber(1, true), new ChildNumber(0, false), new ChildNumber(0, false)};
+    public static final String TESTNET_DERIVATION_PATH = "M/44H/1H/0H/0";
 
     // BTC_DERIVATION_PATH = 'm/44\'/0\'/0\'/0';
-    public static final ChildNumber[] BTC_DERIVATION_PATH = new ChildNumber[]{new ChildNumber(44, true), new ChildNumber(0, false), new ChildNumber(0, false), new ChildNumber(0, false)};
+    public static final String BTC_DERIVATION_PATH = "M/44H/0H/0H/0";
 
     //LTC_DERIVATION_PATH = 'm/44\'/2\'/0\'/0';
-    public static final ChildNumber[] LTC_DERIVATION_PATH = new ChildNumber[]{new ChildNumber(44, true), new ChildNumber(2, true), new ChildNumber(0, false), new ChildNumber(0, false)};
-
+    public static final String LTC_DERIVATION_PATH = "M/44H/2H/0H/0";
 }
