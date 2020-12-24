@@ -19,10 +19,8 @@ public class PrivateKeyBuilder {
     private PrivateKeyBuilder() {
     }
 
-    public static synchronized PrivateKeyBuilder build() {
-        if (privateKeyBuilder == null) {
-            privateKeyBuilder = new PrivateKeyBuilder();
-        }
+    public static PrivateKeyBuilder build() {
+        privateKeyBuilder = new PrivateKeyBuilder();
         return privateKeyBuilder;
     }
 

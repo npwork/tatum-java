@@ -19,10 +19,8 @@ public class WalletBuilder {
     private WalletBuilder() {
     }
 
-    public static synchronized WalletBuilder build() {
-        if (walletBuilder == null) {
-            walletBuilder = new WalletBuilder();
-        }
+    public static WalletBuilder build() {
+        walletBuilder = new WalletBuilder();
         return walletBuilder;
     }
 

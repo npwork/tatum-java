@@ -20,10 +20,8 @@ public class AddressBuilder {
     private AddressBuilder() {
     }
 
-    public static synchronized AddressBuilder build() {
-        if (addressBuilder == null) {
-            addressBuilder = new AddressBuilder();
-        }
+    public static AddressBuilder build() {
+        addressBuilder = new AddressBuilder();
         return addressBuilder;
     }
 
