@@ -13,10 +13,6 @@ public class AddressBuilder {
 
     private static AddressBuilder addressBuilder;
 
-    private DeterministicHierarchy dh;
-    private DeterministicKey ehkey;
-    private DeterministicKey indexPrivKey;
-
     DeterministicKey indexPubKey;
     DeterministicKey normalPubKey;
     private NetworkParameters network;

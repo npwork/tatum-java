@@ -40,11 +40,8 @@ public class Address {
     public String generateLtcAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             NetworkParameters network = testnet ? LITECOIN_TESTNET : LITECOIN_MAINNET;
-            var normalPubKey = DeterministicKey.deserializeB58(xpub, network);
-
-            var indexPubKey = HDKeyDerivation.deriveChildKey(normalPubKey, new ChildNumber(i, false));
-            LegacyAddress address = LegacyAddress.fromKey(network, ECKey.fromPublicOnly(indexPubKey.getPubKeyPoint()));
-            return address.toString();
+            ChildNumber path = new ChildNumber(i, false);
+            return AddressBuilder.build().network(network).fromBase58(xpub).derivePath(path).toBase58();
         }).get();
     }
 
