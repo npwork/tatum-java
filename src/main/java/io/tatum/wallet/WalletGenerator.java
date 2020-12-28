@@ -56,7 +56,7 @@ public class WalletGenerator {
      */
     public static MnemonicWallet generateEthWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
-            NetworkParameters network = testnet ? BITCOIN_TESTNET : BITCOIN_MAINNET;
+            NetworkParameters network = BITCOIN_MAINNET;
             List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(ETH_DERIVATION_PATH);
             WalletBuilder walletBuilder = WalletBuilder.build().network(network).fromSeed(mnem).derivePath(path);
             return new MnemonicWallet(mnem, walletBuilder.toBase58());
