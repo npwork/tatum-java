@@ -49,6 +49,21 @@ public class WalletGenerator {
     }
 
     /**
+     * Generate Ethereum or any other ERC20 wallet
+     * @param testnet testnet or mainnet version of address
+     * @param mnem mnemonic seed to use
+     * @returns wallet
+     */
+    public static MnemonicWallet generateEthWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
+        return CompletableFuture.supplyAsync(() -> {
+            NetworkParameters network = testnet ? BITCOIN_TESTNET : BITCOIN_MAINNET;
+            List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(ETH_DERIVATION_PATH);
+            WalletBuilder walletBuilder = WalletBuilder.build().network(network).fromSeed(mnem).derivePath(path);
+            return new MnemonicWallet(mnem, walletBuilder.toBase58());
+        }).get();
+    }
+
+    /**
      * Generate Xrp address and secret.
      */
     public static XrpWallet generateXrpWallet() throws ExecutionException, InterruptedException {

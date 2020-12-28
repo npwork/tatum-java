@@ -57,4 +57,22 @@ public class WalletGeneratorTest {
         assertThat(wallet, hasProperty("mnemonic", equalTo("quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten")));
         assertThat(wallet, hasProperty("xpub", equalTo("Ltub2aXe9g8RPgAcY6jb6FftNJfQXHMV6UNBeZwrWH1K3vjpua9u8uj95xkZyCC4utdEbfYeh9TwxcUiFy2mGzBCJVBwW3ezHmLX2fHxv7HUt8J")));
     }
+
+    @Test
+    public void generateEthWallet_Testnet_Test() throws ExecutionException, InterruptedException {
+        MnemonicWallet wallet = WalletGenerator.generateBtcWallet(true,
+                "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten");
+
+        assertThat(wallet, hasProperty("mnemonic", equalTo("quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten")));
+        assertThat(wallet, hasProperty("xpub", equalTo("xpub6FMiQpA54nciqs52guGVdWQ5TonZt5XtGsFpurgtttL7H3mSfaJDXv5aBdThjX6tW9HYaJSQ8wZVnLm1ixaQUu1MRQCwvwZ6U2cX6mwWT25")));
+    }
+
+    @Test
+    public void generateEthWallet_Mainnet_Test() throws ExecutionException, InterruptedException {
+        MnemonicWallet wallet = WalletGenerator.generateBtcWallet(false,
+                "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten");
+
+        assertThat(wallet, hasProperty("mnemonic", equalTo("quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten")));
+        assertThat(wallet, hasProperty("xpub", equalTo("xpub6DtR524VQx3ENj2E9pNZnjqkVp47YN5sRCP5y4Gs6KZTwDhH9HTVX8shJPt74WaPZRftRXFfnsyPbMPh6DMEmrQ2WBxDJzGxriStAB36bQM")));
+    }
 }
