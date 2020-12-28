@@ -9,8 +9,6 @@ import static org.bitcoinj.core.Utils.WHITESPACE_SPLITTER;
 
 public class PrivateKeyBuilder {
 
-    private static PrivateKeyBuilder privateKeyBuilder;
-
     private DeterministicHierarchy dh;
     private DeterministicKey ehkey;
     private DeterministicKey indexPrivKey;
@@ -20,35 +18,42 @@ public class PrivateKeyBuilder {
     }
 
     public static PrivateKeyBuilder build() {
-        privateKeyBuilder = new PrivateKeyBuilder();
-        return privateKeyBuilder;
+        return new PrivateKeyBuilder();
     }
 
-    public static PrivateKeyBuilder network(NetworkParameters network) {
-        privateKeyBuilder.network = network;
-        return privateKeyBuilder;
+    public PrivateKeyBuilder network(NetworkParameters network) {
+        this.network = network;
+        return this;
     }
 
-    public static PrivateKeyBuilder fromSeed(String mnemonic) {
+    public PrivateKeyBuilder fromSeed(String mnemonic) {
         List<String> mnemonicCode = WHITESPACE_SPLITTER.splitToList(mnemonic);
         byte[] seed = MnemonicCode.toSeed(mnemonicCode, "");
         DeterministicKey masterPrivateKey = HDKeyDerivation.createMasterPrivateKey(seed);
-        privateKeyBuilder.dh = new DeterministicHierarchy(masterPrivateKey);
-        return privateKeyBuilder;
+        this.dh = new DeterministicHierarchy(masterPrivateKey);
+        return this;
     }
 
-    public static PrivateKeyBuilder derivePath(List<ChildNumber> path) {
+    public PrivateKeyBuilder derivePath(List<ChildNumber> path) {
         int depth = path.size() - 1;
-        privateKeyBuilder.ehkey = privateKeyBuilder.dh.deriveChild(path.subList(0, depth), false, true, path.get(depth));
-        return privateKeyBuilder;
+        this.ehkey = this.dh.deriveChild(path.subList(0, depth), false, true, path.get(depth));
+        return this;
     }
 
-    public static PrivateKeyBuilder derive(int i) {
-        privateKeyBuilder.indexPrivKey = HDKeyDerivation.deriveChildKey(privateKeyBuilder.ehkey, new ChildNumber(i, false));
-        return privateKeyBuilder;
+    public PrivateKeyBuilder derive(int i) {
+        this.indexPrivKey = HDKeyDerivation.deriveChildKey(this.ehkey, new ChildNumber(i, false));
+        return this;
     }
 
-    public static String toWIF() {
-        return privateKeyBuilder.indexPrivKey.getPrivateKeyAsWiF(privateKeyBuilder.network);
+    public String toWIF() {
+        return this.indexPrivKey.getPrivateKeyAsWiF(this.network);
+    }
+
+//    public String toPrivateKeyString() {
+//        return "0x" + this.indexPrivKey.getPrivateKeyAsHex();
+//    }
+
+    public String toHex() {
+        return this.indexPrivKey.getPublicKeyAsHex();
     }
 }

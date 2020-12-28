@@ -28,4 +28,12 @@ public class Constant {
 
     //LTC_DERIVATION_PATH = 'm/44\'/2\'/0\'/0';
     public static final String LTC_DERIVATION_PATH = "M/44H/2H/0H/0";
+
+    public static final String BCH_DERIVATION_PATH = "M/44H/145H/0H/0";
+
+    public static final String ETH_DERIVATION_PATH = "M/44H/60H/0H/0";
+
+    public static final String VET_DERIVATION_PATH = "M/44H/818H/0H/0";
+
+    public static final String ADA_DERIVATION_PATH = "M/44H/1815H/0H/0/0";
 }
