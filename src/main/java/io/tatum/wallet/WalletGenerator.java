@@ -6,14 +6,14 @@ import io.xpring.xrpl.Wallet;
 import io.xpring.xrpl.WalletGenerationResult;
 import io.xpring.xrpl.XrpException;
 import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.crypto.*;
+import org.bitcoinj.crypto.ChildNumber;
+import org.bitcoinj.crypto.HDUtils;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import static io.tatum.constants.Constant.*;
-import static org.bitcoinj.core.Utils.WHITESPACE_SPLITTER;
 
 public class WalletGenerator {
 
@@ -43,6 +43,45 @@ public class WalletGenerator {
         return CompletableFuture.supplyAsync(() -> {
             NetworkParameters network = testnet ? LITECOIN_TESTNET : LITECOIN_MAINNET;
             List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(LTC_DERIVATION_PATH);
+            WalletBuilder walletBuilder = WalletBuilder.build().network(network).fromSeed(mnem).derivePath(path);
+            return new MnemonicWallet(mnem, walletBuilder.toBase58());
+        }).get();
+    }
+
+    public static MnemonicWallet generateBchWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
+        return CompletableFuture.supplyAsync(() -> {
+            NetworkParameters network = testnet ? BITCOIN_TESTNET : BITCOIN_MAINNET;
+            List<ChildNumber> path = HDUtils.parsePath(BCH_DERIVATION_PATH);
+            WalletBuilder walletBuilder = WalletBuilder.build().network(network).fromSeed(mnem).derivePath(path);
+            return new MnemonicWallet(mnem, walletBuilder.toBase58());
+        }).get();
+    }
+
+    /**
+     * Generate VeChain wallet
+     * @param testnet testnet or mainnet version of address
+     * @param mnem mnemonic seed to use
+     * @returns wallet
+     */
+    public static MnemonicWallet generateVetWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
+        return CompletableFuture.supplyAsync(() -> {
+            NetworkParameters network = BITCOIN_MAINNET;
+            List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(VET_DERIVATION_PATH);
+            WalletBuilder walletBuilder = WalletBuilder.build().network(network).fromSeed(mnem).derivePath(path);
+            return new MnemonicWallet(mnem, walletBuilder.toBase58());
+        }).get();
+    }
+
+    /**
+     * Generate Ethereum or any other ERC20 wallet
+     * @param testnet testnet or mainnet version of address
+     * @param mnem mnemonic seed to use
+     * @returns wallet
+     */
+    public static MnemonicWallet generateEthWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
+        return CompletableFuture.supplyAsync(() -> {
+            NetworkParameters network = BITCOIN_MAINNET;
+            List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(ETH_DERIVATION_PATH);
             WalletBuilder walletBuilder = WalletBuilder.build().network(network).fromSeed(mnem).derivePath(path);
             return new MnemonicWallet(mnem, walletBuilder.toBase58());
         }).get();

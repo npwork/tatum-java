@@ -1,7 +1,5 @@
 package io.tatum.wallet;
 
-import org.bitcoinj.core.ECKey;
-import org.bitcoinj.core.LegacyAddress;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.crypto.*;
 
@@ -9,38 +7,53 @@ import java.util.List;
 
 import static org.bitcoinj.core.Utils.WHITESPACE_SPLITTER;
 
-public class AddressBuilder {
+public class PrivateKeyBuilder {
 
-    private static AddressBuilder addressBuilder;
-
-    DeterministicKey indexPubKey;
-    DeterministicKey normalPubKey;
+    private DeterministicHierarchy dh;
+    private DeterministicKey ehkey;
+    private DeterministicKey indexPrivKey;
     private NetworkParameters network;
 
-    private AddressBuilder() {
+    private PrivateKeyBuilder() {
     }
 
-    public static AddressBuilder build() {
-        addressBuilder = new AddressBuilder();
-        return addressBuilder;
+    public static PrivateKeyBuilder build() {
+        return new PrivateKeyBuilder();
     }
 
-    public static AddressBuilder network(NetworkParameters network) {
-        addressBuilder.network = network;
-        return addressBuilder;
+    public PrivateKeyBuilder network(NetworkParameters network) {
+        this.network = network;
+        return this;
     }
 
-    public static AddressBuilder fromBase58(String xpub) {
-        addressBuilder.normalPubKey = DeterministicKey.deserializeB58(xpub, addressBuilder.network);
-        return addressBuilder;
+    public PrivateKeyBuilder fromSeed(String mnemonic) {
+        List<String> mnemonicCode = WHITESPACE_SPLITTER.splitToList(mnemonic);
+        byte[] seed = MnemonicCode.toSeed(mnemonicCode, "");
+        DeterministicKey masterPrivateKey = HDKeyDerivation.createMasterPrivateKey(seed);
+        this.dh = new DeterministicHierarchy(masterPrivateKey);
+        return this;
     }
 
-    public static AddressBuilder derivePath(ChildNumber path) {
-        addressBuilder.indexPubKey = HDKeyDerivation.deriveChildKey(addressBuilder.normalPubKey, path);
-        return addressBuilder;
+    public PrivateKeyBuilder derivePath(List<ChildNumber> path) {
+        int depth = path.size() - 1;
+        this.ehkey = this.dh.deriveChild(path.subList(0, depth), false, true, path.get(depth));
+        return this;
     }
 
-    public static String toBase58() {
-        return LegacyAddress.fromKey(addressBuilder.network, ECKey.fromPublicOnly(addressBuilder.indexPubKey.getPubKeyPoint())).toBase58();
+    public PrivateKeyBuilder derive(int i) {
+        this.indexPrivKey = HDKeyDerivation.deriveChildKey(this.ehkey, new ChildNumber(i, false));
+        return this;
+    }
+
+    public String toWIF() {
+        return this.indexPrivKey.getPrivateKeyAsWiF(this.network);
+    }
+
+//    public String toPrivateKeyString() {
+//        return "0x" + this.indexPrivKey.getPrivateKeyAsHex();
+//    }
+
+    public String toHex() {
+        return this.indexPrivKey.getPublicKeyAsHex();
     }
 }
