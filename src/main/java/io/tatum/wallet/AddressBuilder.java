@@ -9,6 +9,9 @@ import org.bitcoinj.crypto.DeterministicKey;
 import org.bitcoinj.crypto.HDKeyDerivation;
 import org.web3j.crypto.Keys;
 
+import java.math.BigInteger;
+import java.util.Arrays;
+
 public class AddressBuilder {
 
     DeterministicKey indexPubKey;
@@ -32,17 +35,9 @@ public class AddressBuilder {
         return this;
     }
 
-    public DeterministicKey lazyFromBase58(String xpub) {
-        return DeterministicKey.deserializeB58(xpub, this.network);
-    }
-
     public AddressBuilder derivePath(ChildNumber path) {
         this.indexPubKey = HDKeyDerivation.deriveChildKey(this.normalPubKey, path);
         return this;
-    }
-
-    public DeterministicKey lazyDerivePath(ChildNumber path) {
-        return HDKeyDerivation.deriveChildKey(this.normalPubKey, path);
     }
 
     public String toBase58() {
@@ -50,8 +45,9 @@ public class AddressBuilder {
     }
 
     public String toEtherAddress() {
-        System.out.println(this.indexPubKey.serializePubB58(this.network));
-        return Keys.getAddress(this.indexPubKey.getPublicKeyAsHex());
+        byte[] encoded = this.indexPubKey.getPubKeyPoint().getEncoded(false);
+        BigInteger publicKey = new BigInteger(1, Arrays.copyOfRange(encoded, 1, encoded.length));
+        return Keys.getAddress(publicKey);
     }
 
     public String toCashAddress() {

@@ -1,30 +1,12 @@
 package io.tatum.wallet;
 
-import com.google.common.collect.ImmutableList;
 import io.tatum.model.request.Currency;
-import org.bitcoinj.core.Base58;
-import org.bitcoinj.core.ECKey;
-import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.core.Sha256Hash;
-import org.bitcoinj.crypto.ChildNumber;
-import org.bitcoinj.crypto.DeterministicKey;
-import org.bitcoinj.crypto.HDUtils;
-import org.bitcoinj.crypto.LazyECPoint;
-import org.bouncycastle.math.ec.ECPoint;
 import org.junit.Test;
-import org.web3j.crypto.Bip32ECKeyPair;
-import org.web3j.crypto.Keys;
-import org.web3j.crypto.Sign;
-import org.web3j.utils.Numeric;
 
-import javax.annotation.Nullable;
-import java.math.BigInteger;
-import java.nio.ByteBuffer;
 import java.util.concurrent.ExecutionException;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.junit.Assert.assertEquals;
-import static org.web3j.crypto.Hash.sha256;
 
 public class AddressTest {
 
@@ -74,123 +56,29 @@ public class AddressTest {
     @Test
     public void generateEthAddress_Mainnet_Test() throws ExecutionException, InterruptedException {
         Address address = new Address();
-        String rs = address.generateEthAddress(false, "xpub68NZiKmJWnxxS6aaHmn81bvJeTESw724CRDs6HbuccFQN9Ku14VQrADWgqbhhTHBaohPX4CjNLf9fq9MYo6oDaPPLPxSb7gwQN3ih19Zm4Y", 1);
-        assertEquals("0x31f67640a3ef168e5885fbe46e99c0096cde5cb4", rs);
-    }
-
-    /** Deserialize a base-58-encoded HD Key with no parent */
-    public static Bip32ECKeyPair deserializeB58(String base58, NetworkParameters params) {
-        return deserializeB58(null, base58, params);
-    }
-
-    public static Bip32ECKeyPair deserializeB58(@Nullable DeterministicKey parent, String base58, NetworkParameters params) {
-        return deserialize(params, Base58.decodeChecked(base58), parent);
-    }
-
-    /**
-     * Deserialize an HD Key.
-     * @param parent The parent node in the given key's deterministic hierarchy.
-     */
-    public static Bip32ECKeyPair deserialize(NetworkParameters params, byte[] serializedKey, @Nullable DeterministicKey parent) {
-        ByteBuffer buffer = ByteBuffer.wrap(serializedKey);
-        int header = buffer.getInt();
-        final boolean pub = header == params.getBip32HeaderP2PKHpub() || header == params.getBip32HeaderP2WPKHpub();
-        final boolean priv = header == params.getBip32HeaderP2PKHpriv() || header == params.getBip32HeaderP2WPKHpriv();
-        if (!(pub || priv))
-            throw new IllegalArgumentException("Unknown header bytes: " + toBase58(serializedKey).substring(0, 4));
-        int depth = buffer.get() & 0xFF; // convert signed byte to positive int since depth cannot be negative
-        final int parentFingerprint = buffer.getInt();
-        final int i = buffer.getInt();
-        final ChildNumber childNumber = new ChildNumber(i);
-        ImmutableList<ChildNumber> path;
-        if (parent != null) {
-            if (parentFingerprint == 0)
-                throw new IllegalArgumentException("Parent was provided but this key doesn't have one");
-            if (parent.getFingerprint() != parentFingerprint)
-                throw new IllegalArgumentException("Parent fingerprints don't match");
-            path = HDUtils.append(parent.getPath(), childNumber);
-            if (path.size() != depth)
-                throw new IllegalArgumentException("Depth does not match");
-        } else {
-            if (depth >= 1)
-                // We have been given a key that is not a root key, yet we lack the object representing the parent.
-                // This can happen when deserializing an account key for a watching wallet.  In this case, we assume that
-                // the client wants to conceal the key's position in the hierarchy.  The path is truncated at the
-                // parent's node.
-                path = ImmutableList.of(childNumber);
-            else path = ImmutableList.of();
-        }
-        byte[] chainCode = new byte[32];
-        buffer.get(chainCode);
-        byte[] data = new byte[33];
-        buffer.get(data);
-
-
-        checkArgument(!buffer.hasRemaining(), "Found unexpected data in key");
-        if (pub) {
-//            return new DeterministicKey(path, chainCode, new LazyECPoint(ECKey.CURVE.getCurve(), data), parent, depth, parentFingerprint);
-//            return new DeterministicKey(path, chainCode, new LazyECPoint(ECKey.CURVE.getCurve(), data), parent, depth, parentFingerprint);
-            return new Bip32ECKeyPair(
-                    null, Sign.publicFromPoint(data), i, chainCode, null);
-        } else {
-//            return new DeterministicKey(path, chainCode, new BigInteger(1, data), parent, depth, parentFingerprint);
-
-            return new Bip32ECKeyPair(
-                    null, new BigInteger(1, data), i, chainCode, null);
-        }
-    }
-
-    static String toBase58(byte[] ser) {
-        return Base58.encode(addChecksum2(ser));
-    }
-
-    static byte[] addChecksum(byte[] input) {
-        int inputLength = input.length;
-        byte[] checksummed = new byte[inputLength + 4];
-        System.arraycopy(input, 0, checksummed, 0, inputLength);
-        byte[] checksum = hashTwice(input);
-        System.arraycopy(checksum, 0, checksummed, inputLength, 4);
-        return checksummed;
-    }
-
-    static byte[] addChecksum2(byte[] input) {
-        int inputLength = input.length;
-        byte[] checksummed = new byte[inputLength + 4];
-        System.arraycopy(input, 0, checksummed, 0, inputLength);
-        byte[] checksum = Sha256Hash.hashTwice(input);
-        System.arraycopy(checksum, 0, checksummed, inputLength, 4);
-        return checksummed;
-    }
-
-    private static byte[] hashTwice(byte[] input) {
-        return sha256(sha256(input));
+        String rs = address.generateEthAddress(false, "xpub6DtR524VQx3ENj2E9pNZnjqkVp47YN5sRCP5y4Gs6KZTwDhH9HTVX8shJPt74WaPZRftRXFfnsyPbMPh6DMEmrQ2WBxDJzGxriStAB36bQM", 1);
+        assertEquals("0xaac8c73348f1f92b2f9647e1e4f3cf14e2a8b3cb", rs);
     }
 
     @Test
-    public void testGetAddressString() throws ExecutionException, InterruptedException {
-        String PUBLIC_KEY_STRING = "0x506bc1dc099358e5137292f4efdd57e400f29ba5132aa5d12b18dac1c1f6aaba645c0b7b58158babbfa6c6cd5a48aa7340a8749176b120e8516216787a13dc76";
-
-        String xpub = Base58.encode(addChecksum("0488B21E506bc1dc099358e5137292f4efdd57e400f29ba5132aa5d12b18dac1c1f6aaba645c0b7b58158babbfa6c6cd5a48aa7340a8749176b120e8516216787a13dc76".getBytes()));
-        System.out.println(xpub);
-        String ADDRESS = "0xef678007d18427e6022059dbc264f27507cd1ffc";
-        String ADDRESS_NO_PREFIX = Numeric.cleanHexPrefix(ADDRESS);
-
-//        assertEquals(Keys.getAddress(PUBLIC_KEY_STRING), (ADDRESS_NO_PREFIX));
-
+    public void generateEthAddress_Testnet_Test() throws ExecutionException, InterruptedException {
         Address address = new Address();
-        String rs = address.generateEthAddress(false, xpub, 1);
-        assertEquals(ADDRESS, rs);
+        String rs = address.generateEthAddress(true, "xpub6FMiQpA54nciqs52guGVdWQ5TonZt5XtGsFpurgtttL7H3mSfaJDXv5aBdThjX6tW9HYaJSQ8wZVnLm1ixaQUu1MRQCwvwZ6U2cX6mwWT25", 1);
+        assertEquals("0x8cb76aed9c5e336ef961265c6079c14e9cd3d2ea", rs);
     }
 
-    private static byte[] serialize(Bip32ECKeyPair pair, int header, boolean pub) {
-        ByteBuffer ser = ByteBuffer.allocate(78);
-        ser.putInt(header);
-        ser.put((byte) pair.getDepth());
-        ser.putInt(pair.getParentFingerprint());
-        ser.putInt(pair.getChildNumber());
-        ser.put(pair.getChainCode());
-        ser.put(pub ? pair.getPublicKeyPoint().getEncoded(true) : pair.getPrivateKeyBytes33());
-        return ser.array();
+    @Test
+    public void generateVetAddress_Mainnet_Test() throws ExecutionException, InterruptedException {
+        Address address = new Address();
+        String rs = address.generateEthAddress(false, "xpub6EzJLu3Hi5hEFAkiZAxCTaXqXoS95seTnG1tdYdF8fBcVZCfR8GQP8UGvfF52szpwZqiiGHJw5694emxSpYBE5qDxAZUgiHLzbVhb5ErRMa", 1);
+        assertEquals("0x5b70c58cb71712e2d4d3519e065bbe196546877d", rs);
+    }
+
+    @Test
+    public void generateVetAddress_Testnet_Test() throws ExecutionException, InterruptedException {
+        Address address = new Address();
+        String rs = address.generateEthAddress(true, "xpub6FMiQpA54nciqs52guGVdWQ5TonZt5XtGsFpurgtttL7H3mSfaJDXv5aBdThjX6tW9HYaJSQ8wZVnLm1ixaQUu1MRQCwvwZ6U2cX6mwWT25", 1);
+        assertEquals("0x8cb76aed9c5e336ef961265c6079c14e9cd3d2ea", rs);
     }
 
     @Test
