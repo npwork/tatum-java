@@ -1,6 +1,5 @@
 package io.tatum.transaction;
 
-import io.tatum.blockchain.Bitcoin;
 import io.tatum.blockchain.Litecoin;
 import io.tatum.model.request.Currency;
 import io.tatum.model.request.transaction.TransferBtcBasedBlockchain;

@@ -9,6 +9,7 @@ import io.tatum.utils.BaseUrl;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
 
 public final class Ethereum {
@@ -24,9 +25,9 @@ public final class Ethereum {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetTransactionCount" target="_blank">Tatum API documentation</a>
      */
-    public BigDecimal ethGetTransactionsCount(String address) throws ExecutionException, InterruptedException {
+    public BigInteger ethGetTransactionsCount(String address) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/transaction/count/" + address;
-        return Async.get(uri, BigDecimal.class);
+        return Async.get(uri, BigInteger.class);
     }
 
     /**
