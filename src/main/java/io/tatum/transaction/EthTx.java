@@ -7,12 +7,10 @@ import io.tatum.model.response.common.TransactionHash;
 import io.tatum.model.response.kms.TransactionKMS;
 import io.tatum.transaction.eth.EthUtil;
 import io.tatum.transaction.eth.Web3jClient;
-import io.tatum.utils.Async;
 import io.tatum.utils.MapperFactory;
 import io.tatum.utils.ObjectValidator;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.generated.Uint256;
@@ -22,12 +20,10 @@ import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.core.methods.response.EthEstimateGas;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
@@ -62,11 +58,10 @@ public class EthTx {
                 Credentials credentials = Credentials.create(fromPrivateKey);
 
                 Transaction prepareTx = MapperFactory.get().readValue(tx.getSerializedTransaction(), Transaction.class);
+                BigInteger gasLimit = EthUtil.estimateGas(web3j, prepareTx);
 
-                EthEstimateGas ethEstimateGas = web3j.ethEstimateGas(prepareTx).send();
-                BigInteger gasLimit = ethEstimateGas.getAmountUsed().add(BigInteger.valueOf(5000));
-
-                RawTransaction rawTransaction = RawTransaction.createTransaction(new BigInteger(prepareTx.getNonce()),
+                RawTransaction rawTransaction = RawTransaction.createTransaction(
+                        new BigInteger(prepareTx.getNonce()),
                         new BigInteger(prepareTx.getGasPrice()), gasLimit,
                         prepareTx.getTo(),
                         new BigInteger(prepareTx.getValue()),
@@ -74,6 +69,7 @@ public class EthTx {
 
                 byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
                 return Numeric.toHexString(signedMessage);
+
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -103,31 +99,23 @@ public class EthTx {
 
                 Web3j web3j = Web3jClient.get(provider);
                 Credentials credentials = Credentials.create(body.getFromPrivateKey());
-                var address = StringUtils.isNoneEmpty(_to) ? _to : credentials.getAddress();
+                var address = StringUtils.isNotEmpty(_to) ? _to : credentials.getAddress();
 
                 Ethereum ethereum = new Ethereum();
                 var nonce = (_nonce != null && _nonce.compareTo(BigInteger.ONE) > 0) ? _nonce :
                         ethereum.ethGetTransactionsCount(address);
 
-                BigInteger gasLimit;
-                BigInteger gasPrice;
+                BigInteger gasPrice = EthUtil.getGasPrice(_ethFee);
+                BigInteger gasLimit = _ethFee != null ? new BigInteger(_ethFee.getGasLimit()) :
+                        BigInteger.valueOf(_data.length() * 68 + 21000);
 
-                if (_ethFee != null) {
-                    gasLimit = new BigInteger(_ethFee.getGasLimit());
-                    gasPrice = new BigInteger(_ethFee.getGasPrice());
-                } else {
-                    gasLimit = BigInteger.valueOf(_data.length() * 68 + 21000);
-                    gasPrice = Convert.fromWei(ethGetGasPriceInWei(), GWEI).toBigInteger();
-                }
-
-                String data = EthUtil.toHexString(_data);
-
-                RawTransaction rawTransaction = RawTransaction.createTransaction(nonce,
+                RawTransaction rawTransaction = RawTransaction.createTransaction(
+                        nonce,
                         gasPrice,
                         gasLimit,
                         _to,
                         BigInteger.ZERO,
-                        data);
+                        EthUtil.toHexString(_data));
 
                 byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
                 return Numeric.toHexString(signedMessage);
@@ -162,20 +150,23 @@ public class EthTx {
 
                 Web3j web3j = Web3jClient.get(provider);
                 Credentials credentials = Credentials.create(body.getFromPrivateKey());
-                BigInteger gasPrice = _fee != null ? new BigInteger(_fee.getGasPrice()) :
-                        Convert.fromWei(ethGetGasPriceInWei(), GWEI).toBigInteger();
-                String data = EthUtil.toHexString(_data);
+
+                BigInteger gasPrice = EthUtil.getGasPrice(_fee);
 
                 Transaction prepareTx;
-                BigInteger amount;
 
                 if (_currency == ETH) {
-                    amount = Convert.toWei(_amount, ETHER).toBigInteger();
-                    prepareTx = new Transaction(StringUtils.EMPTY, _nonce, gasPrice, null, _to, amount, data);
+                    prepareTx = new Transaction(
+                            StringUtils.EMPTY,
+                            _nonce,
+                            gasPrice,
+                            null,
+                            _to,
+                            Convert.toWei(_amount, ETHER).toBigInteger(),
+                            EthUtil.toHexString(_data));
                 } else {
                     String contractAddress = CONTRACT_ADDRESSES.get(_currency.getCurrency());
-                    var digits = BigInteger.TEN.pow(CONTRACT_DECIMALS.get(_currency.getCurrency()));
-                    amount = new BigDecimal(_amount).toBigInteger().multiply(digits);
+                    var amount = EthUtil.convertAmount(_amount, CONTRACT_DECIMALS.get(_currency.getCurrency()));
 
                     Function function = new Function(
                             "transfer",  // function we're calling
@@ -195,10 +186,12 @@ public class EthTx {
 
                 BigInteger gasLimit = _fee != null ? new BigInteger(_fee.getGasLimit()) : EthUtil.estimateGas(web3j, prepareTx);
 
-                RawTransaction rawTransaction = RawTransaction.createTransaction(_nonce,
-                        gasPrice, gasLimit,
+                RawTransaction rawTransaction = RawTransaction.createTransaction(
+                        new BigInteger(prepareTx.getNonce()),
+                        new BigInteger(prepareTx.getGasPrice()),
+                        gasLimit,
                         prepareTx.getTo(),
-                        amount,
+                        new BigInteger(prepareTx.getValue()), // amount
                         prepareTx.getData());
 
                 byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
@@ -233,19 +226,10 @@ public class EthTx {
                 var _digits = body.getDigits();
 
                 Web3j web3j = Web3jClient.get(provider);
-
                 Credentials credentials = Credentials.create(body.getFromPrivateKey());
 
-                BigInteger gasLimit;
-                BigInteger gasPrice;
-                if (_fee != null) {
-                    gasPrice = new BigInteger(_fee.getGasPrice());
-                } else {
-                    gasPrice = Convert.fromWei(ethGetGasPriceInWei(), GWEI).toBigInteger();
-                }
-
-                var decimals = BigInteger.TEN.pow(_digits);
-                var amount = new BigDecimal(_amount).toBigInteger().multiply(decimals);
+                BigInteger gasPrice = EthUtil.getGasPrice(_fee);
+                var amount = EthUtil.convertAmount(_amount, _digits);
 
                 Function function = new Function(
                         "transfer",  // function we're calling
@@ -259,22 +243,17 @@ public class EthTx {
                         gasPrice,
                         null,
                         _contractAddress,
-                        amount,
+                        null,
                         txData);
 
-                if (_fee != null) {
-                    gasLimit = new BigInteger(_fee.getGasLimit());
-                } else {
-                    EthEstimateGas ethEstimateGas = web3j.ethEstimateGas(prepareTx).send();
-                    gasLimit = ethEstimateGas.getAmountUsed().add(BigInteger.valueOf(5000));
-                }
+                BigInteger gasLimit = _fee != null ? new BigInteger(_fee.getGasLimit()) : EthUtil.estimateGas(web3j, prepareTx);
 
                 RawTransaction rawTransaction = RawTransaction.createTransaction(
-                        _nonce,
-                        gasPrice,
+                        new BigInteger(prepareTx.getNonce()),
+                        new BigInteger(prepareTx.getGasPrice()),
                         gasLimit,
                         prepareTx.getTo(),
-                        amount,
+                        new BigInteger(prepareTx.getValue()),
                         prepareTx.getData());
 
                 byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
@@ -307,10 +286,8 @@ public class EthTx {
                 Web3j web3j = Web3jClient.get(provider);
                 Credentials credentials = Credentials.create(body.getFromPrivateKey());
 
-                BigInteger gasPrice = _fee != null ? new BigInteger(_fee.getGasPrice()) :
-                        Convert.fromWei(ethGetGasPriceInWei(), GWEI).toBigInteger();
-
-                var cap = new BigDecimal(body.getSupply()).toBigInteger().multiply(BigInteger.TEN.pow(body.getDigits()));
+                BigInteger gasPrice = EthUtil.getGasPrice(_fee);
+                var cap = EthUtil.convertAmount(body.getSupply(), body.getDigits());
 
                 String encodedConstructor = FunctionEncoder.encodeConstructor(
                         Arrays.<Type>asList(
@@ -332,29 +309,21 @@ public class EthTx {
                 BigInteger gasLimit = _fee != null ? new BigInteger(_fee.getGasLimit()) : EthUtil.estimateGas(web3j, prepareTx);
 
                 RawTransaction rawTransaction = RawTransaction.createContractTransaction(
-                        _nonce,
-                        gasPrice,
+                        new BigInteger(prepareTx.getNonce()),
+                        new BigInteger(prepareTx.getGasPrice()),
                         gasLimit,
-                        BigInteger.ZERO,
+                        new BigInteger(prepareTx.getValue()),
                         prepareTx.getData());
 
                 byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
                 return Numeric.toHexString(signedMessage);
+
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
             }
         }).get();
 
-    }
-
-    /**
-     * Estimate Gas price for the transaction.
-     */
-    public BigDecimal ethGetGasPriceInWei() throws ExecutionException, InterruptedException {
-        var data = Async.getJson("https://ethgasstation.info/json/ethgasAPI.json");
-        JSONObject jsonObject = new JSONObject(data);
-        return Convert.toWei(jsonObject.getBigDecimal("fast").divide(BigDecimal.TEN), GWEI);
     }
 
     /**
