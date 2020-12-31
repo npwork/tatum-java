@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
-public class MnemonicWallet {
+public class Wallet {
     /**
      * mnemonic seed
      */
@@ -19,4 +19,15 @@ public class MnemonicWallet {
      * extended public key to derive addresses from
      */
     String xpub;
+
+    /**
+     * address
+     */
+    private String address;
+
+    /**
+     * secret
+     */
+    private String secret;
+
 }

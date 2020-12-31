@@ -1,8 +1,6 @@
 package io.tatum.wallet;
 
-import io.tatum.model.wallet.MnemonicWallet;
-import io.tatum.model.wallet.XrpWallet;
-import io.xpring.xrpl.XrpException;
+import io.tatum.model.wallet.Wallet;
 import org.junit.Test;
 
 import java.util.concurrent.ExecutionException;
@@ -16,7 +14,7 @@ public class WalletGeneratorTest {
 
     @Test
     public void generateXrpWalletTest() throws ExecutionException, InterruptedException {
-        XrpWallet xrpWallet = WalletGenerator.generateXrpWallet();
+        Wallet xrpWallet = WalletGenerator.generateXrpWallet();
         assertNotNull(xrpWallet);
         System.out.println(xrpWallet.getAddress());
         System.out.println(xrpWallet.getSecret());
@@ -24,7 +22,7 @@ public class WalletGeneratorTest {
 
     @Test
     public void generateBtcWallet_Testnet_Test() throws ExecutionException, InterruptedException {
-        MnemonicWallet wallet = WalletGenerator.generateBtcWallet(true,
+        Wallet wallet = WalletGenerator.generateBtcWallet(true,
                 "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten");
 
         assertThat(wallet, hasProperty("mnemonic", equalTo("quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten")));
@@ -33,7 +31,7 @@ public class WalletGeneratorTest {
 
     @Test
     public void generateBtcWallet_Mainnet_Test() throws ExecutionException, InterruptedException {
-        MnemonicWallet wallet = WalletGenerator.generateBtcWallet(false,
+        Wallet wallet = WalletGenerator.generateBtcWallet(false,
                 "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten");
 
         assertThat(wallet, hasProperty("mnemonic", equalTo("quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten")));
@@ -42,7 +40,7 @@ public class WalletGeneratorTest {
 
     @Test
     public void generateLtcWallet_Testnet_Test() throws ExecutionException, InterruptedException {
-        MnemonicWallet wallet = WalletGenerator.generateLtcWallet(true,
+        Wallet wallet = WalletGenerator.generateLtcWallet(true,
                 "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten");
 
         assertThat(wallet, hasProperty("mnemonic", equalTo("quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten")));
@@ -51,7 +49,7 @@ public class WalletGeneratorTest {
 
     @Test
     public void generateLtcWallet_Mainnet_Test() throws ExecutionException, InterruptedException {
-        MnemonicWallet wallet = WalletGenerator.generateLtcWallet(false,
+        Wallet wallet = WalletGenerator.generateLtcWallet(false,
                 "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten");
 
         assertThat(wallet, hasProperty("mnemonic", equalTo("quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten")));
@@ -60,7 +58,7 @@ public class WalletGeneratorTest {
 
     @Test
     public void generateEthWallet_Testnet_Test() throws ExecutionException, InterruptedException {
-        MnemonicWallet wallet = WalletGenerator.generateEthWallet(true,
+        Wallet wallet = WalletGenerator.generateEthWallet(true,
                 "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten");
 
         assertThat(wallet, hasProperty("mnemonic", equalTo("quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten")));
@@ -69,7 +67,7 @@ public class WalletGeneratorTest {
 
     @Test
     public void generateEthWallet_Mainnet_Test() throws ExecutionException, InterruptedException {
-        MnemonicWallet wallet = WalletGenerator.generateEthWallet(false,
+        Wallet wallet = WalletGenerator.generateEthWallet(false,
                 "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten");
 
         assertThat(wallet, hasProperty("mnemonic", equalTo("quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten")));
@@ -78,7 +76,7 @@ public class WalletGeneratorTest {
 
     @Test
     public void generateBchWallet_Testnet_Test() throws ExecutionException, InterruptedException {
-        MnemonicWallet wallet = WalletGenerator.generateBchWallet(true,
+        Wallet wallet = WalletGenerator.generateBchWallet(true,
                 "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten");
 
         assertThat(wallet, hasProperty("mnemonic", equalTo("quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten")));
@@ -87,7 +85,7 @@ public class WalletGeneratorTest {
 
     @Test
     public void generateBchWallet_Mainnet_Test() throws ExecutionException, InterruptedException {
-        MnemonicWallet wallet = WalletGenerator.generateBchWallet(false,
+        Wallet wallet = WalletGenerator.generateBchWallet(false,
                 "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten");
 
         assertThat(wallet, hasProperty("mnemonic", equalTo("quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten")));
@@ -96,7 +94,7 @@ public class WalletGeneratorTest {
 
     @Test
     public void generateVetWallet_Testnet_Test() throws ExecutionException, InterruptedException {
-        MnemonicWallet wallet = WalletGenerator.generateVetWallet(true,
+        Wallet wallet = WalletGenerator.generateVetWallet(true,
                 "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten");
 
         assertThat(wallet, hasProperty("mnemonic", equalTo("quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten")));
@@ -105,7 +103,7 @@ public class WalletGeneratorTest {
 
     @Test
     public void generateVetWallet_Mainnet_Test() throws ExecutionException, InterruptedException {
-        MnemonicWallet wallet = WalletGenerator.generateVetWallet(false,
+        Wallet wallet = WalletGenerator.generateVetWallet(false,
                 "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten");
 
         assertThat(wallet, hasProperty("mnemonic", equalTo("quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten")));

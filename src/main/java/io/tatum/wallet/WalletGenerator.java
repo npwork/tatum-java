@@ -1,8 +1,7 @@
 package io.tatum.wallet;
 
 import io.tatum.model.request.Currency;
-import io.tatum.model.wallet.MnemonicWallet;
-import io.xpring.xrpl.Wallet;
+import io.tatum.model.wallet.Wallet;
 import io.xpring.xrpl.WalletGenerationResult;
 import io.xpring.xrpl.XrpException;
 import org.apache.commons.lang3.StringUtils;
@@ -28,12 +27,15 @@ public class WalletGenerator {
      * @param mnem    mnemonic seed to use
      * @returns io.tatum.wallet
      */
-    public static MnemonicWallet generateBtcWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
+    public static Wallet generateBtcWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             NetworkParameters network = testnet ? BITCOIN_TESTNET : BITCOIN_MAINNET;
             List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(BTC_DERIVATION_PATH);
             WalletBuilder walletBuilder = WalletBuilder.build().network(network).fromSeed(mnem).derivePath(path);
-            return new MnemonicWallet(mnem, walletBuilder.toBase58());
+            Wallet wallet = new Wallet();
+            wallet.setMnemonic(mnem);
+            wallet.setXpub(walletBuilder.toBase58());
+            return wallet;
         }).get();
     }
 
@@ -44,21 +46,27 @@ public class WalletGenerator {
      * @param mnem    mnemonic seed to use
      * @returns wallet
      */
-    public static MnemonicWallet generateLtcWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
+    public static Wallet generateLtcWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             NetworkParameters network = testnet ? LITECOIN_TESTNET : LITECOIN_MAINNET;
             List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(LTC_DERIVATION_PATH);
             WalletBuilder walletBuilder = WalletBuilder.build().network(network).fromSeed(mnem).derivePath(path);
-            return new MnemonicWallet(mnem, walletBuilder.toBase58());
+            Wallet wallet = new Wallet();
+            wallet.setMnemonic(mnem);
+            wallet.setXpub(walletBuilder.toBase58());
+            return wallet;
         }).get();
     }
 
-    public static MnemonicWallet generateBchWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
+    public static Wallet generateBchWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             NetworkParameters network = testnet ? BITCOIN_TESTNET : BITCOIN_MAINNET;
             List<ChildNumber> path = HDUtils.parsePath(BCH_DERIVATION_PATH);
             WalletBuilder walletBuilder = WalletBuilder.build().network(network).fromSeed(mnem).derivePath(path);
-            return new MnemonicWallet(mnem, walletBuilder.toBase58());
+            Wallet wallet = new Wallet();
+            wallet.setMnemonic(mnem);
+            wallet.setXpub(walletBuilder.toBase58());
+            return wallet;
         }).get();
     }
 
@@ -69,12 +77,15 @@ public class WalletGenerator {
      * @param mnem    mnemonic seed to use
      * @returns wallet
      */
-    public static MnemonicWallet generateVetWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
+    public static Wallet generateVetWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
-            NetworkParameters network = BITCOIN_MAINNET;
+            NetworkParameters network = VET_MAINNET;
             List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(VET_DERIVATION_PATH);
             WalletBuilder walletBuilder = WalletBuilder.build().network(network).fromSeed(mnem).derivePath(path);
-            return new MnemonicWallet(mnem, walletBuilder.toBase58());
+            Wallet wallet = new Wallet();
+            wallet.setMnemonic(mnem);
+            wallet.setXpub(walletBuilder.toBase58());
+            return wallet;
         }).get();
     }
 
@@ -85,23 +96,29 @@ public class WalletGenerator {
      * @param mnem    mnemonic seed to use
      * @returns wallet
      */
-    public static MnemonicWallet generateEthWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
+    public static Wallet generateEthWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
-            NetworkParameters network = BITCOIN_MAINNET;
+            NetworkParameters network = ETHEREUM_MAINNET;
             List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(ETH_DERIVATION_PATH);
             WalletBuilder walletBuilder = WalletBuilder.build().network(network).fromSeed(mnem).derivePath(path);
-            return new MnemonicWallet(mnem, walletBuilder.toBase58());
+            Wallet wallet = new Wallet();
+            wallet.setMnemonic(mnem);
+            wallet.setXpub(walletBuilder.toBase58());
+            return wallet;
         }).get();
     }
 
     /**
      * Generate Xrp address and secret.
      */
-    public static MnemonicWallet generateXrpWallet() throws ExecutionException, InterruptedException {
+    public static Wallet generateXrpWallet() throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                WalletGenerationResult generationResult = Wallet.generateRandomWallet();
-                return new MnemonicWallet(generationResult.getWallet().getPrivateKey(), generationResult.getWallet().getAddress());
+                WalletGenerationResult generationResult = io.xpring.xrpl.Wallet.generateRandomWallet();
+                Wallet wallet = new Wallet();
+                wallet.setAddress(generationResult.getWallet().getAddress());
+                wallet.setSecret(generationResult.getWallet().getPrivateKey());
+                return wallet;
             } catch (XrpException e) {
                 e.printStackTrace();
             }
@@ -117,7 +134,7 @@ public class WalletGenerator {
      * @param mnemonic mnemonic seed to use. If not present, new one will be generated
      * @returns wallet or a combination of address and private key
      */
-    public MnemonicWallet generateWallet(Currency currency, boolean testnet, String mnemonic) throws Exception {
+    public Wallet generateWallet(Currency currency, boolean testnet, String mnemonic) throws Exception {
         String mnem = null;
         if (StringUtils.isNotEmpty(mnemonic)) {
             mnem = mnemonic;

@@ -1,8 +1,9 @@
 package io.tatum.constants;
 
-import io.tatum.model.request.Currency;
-import io.tatum.utils.LtcMainNetParams;
-import io.tatum.utils.LtcTestNet3Params;
+import io.tatum.network.EthMainNetParams;
+import io.tatum.network.VetMainNetParams;
+import io.tatum.network.LtcMainNetParams;
+import io.tatum.network.LtcTestNet3Params;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.params.TestNet3Params;
@@ -24,6 +25,10 @@ public class Constant {
     public static final NetworkParameters LITECOIN_MAINNET = LtcMainNetParams.get();
 
     public static final NetworkParameters LITECOIN_TESTNET = LtcTestNet3Params.get();
+
+    public static final NetworkParameters ETHEREUM_MAINNET = EthMainNetParams.get();
+
+    public static final NetworkParameters VET_MAINNET = VetMainNetParams.get();
 
 
     // TESTNET_DERIVATION_PATH = 'm/44\'/1\'/0\'/0'
