@@ -1,10 +1,15 @@
 package io.tatum.wallet;
 
 import io.tatum.model.request.Currency;
+import org.bitcoinj.core.Base58;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.crypto.ChildNumber;
 import org.bitcoinj.crypto.HDUtils;
+import org.bitcoinj.script.Script;
 
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -72,7 +77,7 @@ public class Address {
     public String generateEthAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             ChildNumber path = new ChildNumber(i, false);
-            NetworkParameters network = BITCOIN_MAINNET;
+            NetworkParameters network = ETHEREUM_MAINNET;
             return "0x" + AddressBuilder.build().network(network).fromBase58(xpub).derivePath(path).toEtherAddress();
         }).get();
     }
@@ -88,7 +93,7 @@ public class Address {
     public String generateVetAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             ChildNumber path = new ChildNumber(i, false);
-            NetworkParameters network = BITCOIN_MAINNET;
+            NetworkParameters network = VET_MAINNET;
             return "0x" + AddressBuilder.build().network(network).fromBase58(xpub).derivePath(path).toEtherAddress();
         }).get();
     }

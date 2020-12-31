@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,7 +19,7 @@ public class EthereumTest {
         Ethereum ethereum = new Ethereum();
         // https://etherscan.io/address/0xec5a91b107775d267879e8474ced81a70bcfd7a9
         String address = "0xec5a91b107775d267879e8474ced81a70bcfd7a9";
-        BigDecimal count = ethereum.ethGetTransactionsCount(address);
+        BigInteger count = ethereum.ethGetTransactionsCount(address);
         System.out.println(count);
     }
 

@@ -49,11 +49,7 @@ public class PrivateKeyBuilder {
         return this.indexPrivKey.getPrivateKeyAsWiF(this.network);
     }
 
-//    public String toPrivateKeyString() {
-//        return "0x" + this.indexPrivKey.getPrivateKeyAsHex();
-//    }
-
     public String toHex() {
-        return this.indexPrivKey.getPublicKeyAsHex();
+        return this.indexPrivKey.getPrivateKeyAsHex();
     }
 }
