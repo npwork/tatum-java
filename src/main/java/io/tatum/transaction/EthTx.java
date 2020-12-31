@@ -2,18 +2,15 @@ package io.tatum.transaction;
 
 import io.tatum.blockchain.Ethereum;
 import io.tatum.contracts.erc20.TokenBytecode;
-import io.tatum.model.request.CreateRecord;
-import io.tatum.model.request.DeployEthErc20;
-import io.tatum.model.request.TransferCustomErc20;
-import io.tatum.model.request.TransferEthErc20;
+import io.tatum.model.request.*;
 import io.tatum.model.response.common.TransactionHash;
-import io.tatum.utils.ApiKey;
-import io.tatum.utils.Async;
-import io.tatum.utils.NumericUtil;
+import io.tatum.model.response.kms.TransactionKMS;
+import io.tatum.transaction.eth.EthUtil;
+import io.tatum.transaction.eth.Web3jClient;
+import io.tatum.utils.MapperFactory;
 import io.tatum.utils.ObjectValidator;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.generated.Uint256;
@@ -23,26 +20,63 @@ import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.core.methods.response.EthEstimateGas;
-import org.web3j.protocol.core.methods.response.Web3ClientVersion;
-import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static io.tatum.constants.Constant.*;
+import static io.tatum.constants.Constant.CONTRACT_ADDRESSES;
+import static io.tatum.constants.Constant.CONTRACT_DECIMALS;
 import static io.tatum.model.request.Currency.ETH;
 import static org.web3j.utils.Convert.Unit.ETHER;
 import static org.web3j.utils.Convert.Unit.GWEI;
 
 @Log4j2
 public class EthTx {
+
+    /**
+     * Sign Ethereum pending transaction from Tatum KMS
+     *
+     * @param tx             pending transaction from KMS
+     * @param fromPrivateKey private key to sign transaction with.
+     * @param testnet        mainnet or testnet version
+     * @param provider       url of the Ethereum Server to connect to. If not set, default public server will be used.
+     * @returns transaction data to be broadcast to blockchain.
+     */
+    public String signEthKMSTransaction(TransactionKMS tx, String fromPrivateKey, boolean testnet, String provider) throws Exception {
+        if (tx.getChain() != Currency.ETH) {
+            throw new Exception("Unsupported chain.");
+        }
+
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                Web3j web3j = Web3jClient.get(provider);
+                Credentials credentials = Credentials.create(fromPrivateKey);
+
+                Transaction prepareTx = MapperFactory.get().readValue(tx.getSerializedTransaction(), Transaction.class);
+                BigInteger gasLimit = EthUtil.estimateGas(web3j, prepareTx);
+
+                RawTransaction rawTransaction = RawTransaction.createTransaction(
+                        new BigInteger(prepareTx.getNonce()),
+                        new BigInteger(prepareTx.getGasPrice()), gasLimit,
+                        prepareTx.getTo(),
+                        new BigInteger(prepareTx.getValue()),
+                        prepareTx.getData());
+
+                byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
+                return Numeric.toHexString(signedMessage);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }).get();
+
+    }
 
     /**
      * Sign Ethereum Store data transaction with private keys locally. Nothing is broadcast to the blockchain.
@@ -63,43 +97,25 @@ public class EthTx {
                 var _data = body.getData();
                 var _nonce = body.getNonce();
 
-                var url = StringUtils.isNotEmpty(provider) ? provider : TATUM_API_URL + "/v3/ethereum/web3/" + ApiKey.getInstance().getApiKey();
-                Web3j web3j = Web3j.build(new HttpService(url));
-                Web3ClientVersion web3ClientVersion = web3j.web3ClientVersion().sendAsync().get();
-                String clientVersion = web3ClientVersion.getWeb3ClientVersion();
-                log.info(clientVersion);
-
+                Web3j web3j = Web3jClient.get(provider);
                 Credentials credentials = Credentials.create(body.getFromPrivateKey());
-                var address = StringUtils.isNoneEmpty(_to) ? _to : credentials.getAddress();
+                var address = StringUtils.isNotEmpty(_to) ? _to : credentials.getAddress();
 
                 Ethereum ethereum = new Ethereum();
                 var nonce = (_nonce != null && _nonce.compareTo(BigInteger.ONE) > 0) ? _nonce :
                         ethereum.ethGetTransactionsCount(address);
 
-                BigInteger gasLimit;
-                BigInteger gasPrice;
+                BigInteger gasPrice = EthUtil.getGasPrice(_ethFee);
+                BigInteger gasLimit = _ethFee != null ? new BigInteger(_ethFee.getGasLimit()) :
+                        BigInteger.valueOf(_data.length() * 68 + 21000);
 
-                if (_ethFee != null) {
-                    gasLimit = new BigInteger(_ethFee.getGasLimit());
-                    gasPrice = new BigInteger(_ethFee.getGasPrice());
-                } else {
-                    gasLimit = BigInteger.valueOf(_data.length() * 68 + 21000);
-                    gasPrice = Convert.fromWei(ethGetGasPriceInWei(), GWEI).toBigInteger();
-                }
-
-                String data = null;
-                if (StringUtils.isNotEmpty(_data)) {
-                    if (Numeric.containsHexPrefix(_data)) {
-                        data = _data;
-                    } else if (NumericUtil.isHexadecimal(_data)) {
-                        data = Numeric.prependHexPrefix(_data);
-                    } else {
-                        data = Numeric.toHexString(_data.getBytes());
-                    }
-                }
-
-                RawTransaction rawTransaction = RawTransaction.createTransaction(nonce, gasPrice, gasLimit,
-                        _to, BigInteger.ZERO, data);
+                RawTransaction rawTransaction = RawTransaction.createTransaction(
+                        nonce,
+                        gasPrice,
+                        gasLimit,
+                        _to,
+                        BigInteger.ZERO,
+                        EthUtil.toHexString(_data));
 
                 byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
                 return Numeric.toHexString(signedMessage);
@@ -132,66 +148,55 @@ public class EthTx {
                 var _currency = body.getCurrency();
                 var _amount = body.getAmount();
 
-                var url = StringUtils.isNotEmpty(provider) ? provider : TATUM_API_URL + "/v3/ethereum/web3/" + ApiKey.getInstance().getApiKey();
-                Web3j web3j = Web3j.build(new HttpService(url));
-                Web3ClientVersion web3ClientVersion = web3j.web3ClientVersion().sendAsync().get();
-                String clientVersion = web3ClientVersion.getWeb3ClientVersion();
-                log.info(clientVersion);
-
+                Web3j web3j = Web3jClient.get(provider);
                 Credentials credentials = Credentials.create(body.getFromPrivateKey());
 
-                BigInteger gasPrice;
-                if (_fee != null) {
-                    gasPrice = new BigInteger(_fee.getGasPrice());
-                } else {
-                    gasPrice = Convert.fromWei(ethGetGasPriceInWei(), GWEI).toBigInteger();
-                }
-
-                String data = null;
-                if (StringUtils.isNotEmpty(_data)) {
-                    if (Numeric.containsHexPrefix(_data)) {
-                        data = _data;
-                    } else if (NumericUtil.isHexadecimal(_data)) {
-                        data = Numeric.prependHexPrefix(_data);
-                    } else {
-                        data = Numeric.toHexString(_data.getBytes());
-                    }
-                }
+                BigInteger gasPrice = EthUtil.getGasPrice(_fee);
 
                 Transaction prepareTx;
-                BigInteger amount;
 
                 if (_currency == ETH) {
-                    amount = Convert.toWei(_amount, ETHER).toBigInteger();
-                    prepareTx = new Transaction(StringUtils.EMPTY, _nonce, gasPrice, null, _to, amount, data);
-
+                    prepareTx = new Transaction(
+                            StringUtils.EMPTY,
+                            _nonce,
+                            gasPrice,
+                            null,
+                            _to,
+                            Convert.toWei(_amount, ETHER).toBigInteger(),
+                            EthUtil.toHexString(_data));
                 } else {
-
                     String contractAddress = CONTRACT_ADDRESSES.get(_currency.getCurrency());
-                    var digits = BigInteger.TEN.pow(CONTRACT_DECIMALS.get(_currency.getCurrency()));
-                    amount = new BigDecimal(_amount).toBigInteger().multiply(digits);
+                    var amount = EthUtil.convertAmount(_amount, CONTRACT_DECIMALS.get(_currency.getCurrency()));
+
                     Function function = new Function(
                             "transfer",  // function we're calling
                             Arrays.asList(new Address(_to), new Uint256(amount)),  // Parameters to pass as Solidity Types
                             Arrays.asList(new org.web3j.abi.TypeReference<Bool>() {
                             }));
                     String txData = FunctionEncoder.encode(function);
-                    prepareTx = new Transaction(StringUtils.EMPTY, _nonce, gasPrice, null, contractAddress, amount, txData);
+
+                    prepareTx = new Transaction(StringUtils.EMPTY,
+                            _nonce,
+                            gasPrice,
+                            null,
+                            contractAddress,
+                            amount,
+                            txData);
                 }
 
-                BigInteger gasLimit;
-                if (_fee != null) {
-                    gasLimit = new BigInteger(_fee.getGasLimit());
-                } else {
-                    EthEstimateGas ethEstimateGas = web3j.ethEstimateGas(prepareTx).send();
-                    gasLimit = ethEstimateGas.getAmountUsed().add(BigInteger.valueOf(5000));
-                }
+                BigInteger gasLimit = _fee != null ? new BigInteger(_fee.getGasLimit()) : EthUtil.estimateGas(web3j, prepareTx);
 
-                RawTransaction rawTransaction = RawTransaction.createTransaction(_nonce, gasPrice, gasLimit,
-                        prepareTx.getTo(), amount, prepareTx.getData());
+                RawTransaction rawTransaction = RawTransaction.createTransaction(
+                        new BigInteger(prepareTx.getNonce()),
+                        new BigInteger(prepareTx.getGasPrice()),
+                        gasLimit,
+                        prepareTx.getTo(),
+                        new BigInteger(prepareTx.getValue()), // amount
+                        prepareTx.getData());
 
                 byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
                 return Numeric.toHexString(signedMessage);
+
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -220,24 +225,11 @@ public class EthTx {
                 var _contractAddress = body.getContractAddress();
                 var _digits = body.getDigits();
 
-                var url = StringUtils.isNotEmpty(provider) ? provider : TATUM_API_URL + "/v3/ethereum/web3/" + ApiKey.getInstance().getApiKey();
-                Web3j web3j = Web3j.build(new HttpService(url));
-                Web3ClientVersion web3ClientVersion = web3j.web3ClientVersion().sendAsync().get();
-                String clientVersion = web3ClientVersion.getWeb3ClientVersion();
-                log.info(clientVersion);
-
+                Web3j web3j = Web3jClient.get(provider);
                 Credentials credentials = Credentials.create(body.getFromPrivateKey());
 
-                BigInteger gasLimit;
-                BigInteger gasPrice;
-                if (_fee != null) {
-                    gasPrice = new BigInteger(_fee.getGasPrice());
-                } else {
-                    gasPrice = Convert.fromWei(ethGetGasPriceInWei(), GWEI).toBigInteger();
-                }
-
-                var decimals = BigInteger.TEN.pow(_digits);
-                var amount = new BigDecimal(_amount).toBigInteger().multiply(decimals);
+                BigInteger gasPrice = EthUtil.getGasPrice(_fee);
+                var amount = EthUtil.convertAmount(_amount, _digits);
 
                 Function function = new Function(
                         "transfer",  // function we're calling
@@ -245,17 +237,24 @@ public class EthTx {
                         Arrays.asList(new org.web3j.abi.TypeReference<Bool>() {
                         }));
                 String txData = FunctionEncoder.encode(function);
-                Transaction prepareTx = new Transaction(StringUtils.EMPTY, _nonce, gasPrice, null, _contractAddress, amount, txData);
 
-                if (_fee != null) {
-                    gasLimit = new BigInteger(_fee.getGasLimit());
-                } else {
-                    EthEstimateGas ethEstimateGas = web3j.ethEstimateGas(prepareTx).send();
-                    gasLimit = ethEstimateGas.getAmountUsed().add(BigInteger.valueOf(5000));
-                }
+                Transaction prepareTx = new Transaction(StringUtils.EMPTY,
+                        _nonce,
+                        gasPrice,
+                        null,
+                        _contractAddress,
+                        null,
+                        txData);
 
-                RawTransaction rawTransaction = RawTransaction.createTransaction(_nonce, gasPrice, gasLimit,
-                        prepareTx.getTo(), amount, prepareTx.getData());
+                BigInteger gasLimit = _fee != null ? new BigInteger(_fee.getGasLimit()) : EthUtil.estimateGas(web3j, prepareTx);
+
+                RawTransaction rawTransaction = RawTransaction.createTransaction(
+                        new BigInteger(prepareTx.getNonce()),
+                        new BigInteger(prepareTx.getGasPrice()),
+                        gasLimit,
+                        prepareTx.getTo(),
+                        new BigInteger(prepareTx.getValue()),
+                        prepareTx.getData());
 
                 byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
                 return Numeric.toHexString(signedMessage);
@@ -284,22 +283,11 @@ public class EthTx {
                 var _fee = body.getFee();
                 var _nonce = body.getNonce();
 
-                var url = StringUtils.isNotEmpty(provider) ? provider : TATUM_API_URL + "/v3/ethereum/web3/" + ApiKey.getInstance().getApiKey();
-                Web3j web3j = Web3j.build(new HttpService(url));
-                Web3ClientVersion web3ClientVersion = web3j.web3ClientVersion().sendAsync().get();
-                String clientVersion = web3ClientVersion.getWeb3ClientVersion();
-                log.info(clientVersion);
-
+                Web3j web3j = Web3jClient.get(provider);
                 Credentials credentials = Credentials.create(body.getFromPrivateKey());
 
-                BigInteger gasPrice;
-                if (_fee != null) {
-                    gasPrice = new BigInteger(_fee.getGasPrice());
-                } else {
-                    gasPrice = Convert.fromWei(ethGetGasPriceInWei(), GWEI).toBigInteger();
-                }
-
-                var cap = new BigDecimal(body.getSupply()).toBigInteger().multiply(BigInteger.TEN.pow(body.getDigits()));
+                BigInteger gasPrice = EthUtil.getGasPrice(_fee);
+                var cap = EthUtil.convertAmount(body.getSupply(), body.getDigits());
 
                 String encodedConstructor = FunctionEncoder.encodeConstructor(
                         Arrays.<Type>asList(
@@ -310,37 +298,32 @@ public class EthTx {
                                 new Uint256(cap),
                                 new Uint256(cap)));
 
-                Transaction prepareTx = new Transaction(StringUtils.EMPTY, _nonce, gasPrice, null, StringUtils.EMPTY,
-                        BigInteger.ZERO, TokenBytecode.TOKEN_BYTE_CODE + encodedConstructor);
+                Transaction prepareTx = new Transaction(StringUtils.EMPTY,
+                        _nonce,
+                        gasPrice,
+                        null,
+                        StringUtils.EMPTY,
+                        BigInteger.ZERO,
+                        TokenBytecode.TOKEN_BYTE_CODE + encodedConstructor);
 
-                BigInteger gasLimit;
-                if (_fee != null) {
-                    gasLimit = new BigInteger(_fee.getGasLimit());
-                } else {
-                    EthEstimateGas ethEstimateGas = web3j.ethEstimateGas(prepareTx).send();
-                    gasLimit = ethEstimateGas.getAmountUsed().add(BigInteger.valueOf(5000));
-                }
+                BigInteger gasLimit = _fee != null ? new BigInteger(_fee.getGasLimit()) : EthUtil.estimateGas(web3j, prepareTx);
 
-                RawTransaction rawTransaction = RawTransaction.createContractTransaction(_nonce, gasPrice, gasLimit,
-                        BigInteger.ZERO, prepareTx.getData());
+                RawTransaction rawTransaction = RawTransaction.createContractTransaction(
+                        new BigInteger(prepareTx.getNonce()),
+                        new BigInteger(prepareTx.getGasPrice()),
+                        gasLimit,
+                        new BigInteger(prepareTx.getValue()),
+                        prepareTx.getData());
 
                 byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
                 return Numeric.toHexString(signedMessage);
+
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
             }
         }).get();
 
-    }
-
-    /**
-     * Estimate Gas price for the transaction.
-     */
-    public BigDecimal ethGetGasPriceInWei() throws ExecutionException, InterruptedException {
-        var data = Async.getJson("https://ethgasstation.info/json/ethgasAPI.json");
-        JSONObject jsonObject = new JSONObject(data);
-        return Convert.toWei(jsonObject.getBigDecimal("fast").divide(BigDecimal.TEN), GWEI);
     }
 
     /**
