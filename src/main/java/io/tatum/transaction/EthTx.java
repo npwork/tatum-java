@@ -1,9 +1,12 @@
 package io.tatum.transaction;
 
 import io.tatum.blockchain.Ethereum;
+import io.tatum.contracts.erc20.TokenBytecode;
 import io.tatum.model.request.CreateRecord;
+import io.tatum.model.request.DeployEthErc20;
 import io.tatum.model.request.TransferCustomErc20;
 import io.tatum.model.request.TransferEthErc20;
+import io.tatum.model.response.common.TransactionHash;
 import io.tatum.utils.ApiKey;
 import io.tatum.utils.Async;
 import io.tatum.utils.NumericUtil;
@@ -12,10 +15,9 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.web3j.abi.FunctionEncoder;
-import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.Bool;
-import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.*;
 import org.web3j.abi.datatypes.generated.Uint256;
+import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
@@ -138,7 +140,6 @@ public class EthTx {
 
                 Credentials credentials = Credentials.create(body.getFromPrivateKey());
 
-                BigInteger gasLimit = null;
                 BigInteger gasPrice;
                 if (_fee != null) {
                     gasPrice = new BigInteger(_fee.getGasPrice());
@@ -158,12 +159,11 @@ public class EthTx {
                 }
 
                 Transaction prepareTx;
-
                 BigInteger amount;
 
                 if (_currency == ETH) {
                     amount = Convert.toWei(_amount, ETHER).toBigInteger();
-                    prepareTx = new Transaction(StringUtils.EMPTY, _nonce, gasPrice, gasLimit, _to, amount, data);
+                    prepareTx = new Transaction(StringUtils.EMPTY, _nonce, gasPrice, null, _to, amount, data);
 
                 } else {
 
@@ -176,9 +176,10 @@ public class EthTx {
                             Arrays.asList(new org.web3j.abi.TypeReference<Bool>() {
                             }));
                     String txData = FunctionEncoder.encode(function);
-                    prepareTx = new Transaction(StringUtils.EMPTY, _nonce, gasPrice, gasLimit, contractAddress, amount, txData);
+                    prepareTx = new Transaction(StringUtils.EMPTY, _nonce, gasPrice, null, contractAddress, amount, txData);
                 }
 
+                BigInteger gasLimit;
                 if (_fee != null) {
                     gasLimit = new BigInteger(_fee.getGasLimit());
                 } else {
@@ -227,7 +228,7 @@ public class EthTx {
 
                 Credentials credentials = Credentials.create(body.getFromPrivateKey());
 
-                BigInteger gasLimit = null;
+                BigInteger gasLimit;
                 BigInteger gasPrice;
                 if (_fee != null) {
                     gasPrice = new BigInteger(_fee.getGasPrice());
@@ -244,7 +245,7 @@ public class EthTx {
                         Arrays.asList(new org.web3j.abi.TypeReference<Bool>() {
                         }));
                 String txData = FunctionEncoder.encode(function);
-                Transaction prepareTx = new Transaction(StringUtils.EMPTY, _nonce, gasPrice, gasLimit, _contractAddress, amount, txData);
+                Transaction prepareTx = new Transaction(StringUtils.EMPTY, _nonce, gasPrice, null, _contractAddress, amount, txData);
 
                 if (_fee != null) {
                     gasLimit = new BigInteger(_fee.getGasLimit());
@@ -267,11 +268,130 @@ public class EthTx {
     }
 
     /**
+     * Sign Ethereum deploy ERC20 transaction with private keys locally. Nothing is broadcast to the blockchain.
+     *
+     * @param body     content of the transaction to broadcast
+     * @param provider url of the Ethereum Server to connect to. If not set, default public server will be used.
+     * @returns transaction data to be broadcast to blockchain.
+     */
+    public String prepareDeployErc20SignedTransaction(DeployEthErc20 body, String provider) throws ExecutionException, InterruptedException, IOException {
+        if (!ObjectValidator.isValidated(body)) {
+            return null;
+        }
+
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                var _fee = body.getFee();
+                var _nonce = body.getNonce();
+
+                var url = StringUtils.isNotEmpty(provider) ? provider : TATUM_API_URL + "/v3/ethereum/web3/" + ApiKey.getInstance().getApiKey();
+                Web3j web3j = Web3j.build(new HttpService(url));
+                Web3ClientVersion web3ClientVersion = web3j.web3ClientVersion().sendAsync().get();
+                String clientVersion = web3ClientVersion.getWeb3ClientVersion();
+                log.info(clientVersion);
+
+                Credentials credentials = Credentials.create(body.getFromPrivateKey());
+
+                BigInteger gasPrice;
+                if (_fee != null) {
+                    gasPrice = new BigInteger(_fee.getGasPrice());
+                } else {
+                    gasPrice = Convert.fromWei(ethGetGasPriceInWei(), GWEI).toBigInteger();
+                }
+
+                var cap = new BigDecimal(body.getSupply()).toBigInteger().multiply(BigInteger.TEN.pow(body.getDigits()));
+
+                String encodedConstructor = FunctionEncoder.encodeConstructor(
+                        Arrays.<Type>asList(
+                                new Utf8String(body.getName()),
+                                new Utf8String(body.getSymbol()),
+                                new Address(body.getAddress()),
+                                new Uint8(body.getDigits()),
+                                new Uint256(cap),
+                                new Uint256(cap)));
+
+                Transaction prepareTx = new Transaction(StringUtils.EMPTY, _nonce, gasPrice, null, StringUtils.EMPTY,
+                        BigInteger.ZERO, TokenBytecode.TOKEN_BYTE_CODE + encodedConstructor);
+
+                BigInteger gasLimit;
+                if (_fee != null) {
+                    gasLimit = new BigInteger(_fee.getGasLimit());
+                } else {
+                    EthEstimateGas ethEstimateGas = web3j.ethEstimateGas(prepareTx).send();
+                    gasLimit = ethEstimateGas.getAmountUsed().add(BigInteger.valueOf(5000));
+                }
+
+                RawTransaction rawTransaction = RawTransaction.createContractTransaction(_nonce, gasPrice, gasLimit,
+                        BigInteger.ZERO, prepareTx.getData());
+
+                byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
+                return Numeric.toHexString(signedMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }).get();
+
+    }
+
+    /**
      * Estimate Gas price for the transaction.
      */
     public BigDecimal ethGetGasPriceInWei() throws ExecutionException, InterruptedException {
         var data = Async.getJson("https://ethgasstation.info/json/ethgasAPI.json");
         JSONObject jsonObject = new JSONObject(data);
         return Convert.toWei(jsonObject.getBigDecimal("fast").divide(BigDecimal.TEN), GWEI);
+    }
+
+    /**
+     * Send Ethereum store data transaction to the blockchain. This method broadcasts signed transaction to the blockchain.
+     * This operation is irreversible.
+     *
+     * @param testnet  mainnet or testnet version
+     * @param body     content of the transaction to broadcast
+     * @param provider url of the Ethereum Server to connect to. If not set, default public server will be used.
+     * @returns transaction id of the transaction in the blockchain
+     */
+    public TransactionHash sendStoreDataTransaction(boolean testnet, CreateRecord body, String provider) throws ExecutionException, InterruptedException, IOException {
+        return new Ethereum().ethBroadcast(prepareStoreDataTransaction(body, provider), null);
+    }
+
+    /**
+     * Send Ethereum or supported ERC20 transaction to the blockchain. This method broadcasts signed transaction to the blockchain.
+     * This operation is irreversible.
+     *
+     * @param testnet  mainnet or testnet version
+     * @param body     content of the transaction to broadcast
+     * @param provider url of the Ethereum Server to connect to. If not set, default public server will be used.
+     * @returns transaction id of the transaction in the blockchain
+     */
+    public TransactionHash sendEthOrErc20Transaction(boolean testnet, TransferEthErc20 body, String provider) throws ExecutionException, InterruptedException, IOException {
+        return new Ethereum().ethBroadcast(prepareEthOrErc20SignedTransaction(body, provider), null);
+    }
+
+    /**
+     * Send Ethereum custom ERC20 transaction to the blockchain. This method broadcasts signed transaction to the blockchain.
+     * This operation is irreversible.
+     *
+     * @param testnet  mainnet or testnet version
+     * @param body     content of the transaction to broadcast
+     * @param provider url of the Ethereum Server to connect to. If not set, default public server will be used.
+     * @returns transaction id of the transaction in the blockchain
+     */
+    public TransactionHash sendCustomErc20Transaction(boolean testnet, TransferCustomErc20 body, String provider) throws InterruptedException, ExecutionException, IOException {
+        return new Ethereum().ethBroadcast(prepareCustomErc20SignedTransaction(body, provider), null);
+    }
+
+    /**
+     * Send Ethereum deploy ERC20 transaction to the blockchain. This method broadcasts signed transaction to the blockchain.
+     * This operation is irreversible.
+     *
+     * @param testnet  mainnet or testnet version
+     * @param body     content of the transaction to broadcast
+     * @param provider url of the Ethereum Server to connect to. If not set, default public server will be used.
+     * @returns transaction id of the transaction in the blockchain
+     */
+    public TransactionHash sendDeployErc20Transaction(boolean testnet, DeployEthErc20 body, String provider) throws InterruptedException, ExecutionException, IOException {
+        return new Ethereum().ethBroadcast(prepareDeployErc20SignedTransaction(body, provider), null);
     }
 }
