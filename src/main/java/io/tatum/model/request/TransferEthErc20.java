@@ -7,10 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.math.BigInteger;
 
 @AllArgsConstructor
@@ -28,15 +25,14 @@ public class TransferEthErc20 {
     private String to;
 
     @NotEmpty
-    @Pattern(regexp = "\\d+") // number string
     @Pattern(regexp = "^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$")
     private String amount;
 
     @Size(max = 130000)
     private String data;
 
-    @NotEmpty
-//    @IsIn(ETH_BASED_CURRENCIES)
+    @NotNull
+//    @IsIn(ETH_BASED_CURRENCIES) // TO_DO
     private Currency currency;
 
     @Valid

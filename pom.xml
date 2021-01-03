@@ -147,10 +147,6 @@
 
     <repositories>
         <repository>
-            <id>my-alternate-repository</id>
-            <url>http://myrepo.net/repo</url>
-        </repository>
-        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
