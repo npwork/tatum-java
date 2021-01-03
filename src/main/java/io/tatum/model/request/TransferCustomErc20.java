@@ -25,7 +25,6 @@ public class TransferCustomErc20 {
     private String to;
 
     @NotEmpty
-    @Pattern(regexp = "\\d+") // number string
     @Pattern(regexp = "^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$")
     private String amount;
 

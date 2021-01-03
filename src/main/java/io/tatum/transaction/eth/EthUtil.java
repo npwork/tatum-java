@@ -3,6 +3,7 @@ package io.tatum.transaction.eth;
 import io.tatum.model.request.transaction.Fee;
 import io.tatum.utils.Async;
 import io.tatum.utils.NumericUtil;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.web3j.protocol.Web3j;
@@ -18,6 +19,7 @@ import java.util.concurrent.ExecutionException;
 
 import static org.web3j.utils.Convert.Unit.GWEI;
 
+@Log4j2
 public class EthUtil {
 
     public static final String toHexString(String data) {
@@ -28,11 +30,14 @@ public class EthUtil {
                 return Numeric.toHexString(data.getBytes());
             }
         }
-        return null;
+        return "0x0";
     }
 
     public static BigInteger estimateGas(Web3j web3j, Transaction transaction) throws IOException {
         EthEstimateGas ethEstimateGas = web3j.ethEstimateGas(transaction).send();
+        if (ethEstimateGas.getError() != null) {
+            log.error(ethEstimateGas.getError().getMessage());
+        }
         return ethEstimateGas.getAmountUsed().add(BigInteger.valueOf(5000));
     }
 

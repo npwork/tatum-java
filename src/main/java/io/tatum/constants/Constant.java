@@ -1,5 +1,6 @@
 package io.tatum.constants;
 
+import io.tatum.model.request.Currency;
 import io.tatum.network.EthMainNetParams;
 import io.tatum.network.VetMainNetParams;
 import io.tatum.network.LtcMainNetParams;
@@ -8,13 +9,20 @@ import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.params.TestNet3Params;
 
+import java.awt.*;
 import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import static io.tatum.model.request.Currency.*;
 
 public class Constant {
     public static final String TATUM_API_URL = "https://api-eu1.tatum.io";
+
+    public static final String TEST_VET_URL = "https://sync-testnet.vechain.org/";
+    public static final String VET_URL = "https://sync-mainnet.vechain.org/";
 
     public static final String EMPTY_BODY = "{}";
 
@@ -106,5 +114,22 @@ public class Constant {
             new AbstractMap.SimpleEntry<>(MMY.toString(), 18),
             new AbstractMap.SimpleEntry<>(XCON.toString(), 18)
     );
+
+
+    public static final List<Currency> ETH_BASED_CURRENCIES = new ArrayList<>(Arrays.asList(USDT,
+            LEO,
+            UNI,
+            LINK,
+            FREE,
+            MKR,
+            USDC,
+            BAT,
+            TUSD,
+            PAX,
+            PAXG,
+            PLTC,
+            MMY,
+            XCON,
+            ETH));
 
 }
