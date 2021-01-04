@@ -9,6 +9,8 @@ import java.util.Set;
 @Log4j2
 public class ObjectValidator {
 
+    private ObjectValidator() {}
+
     private final static ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private final static Validator validator = factory.getValidator();
 

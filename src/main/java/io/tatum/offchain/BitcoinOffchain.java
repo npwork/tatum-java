@@ -6,6 +6,7 @@ import io.tatum.model.response.kms.TransactionKMS;
 import io.tatum.model.response.offchain.WithdrawalResponse;
 import io.tatum.model.response.offchain.WithdrawalResponseData;
 import io.tatum.transaction.bitcoin.TransactionBuilder;
+import io.tatum.utils.Convert;
 import io.tatum.utils.ObjectValidator;
 import io.tatum.wallet.Address;
 import io.tatum.wallet.WalletGenerator;
@@ -127,11 +128,11 @@ public class BitcoinOffchain {
         var network = testnet ? BITCOIN_TESTNET : BITCOIN_MAINNET;
         var tx = new TransactionBuilder(network);
 
-        BigDecimal satoshis = new BigDecimal(amount).multiply(BigDecimal.valueOf(100000000)).setScale(8, RoundingMode.FLOOR);
+        BigDecimal satoshis = Convert.toSatoshis(amount);
         tx.addOutput(address, satoshis);
 
         var lastVin = Arrays.stream(data).filter(d -> "-1".equals(d.getVIn())).findFirst().get();
-        BigDecimal last = lastVin.getAmount().multiply(BigDecimal.valueOf(100000000)).setScale(8, RoundingMode.FLOOR);
+        BigDecimal last = Convert.toSatoshis(lastVin.getAmount());
 
         Address _address = new Address();
 

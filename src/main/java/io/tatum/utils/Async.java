@@ -14,6 +14,8 @@ import java.util.concurrent.ExecutionException;
 
 public class Async implements Serializable {
 
+    private Async() {}
+
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final String apiKey = ApiKey.getInstance().getApiKey();
 
