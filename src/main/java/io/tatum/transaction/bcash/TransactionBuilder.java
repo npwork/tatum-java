@@ -45,8 +45,7 @@ public class TransactionBuilder {
     public void addOutput(String address, BigDecimal value) {
         Address p2SHAddress = null;//Address.fromBase58(this.network, address);
         Script scriptPubKey = ScriptBuilder.createOutputScript(p2SHAddress);
-        BigDecimal satoshis = value.multiply(BigDecimal.valueOf(100000000));
-        value.setScale(8, RoundingMode.FLOOR);
+        BigDecimal satoshis = value.multiply(BigDecimal.valueOf(100000000)).setScale(8, RoundingMode.FLOOR);
         Coin coin = Coin.valueOf(satoshis.longValue());
         this.transaction.addOutput(coin, scriptPubKey);
     }

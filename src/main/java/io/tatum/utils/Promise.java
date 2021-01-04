@@ -6,6 +6,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Promise {
+
+    private Promise() {}
+
     public static <T> CompletableFuture<List<T>> all(final List<CompletableFuture<T>> futures) {
         CompletableFuture<List<T>> completableFuture = new CompletableFuture<>();
         final int total = futures.size();

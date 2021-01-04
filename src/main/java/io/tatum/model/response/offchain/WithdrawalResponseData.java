@@ -43,7 +43,7 @@ public class WithdrawalResponseData {
      * @type {number}
      * @memberof WithdrawalResponseData
      */
-    private BigDecimal vInIndex;
+    private long vInIndex;
 
     /**
      * Script of last unprocessed UTXO. Bitcoin SV only.

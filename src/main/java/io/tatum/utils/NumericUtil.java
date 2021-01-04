@@ -4,6 +4,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class NumericUtil {
+
+    private NumericUtil() {}
+
     /**
      * The character class \p{XDigit} matches any hexadecimal character.
      */

@@ -49,8 +49,8 @@ public class BcashTx {
 
                 for (int i = 0; i < fromUTXO.length; i++) {
                     FromUTXO item = fromUTXO[i];
-                    BigDecimal value = new BigDecimal(txs.get(i).getVout()[item.getIndex().intValue()].getValue());
-                    value.setScale(8, RoundingMode.FLOOR);
+                    BigDecimal value = new BigDecimal(txs.get(i).getVout()[item.getIndex().intValue()].getValue())
+                            .setScale(8, RoundingMode.FLOOR);
                     long satoshis = value.multiply(BigDecimal.valueOf(100000000)).longValue();
                     transactionBuilder.addInput(item.getTxHash(), item.getIndex().longValue(), item.getPrivateKey(), satoshis);
                 }
