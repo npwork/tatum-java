@@ -16,7 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.bitcoinj.core.Transaction;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Arrays;
 
 import static io.tatum.constants.Constant.BITCOIN_MAINNET;
@@ -95,7 +94,6 @@ public class BitcoinOffchain {
         var builder = new TransactionBuilder(network);
         Transaction transaction = new Transaction(network, HEX.decode(tx.getSerializedTransaction()));
         String[] privateKeys = new String[withdrawalResponses.length];
-
 
         for (int i = 0; i < withdrawalResponses.length; i++) {
             if ("-1".equals(withdrawalResponses[i].getVIn())) {
