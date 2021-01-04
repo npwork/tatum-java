@@ -43,8 +43,7 @@ public class TransactionBuilder {
     public void addOutput(String address, BigDecimal value) {
         Address p2SHAddress = LegacyAddress.fromBase58(this.network, address);
         Script scriptPubKey = ScriptBuilder.createOutputScript(p2SHAddress);
-        BigDecimal satoshis = value.multiply(BigDecimal.valueOf(100000000));
-        value.setScale(8, RoundingMode.FLOOR);
+        BigDecimal satoshis = value.multiply(BigDecimal.valueOf(100000000)).setScale(8, RoundingMode.FLOOR);
         Coin coin = Coin.valueOf(satoshis.longValue());
         this.transaction.addOutput(coin, scriptPubKey);
     }
@@ -60,10 +59,12 @@ public class TransactionBuilder {
     private void signInput() {
         for (int i = 0; i < privateKeysToSign.size(); i++) {
             ECKey key = privateKeysToSign.get(i);
-            Address sourceAddress = Address.fromKey(this.network, key, Script.ScriptType.P2PKH);
-            Script scriptPubKey = ScriptBuilder.createOutputScript(sourceAddress);
-            TransactionSignature txSignature = transaction.calculateSignature(i, key, scriptPubKey, Transaction.SigHash.ALL, false);
-            this.transaction.getInput(i).setScriptSig(ScriptBuilder.createInputScript(txSignature, key));
+            if (key != null) {
+                Address sourceAddress = Address.fromKey(this.network, key, Script.ScriptType.P2PKH);
+                Script scriptPubKey = ScriptBuilder.createOutputScript(sourceAddress);
+                TransactionSignature txSignature = transaction.calculateSignature(i, key, scriptPubKey, Transaction.SigHash.ALL, false);
+                this.transaction.getInput(i).setScriptSig(ScriptBuilder.createInputScript(txSignature, key));
+            }
         }
     }
 
@@ -106,8 +107,12 @@ public class TransactionBuilder {
         });
 
         for (String privKey : privateKeys) {
-            ECKey ecKey = DumpedPrivateKey.fromBase58(this.network, privKey).getKey();
-            this.privateKeysToSign.add(ecKey);
+            if (privateKeys != null) {
+                ECKey ecKey = DumpedPrivateKey.fromBase58(this.network, privKey).getKey();
+                this.privateKeysToSign.add(ecKey);
+            } else {
+                this.privateKeysToSign.add(null);
+            }
         }
 
         return this;

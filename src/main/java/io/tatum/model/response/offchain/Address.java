@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,7 +37,7 @@ public class Address {
      * @type {number}
      * @memberof Address
      */
-    private BigDecimal derivationKey;
+    private int derivationKey;
 
     /**
      * Extended public key to derive address from. In case of XRP, this is account address,
@@ -53,7 +54,7 @@ public class Address {
      * @type {number}
      * @memberof Address
      */
-    private BigDecimal destinatinTag;
+    private BigInteger destinatinTag;
 
     /**
      * In case of XLM, message is the distinguisher of the account.
