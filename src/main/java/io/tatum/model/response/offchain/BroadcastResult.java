@@ -1,5 +1,6 @@
-package io.tatum.model.response.common;
+package io.tatum.model.response.offchain;
 
+import io.tatum.model.response.common.TxHash;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
-public class BtcBroadcastResult {
+public class BroadcastResult {
 
     private TxHash txHash;
     private String id;

@@ -18,8 +18,7 @@ public class Common {
      * For more details, see <a href="https://tatum.io/apidoc#operation/storeWithdrawal" target="_blank">Tatum API documentation</a>
      */
     public static WithdrawalResponse offchainStoreWithdrawal(Object data) throws InterruptedException, ExecutionException, IOException {
-        String uri = (StringUtils.isNotEmpty(BaseUrl.getInstance().getUrl()) ?
-                BaseUrl.getInstance().getUrl() : TATUM_API_URL) + "/v3/offchain/withdrawal";
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/offchain/withdrawal";
         return Async.post(uri, data, WithdrawalResponse.class);
     }
 

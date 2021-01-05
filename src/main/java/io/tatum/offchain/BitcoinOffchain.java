@@ -1,7 +1,7 @@
 package io.tatum.offchain;
 
 import io.tatum.model.request.*;
-import io.tatum.model.response.common.BtcBroadcastResult;
+import io.tatum.model.response.offchain.BroadcastResult;
 import io.tatum.model.response.kms.TransactionKMS;
 import io.tatum.model.response.offchain.WithdrawalResponse;
 import io.tatum.model.response.offchain.WithdrawalResponseData;
@@ -33,7 +33,7 @@ public class BitcoinOffchain {
      * @param body    content of the transaction to broadcast
      * @returns transaction id of the transaction in the blockchain
      */
-    public BtcBroadcastResult sendBitcoinOffchainTransaction(boolean testnet, TransferBtcBasedOffchain body) throws Exception {
+    public BroadcastResult sendBitcoinOffchainTransaction(boolean testnet, TransferBtcBasedOffchain body) throws Exception {
         if (!ObjectValidator.isValidated(body)) {
             return null;
         }
@@ -66,7 +66,7 @@ public class BitcoinOffchain {
             broadcastWithdrawal.setTxData(txData);
             broadcastWithdrawal.setWithdrawalId(id);
             broadcastWithdrawal.setCurrency(Currency.BTC.getCurrency());
-            return new BtcBroadcastResult(Common.offchainBroadcast(broadcastWithdrawal), id);
+            return new BroadcastResult(Common.offchainBroadcast(broadcastWithdrawal), id);
 
         } catch (Exception e) {
             e.printStackTrace();
