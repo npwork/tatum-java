@@ -1,12 +1,29 @@
 # tatum-java
 
-To use Tatum library in your project, add following dependency to your Maven's *pom.xml* file:
+To use Tatum library in your project, first you need to add a repository section in your Maven's *pom.xml* file
 ```
-<dependency>
-  <groupId>io.tatum</groupId>
-  <artifactId>tatum-java</artifactId>
-  <version>0.1.0</version>
-</dependency>
+<repositories>
+    <!-- ... some other repository definitions -->
+
+    <repository>
+      <id>repsy</id>
+      <name>Tatumio Maven Repositoty on Repsy</name>
+      <url>https://repo.repsy.io/mvn/tatumio/tatumio</url>
+    </repository>
+  </repositories>
+```
+
+then add following dependency
+```
+<dependencies>
+  <!-- ... some other dependency definitions -->
+
+  <dependency>
+    <groupId>io.tatum</groupId>
+    <artifactId>tatum-java</artifactId>
+    <version>2.0.0</version>
+  </dependency>
+</dependencies>
 ```
 
 Library provides you these main blockchain functionalities:

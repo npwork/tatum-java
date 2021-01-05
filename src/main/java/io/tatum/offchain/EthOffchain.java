@@ -1,10 +1,11 @@
 package io.tatum.offchain;
 
-import com.oracle.truffle.js.builtins.JSONBuiltins;
 import io.tatum.ledger.LedgerAccount;
 import io.tatum.ledger.LedgerVC;
-import io.tatum.model.request.*;
-import io.tatum.model.response.common.TxHash;
+import io.tatum.model.request.CreateWithdrawal;
+import io.tatum.model.request.Currency;
+import io.tatum.model.request.TransferEthErc20Offchain;
+import io.tatum.model.request.TransferEthOffchain;
 import io.tatum.model.response.kms.TransactionKMS;
 import io.tatum.model.response.ledger.VC;
 import io.tatum.model.response.offchain.BroadcastResult;
