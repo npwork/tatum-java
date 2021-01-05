@@ -7,8 +7,8 @@ To use Tatum library in your project, first you need to add a repository section
 
     <repository>
       <id>repsy</id>
-      <name>My Private Maven Repositoty on Repsy</name>
-      <url>https://repo.repsy.io/mvn/{MY REPSY USERNAME}/{MY REPOSITORY NAME}</url>
+      <name>Tatumio Maven Repositoty on Repsy</name>
+      <url>https://repo.repsy.io/mvn/tatumio/tatumio</url>
     </repository>
   </repositories>
 ```
