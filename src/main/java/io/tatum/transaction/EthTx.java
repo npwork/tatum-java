@@ -181,7 +181,7 @@ public class EthTx {
                             gasPrice,
                             null,
                             contractAddress,
-                            amount,
+                            BigInteger.ZERO,
                             txData);
                 }
 

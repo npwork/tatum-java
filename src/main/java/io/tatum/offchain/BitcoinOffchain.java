@@ -1,7 +1,7 @@
 package io.tatum.offchain;
 
 import io.tatum.model.request.*;
-import io.tatum.model.response.common.BtcBroadcastResult;
+import io.tatum.model.response.offchain.BroadcastResult;
 import io.tatum.model.response.kms.TransactionKMS;
 import io.tatum.model.response.offchain.WithdrawalResponse;
 import io.tatum.model.response.offchain.WithdrawalResponseData;
@@ -16,7 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.bitcoinj.core.Transaction;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Arrays;
 
 import static io.tatum.constants.Constant.BITCOIN_MAINNET;
@@ -34,7 +33,7 @@ public class BitcoinOffchain {
      * @param body    content of the transaction to broadcast
      * @returns transaction id of the transaction in the blockchain
      */
-    public BtcBroadcastResult sendBitcoinOffchainTransaction(boolean testnet, TransferBtcBasedOffchain body) throws Exception {
+    public BroadcastResult sendBitcoinOffchainTransaction(boolean testnet, TransferBtcBasedOffchain body) throws Exception {
         if (!ObjectValidator.isValidated(body)) {
             return null;
         }
@@ -67,7 +66,7 @@ public class BitcoinOffchain {
             broadcastWithdrawal.setTxData(txData);
             broadcastWithdrawal.setWithdrawalId(id);
             broadcastWithdrawal.setCurrency(Currency.BTC.getCurrency());
-            return new BtcBroadcastResult(Common.offchainBroadcast(broadcastWithdrawal), id);
+            return new BroadcastResult(Common.offchainBroadcast(broadcastWithdrawal), id);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,7 +94,6 @@ public class BitcoinOffchain {
         var builder = new TransactionBuilder(network);
         Transaction transaction = new Transaction(network, HEX.decode(tx.getSerializedTransaction()));
         String[] privateKeys = new String[withdrawalResponses.length];
-
 
         for (int i = 0; i < withdrawalResponses.length; i++) {
             if ("-1".equals(withdrawalResponses[i].getVIn())) {

@@ -1,5 +1,7 @@
 package io.tatum.model.request;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.tatum.model.response.common.Money;
 
 public enum Currency implements Money {
