@@ -75,7 +75,7 @@ public class EthOffchain {
 
                 withdrawal.setFee(Convert.fromWei(prepareEthTx.getGasLimit().multiply(gasPrice.toBigInteger()).toString(), ETHER).toString());
                 WithdrawalResponse withdrawalResponse = Common.offchainStoreWithdrawal(withdrawal);
-                return broadcast(prepareEthTx.getTx(), withdrawalResponse.getId());
+                return OffchainUtil.broadcast(prepareEthTx.getTx(), withdrawalResponse.getId(), Currency.ETH.getCurrency());
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -94,21 +94,6 @@ public class EthOffchain {
             throw new Exception("No mnemonic or private key is present.");
         }
         return fromPriv;
-    }
-
-    private BroadcastResult broadcast(String tx, String id) throws ExecutionException, InterruptedException, IOException {
-        try {
-            BroadcastWithdrawal broadcastWithdrawal = new BroadcastWithdrawal();
-            broadcastWithdrawal.setTxData(tx);
-            broadcastWithdrawal.setWithdrawalId(id);
-            broadcastWithdrawal.setCurrency(Currency.ETH.getCurrency());
-            TxHash txHash = Common.offchainBroadcast(broadcastWithdrawal);
-            return new BroadcastResult(txHash, id);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Common.offchainCancelWithdrawal(id, true);
-            throw e;
-        }
     }
 
     /**
@@ -158,7 +143,8 @@ public class EthOffchain {
 
                 withdrawal.setFee(Convert.fromWei(prepareEthTx.getGasLimit().multiply(gasPrice.toBigInteger()).toString(), ETHER).toString());
                 var withdrawalResponse = Common.offchainStoreWithdrawal(withdrawal);
-                return broadcast(prepareEthTx.getTx(), withdrawalResponse.getId());
+                return OffchainUtil.broadcast(prepareEthTx.getTx(), withdrawalResponse.getId(), Currency.ETH.getCurrency());
+
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
