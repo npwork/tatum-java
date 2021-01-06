@@ -16,6 +16,9 @@ import java.util.concurrent.ExecutionException;
 
 import static io.tatum.constants.Constant.*;
 
+/**
+ * The type Address.
+ */
 public class Address {
 
     /**
@@ -24,6 +27,9 @@ public class Address {
      * @param testnet testnet or mainnet version of address
      * @param xpub    extended public key to generate address from
      * @param i       derivation index of address to generate. Up to 2^32 addresses can be generated.
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns blockchain address
      */
     public String generateBtcAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
@@ -40,6 +46,9 @@ public class Address {
      * @param testnet testnet or mainnet version of address
      * @param xpub    extended public key to generate address from
      * @param i       derivation index of address to generate. Up to 2^32 addresses can be generated.
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns blockchain address
      */
     public String generateLtcAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
@@ -56,6 +65,9 @@ public class Address {
      * @param testnet testnet or mainnet version of address
      * @param xpub    extended public key to generate address from
      * @param i       derivation index of address to generate. Up to 2^32 addresses can be generated.
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns blockchain address
      */
     public String generateBchAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
@@ -72,6 +84,9 @@ public class Address {
      * @param testnet testnet or mainnet version of address
      * @param xpub    extended public key to generate address from
      * @param i       derivation index of address to generate. Up to 2^32 addresses can be generated.
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns blockchain address
      */
     public String generateEthAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
@@ -88,6 +103,9 @@ public class Address {
      * @param testnet testnet or mainnet version of address
      * @param xpub    extended public key to generate address from
      * @param i       derivation index of address to generate. Up to 2^32 addresses can be generated.
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns blockchain address
      */
     public String generateVetAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
@@ -104,6 +122,9 @@ public class Address {
      * @param testnet  testnet or mainnet version of address
      * @param mnemonic mnemonic to generate private key from
      * @param i        derivation index of private key to generate.
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns blockchain private key to the address
      */
     public String generateBtcPrivateKey(Boolean testnet, String mnemonic, int i) throws ExecutionException, InterruptedException {
@@ -125,6 +146,9 @@ public class Address {
      * @param testnet  testnet or mainnet version of address
      * @param mnemonic mnemonic to generate private key from
      * @param i        derivation index of private key to generate.
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns blockchain private key to the address
      */
     public String generateLtcPrivateKey(Boolean testnet, String mnemonic, int i) throws ExecutionException, InterruptedException {
@@ -146,6 +170,9 @@ public class Address {
      * @param testnet  testnet or mainnet version of address
      * @param mnemonic mnemonic to generate private key from
      * @param i        derivation index of private key to generate.
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns blockchain private key to the address
      */
     public String generateBchPrivateKey(Boolean testnet, String mnemonic, int i) throws ExecutionException, InterruptedException {
@@ -167,6 +194,9 @@ public class Address {
      * @param testnet  testnet or mainnet version of address
      * @param mnemonic mnemonic to generate private key from
      * @param i        derivation index of private key to generate.
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns blockchain private key to the address
      */
     public String generateEthPrivateKey(Boolean testnet, String mnemonic, int i) throws ExecutionException, InterruptedException {
@@ -186,6 +216,9 @@ public class Address {
      * @param testnet  testnet or mainnet version of address
      * @param mnemonic mnemonic to generate private key from
      * @param i        derivation index of private key to generate.
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns blockchain private key to the address
      */
     public String generateVetPrivateKey(Boolean testnet, String mnemonic, int i) throws ExecutionException, InterruptedException {
@@ -205,6 +238,9 @@ public class Address {
      * @param testnet  testnet or mainnet version of address
      * @param mnemonic mnemonic to generate private key from
      * @param i        derivation index of private key to generate.
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns blockchain private key to the address
      */
     public String generateAdaPrivateKey(Boolean testnet, String mnemonic, int i) throws ExecutionException, InterruptedException {
@@ -225,6 +261,8 @@ public class Address {
      * @param testnet  testnet or mainnet version of address
      * @param xpub     extended public key to generate address from
      * @param i        derivation index of address to generate. Up to 2^32 addresses can be generated.
+     * @return the string
+     * @throws Exception the exception
      * @returns blockchain address
      */
     public String generateAddressFromXPub(Currency currency, boolean testnet, String xpub, int i) throws Exception {
@@ -267,6 +305,8 @@ public class Address {
      * @param testnet  testnet or mainnet version of address
      * @param mnemonic mnemonic to generate private key from
      * @param i        derivation index of private key to generate.
+     * @return the string
+     * @throws Exception the exception
      * @returns blockchain private key to the address
      */
     public String generatePrivateKeyFromMnemonic(Currency currency, Boolean testnet, String mnemonic, int i) throws Exception {

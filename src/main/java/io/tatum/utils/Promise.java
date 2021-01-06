@@ -5,10 +5,20 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * The type Promise.
+ */
 public class Promise {
 
     private Promise() {}
 
+    /**
+     * All completable future.
+     *
+     * @param <T>     the type parameter
+     * @param futures the futures
+     * @return the completable future
+     */
     public static <T> CompletableFuture<List<T>> all(final List<CompletableFuture<T>> futures) {
         CompletableFuture<List<T>> completableFuture = new CompletableFuture<>();
         final int total = futures.size();

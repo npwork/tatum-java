@@ -4,6 +4,9 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 
+/**
+ * The type Not empty fields validator.
+ */
 public class NotEmptyFieldsValidator implements ConstraintValidator<NotEmptyFields, Object[]> {
 
     @Override

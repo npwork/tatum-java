@@ -9,10 +9,19 @@ import io.tatum.utils.BaseUrl;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * The type Order book.
+ */
 public class OrderBook {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getHistoricalTrades" target="_blank">Tatum API documentation</a>
+     *
+     * @param pageSize the page size
+     * @param offset   the offset
+     * @return the order book response [ ]
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public OrderBookResponse[] getHistoricalTrades(Integer pageSize, Integer offset) throws ExecutionException, InterruptedException {
         Integer _pageSize = (pageSize == null || pageSize < 0 || pageSize > 50) ? 50 : pageSize;
@@ -23,6 +32,13 @@ public class OrderBook {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getBuyTrades" target="_blank">Tatum API documentation</a>
+     *
+     * @param id       the id
+     * @param pageSize the page size
+     * @param offset   the offset
+     * @return the order book response [ ]
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public OrderBookResponse[] getActiveBuyTrades(String id, Integer pageSize, Integer offset) throws ExecutionException, InterruptedException {
         Integer _pageSize = (pageSize == null || pageSize < 0 || pageSize > 50) ? 50 : pageSize;
@@ -33,6 +49,13 @@ public class OrderBook {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getSellTrades" target="_blank">Tatum API documentation</a>
+     *
+     * @param id       the id
+     * @param pageSize the page size
+     * @param offset   the offset
+     * @return the order book response [ ]
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public OrderBookResponse[] getActiveSellTrades(String id, Integer pageSize, Integer offset) throws ExecutionException, InterruptedException {
         Integer _pageSize = (pageSize == null || pageSize < 0 || pageSize > 50) ? 50 : pageSize;
@@ -43,6 +66,12 @@ public class OrderBook {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/storeTrade" target="_blank">Tatum API documentation</a>
+     *
+     * @param data the data
+     * @return the id
+     * @throws IOException          the io exception
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public Id storeTrade(OrderBookRequest data) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/trade";
@@ -51,6 +80,11 @@ public class OrderBook {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getTradeById" target="_blank">Tatum API documentation</a>
+     *
+     * @param id the id
+     * @return the trade by id
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public OrderBookResponse getTradeById(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/trade/" + id;
@@ -59,6 +93,10 @@ public class OrderBook {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/deleteTrade" target="_blank">Tatum API documentation</a>
+     *
+     * @param id the id
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public void deleteTrade(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/trade/" + id;
@@ -67,6 +105,10 @@ public class OrderBook {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/deleteAccountTrades" target="_blank">Tatum API documentation</a>
+     *
+     * @param id the id
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public void deleteAccountTrades(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/trade/account/" + id;

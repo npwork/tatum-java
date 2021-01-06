@@ -14,10 +14,19 @@ import io.tatum.utils.ObjectValidator;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * The type Ledger subscription.
+ */
 public class LedgerSubscription {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/createSubscription" target="_blank">Tatum API documentation</a>
+     *
+     * @param data the data
+     * @return the id
+     * @throws IOException          the io exception
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public Id createNewSubscription(CreateSubscription data) throws IOException, ExecutionException, InterruptedException {
         if (!ObjectValidator.isValidated(data)) {
@@ -29,6 +38,12 @@ public class LedgerSubscription {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getSubscriptions" target="_blank">Tatum API documentation</a>
+     *
+     * @param pageSize the page size
+     * @param offset   the offset
+     * @return the subscription [ ]
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public Subscription[] listActiveSubscriptions(Integer pageSize, Integer offset) throws ExecutionException, InterruptedException {
         Integer _pageSize = (pageSize == null || pageSize < 0 || pageSize > 50) ? 50 : pageSize;
@@ -39,6 +54,10 @@ public class LedgerSubscription {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/deleteSubscription" target="_blank">Tatum API documentation</a>
+     *
+     * @param id the id
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public void cancelExistingSubscription(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/subscription/" + id;
@@ -47,6 +66,11 @@ public class LedgerSubscription {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getSubscriptionReport" target="_blank">Tatum API documentation</a>
+     *
+     * @param id the id
+     * @return the object [ ]
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public Object[] obtainReportForSubscription(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/subscription/report/" + id;

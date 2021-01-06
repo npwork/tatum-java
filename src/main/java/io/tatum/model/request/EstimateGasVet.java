@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 
+/**
+ * The type Estimate gas vet.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
+/**
+ * The type Create accounts batch.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

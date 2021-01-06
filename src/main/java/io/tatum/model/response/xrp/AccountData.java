@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+/**
+ * The type Account data.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -23,4 +26,7 @@ public class AccountData {
     @NotNull
     @Min(0)
     private Integer sequence;
+
+    @NotNull
+    private String account;
 }

@@ -17,6 +17,9 @@ import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * The type Xlm tx.
+ */
 public class XlmTx {
 
     /**
@@ -25,6 +28,9 @@ public class XlmTx {
      *
      * @param testnet mainnet or testnet version
      * @param body    content of the transaction to broadcast
+     * @return the transaction hash
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns transaction id of the transaction in the blockchain
      */
     public TransactionHash sendXlmTransaction(boolean testnet, TransferXlm body) throws ExecutionException, InterruptedException {
@@ -44,6 +50,8 @@ public class XlmTx {
      * @param tx      pending transaction from KMS
      * @param secret  secret key to sign transaction with.
      * @param testnet mainnet or testnet version
+     * @return the string
+     * @throws Exception the exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String signXlmKMSTransaction(TransactionKMS tx, String secret, boolean testnet) throws Exception {
@@ -71,6 +79,9 @@ public class XlmTx {
      *
      * @param testnet mainnet or testnet version
      * @param body    content of the transaction to broadcast
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareXlmSignedTransaction(boolean testnet, TransferXlm body) throws ExecutionException, InterruptedException {

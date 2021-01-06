@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigInteger;
 
+/**
+ * The type Prepare eth tx.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

@@ -10,6 +10,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+/**
+ * The type Transaction json.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

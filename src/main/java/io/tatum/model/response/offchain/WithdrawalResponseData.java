@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * The type Withdrawal response data.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

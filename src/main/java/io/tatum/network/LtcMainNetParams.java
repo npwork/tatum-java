@@ -30,6 +30,9 @@ import static com.google.common.base.Preconditions.*;
  */
 public class LtcMainNetParams extends AbstractBitcoinNetParams {
 
+    /**
+     * Instantiates a new Ltc main net params.
+     */
     public LtcMainNetParams() {
         super();
         dumpedPrivateKeyHeader = 128;
@@ -45,6 +48,12 @@ public class LtcMainNetParams extends AbstractBitcoinNetParams {
     }
 
     private static LtcMainNetParams instance;
+
+    /**
+     * Get ltc main net params.
+     *
+     * @return the ltc main net params
+     */
     public static synchronized LtcMainNetParams get() {
         if (instance == null) {
             instance = new LtcMainNetParams();

@@ -9,10 +9,20 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * The type Xlm.
+ */
 public class XLM {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XlmBroadcast" target="_blank">Tatum API documentation</a>
+     *
+     * @param txData      the tx data
+     * @param signatureId the signature id
+     * @return the transaction hash
+     * @throws IOException          the io exception
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public TransactionHash xlmBroadcast(String txData, String signatureId) throws IOException, ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/broadcast";
@@ -21,6 +31,11 @@ public class XLM {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XlmGetAccountInfo" target="_blank">Tatum API documentation</a>
+     *
+     * @param account the account
+     * @return the account
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public Account xlmGetAccountInfo(String account) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/account/" + account;
@@ -29,6 +44,10 @@ public class XLM {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XlmGetLastClosedLedger" target="_blank">Tatum API documentation</a>
+     *
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public String xlmGetCurrentLedger() throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/info";
@@ -37,6 +56,10 @@ public class XLM {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XlmGetFee" target="_blank">Tatum API documentation</a>
+     *
+     * @return the big decimal
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public BigDecimal xlmGetFee() throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/fee";
@@ -45,6 +68,11 @@ public class XLM {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XlmGetLedger" target="_blank">Tatum API documentation</a>
+     *
+     * @param sequence the sequence
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public String xlmGetLedger(BigDecimal sequence) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/ledger/" + sequence;
@@ -53,6 +81,11 @@ public class XLM {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XlmGetLedgerTx" target="_blank">Tatum API documentation</a>
+     *
+     * @param sequence the sequence
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public String xlmGetLedgerTx(BigDecimal sequence) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/ledger/" + sequence + "/transaction";
@@ -61,6 +94,11 @@ public class XLM {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XlmGetTransaction" target="_blank">Tatum API documentation</a>
+     *
+     * @param hash the hash
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public String xlmGetTransaction(String hash) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/transaction/" + hash;
@@ -69,6 +107,11 @@ public class XLM {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/XlmGetAccountTx" target="_blank">Tatum API documentation</a>
+     *
+     * @param address the address
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public String xlmGetAccountTransactions(String address) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/account/tx/" + address;

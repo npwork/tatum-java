@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+/**
+ * The type Address.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

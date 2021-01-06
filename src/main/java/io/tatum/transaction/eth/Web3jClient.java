@@ -11,12 +11,23 @@ import java.util.concurrent.ExecutionException;
 
 import static io.tatum.constants.Constant.TATUM_API_URL;
 
+/**
+ * The type Web 3 j client.
+ */
 @Log4j2
 public class Web3jClient {
 
     private Web3jClient() {
     }
 
+    /**
+     * Get web 3 j.
+     *
+     * @param provider the provider
+     * @return the web 3 j
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
+     */
     public static Web3j get(String provider) throws ExecutionException, InterruptedException {
         var url = StringUtils.isNotEmpty(provider) ? provider : TATUM_API_URL + "/v3/ethereum/web3/" + ApiKey.getInstance().getApiKey();
         Web3j web3j = Web3j.build(new HttpService(url));

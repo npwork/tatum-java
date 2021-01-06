@@ -35,6 +35,9 @@ import static io.tatum.constants.Constant.VET_URL;
 import static io.tatum.model.request.Currency.ETH;
 import static org.web3j.utils.Convert.Unit.ETHER;
 
+/**
+ * The type Eth tx.
+ */
 @Log4j2
 public class EthTx {
 
@@ -45,6 +48,8 @@ public class EthTx {
      * @param fromPrivateKey private key to sign transaction with.
      * @param testnet        mainnet or testnet version
      * @param provider       url of the Ethereum Server to connect to. If not set, default public server will be used.
+     * @return the string
+     * @throws Exception the exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String signEthKMSTransaction(TransactionKMS tx, String fromPrivateKey, boolean testnet, String provider) throws Exception {
@@ -83,6 +88,9 @@ public class EthTx {
      *
      * @param body     content of the transaction to broadcast
      * @param provider url of the Ethereum Server to connect to. If not set, default public server will be used.
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareStoreDataTransaction(CreateRecord body, String provider) throws ExecutionException, InterruptedException {
@@ -132,6 +140,9 @@ public class EthTx {
      *
      * @param body     content of the transaction to broadcast
      * @param provider url of the Ethereum Server to connect to. If not set, default public server will be used.
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareEthOrErc20SignedTransaction(TransferEthErc20 body, String provider) throws ExecutionException, InterruptedException {
@@ -210,6 +221,10 @@ public class EthTx {
      *
      * @param body     content of the transaction to broadcast
      * @param provider url of the Ethereum Server to connect to. If not set, default public server will be used.
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
+     * @throws IOException          the io exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareCustomErc20SignedTransaction(TransferCustomErc20 body, String provider) throws ExecutionException, InterruptedException, IOException {
@@ -272,6 +287,10 @@ public class EthTx {
      *
      * @param body     content of the transaction to broadcast
      * @param provider url of the Ethereum Server to connect to. If not set, default public server will be used.
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
+     * @throws IOException          the io exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareDeployErc20SignedTransaction(DeployEthErc20 body, String provider) throws ExecutionException, InterruptedException, IOException {
@@ -334,6 +353,10 @@ public class EthTx {
      * @param testnet  mainnet or testnet version
      * @param body     content of the transaction to broadcast
      * @param provider url of the Ethereum Server to connect to. If not set, default public server will be used.
+     * @return the transaction hash
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
+     * @throws IOException          the io exception
      * @returns transaction id of the transaction in the blockchain
      */
     public TransactionHash sendStoreDataTransaction(boolean testnet, CreateRecord body, String provider) throws ExecutionException, InterruptedException, IOException {
@@ -347,6 +370,10 @@ public class EthTx {
      * @param testnet  mainnet or testnet version
      * @param body     content of the transaction to broadcast
      * @param provider url of the Ethereum Server to connect to. If not set, default public server will be used.
+     * @return the transaction hash
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
+     * @throws IOException          the io exception
      * @returns transaction id of the transaction in the blockchain
      */
     public TransactionHash sendEthOrErc20Transaction(boolean testnet, TransferEthErc20 body, String provider) throws ExecutionException, InterruptedException, IOException {
@@ -360,6 +387,10 @@ public class EthTx {
      * @param testnet  mainnet or testnet version
      * @param body     content of the transaction to broadcast
      * @param provider url of the Ethereum Server to connect to. If not set, default public server will be used.
+     * @return the transaction hash
+     * @throws InterruptedException the interrupted exception
+     * @throws ExecutionException   the execution exception
+     * @throws IOException          the io exception
      * @returns transaction id of the transaction in the blockchain
      */
     public TransactionHash sendCustomErc20Transaction(boolean testnet, TransferCustomErc20 body, String provider) throws InterruptedException, ExecutionException, IOException {
@@ -373,6 +404,10 @@ public class EthTx {
      * @param testnet  mainnet or testnet version
      * @param body     content of the transaction to broadcast
      * @param provider url of the Ethereum Server to connect to. If not set, default public server will be used.
+     * @return the transaction hash
+     * @throws InterruptedException the interrupted exception
+     * @throws ExecutionException   the execution exception
+     * @throws IOException          the io exception
      * @returns transaction id of the transaction in the blockchain
      */
     public TransactionHash sendDeployErc20Transaction(boolean testnet, DeployEthErc20 body, String provider) throws InterruptedException, ExecutionException, IOException {

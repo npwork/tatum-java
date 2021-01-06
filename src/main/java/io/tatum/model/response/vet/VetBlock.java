@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * The type Vet block.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

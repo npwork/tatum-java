@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * The type Vet tx receipt meta.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

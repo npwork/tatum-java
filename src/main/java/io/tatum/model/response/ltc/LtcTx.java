@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * The type Ltc tx.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

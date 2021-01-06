@@ -9,6 +9,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+/**
+ * The type Subscription attr complete blockchain tx.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

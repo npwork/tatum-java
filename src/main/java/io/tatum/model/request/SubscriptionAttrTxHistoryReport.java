@@ -10,6 +10,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 
+/**
+ * The type Subscription attr tx history report.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

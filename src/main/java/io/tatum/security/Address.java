@@ -6,10 +6,18 @@ import io.tatum.utils.BaseUrl;
 
 import java.util.concurrent.ExecutionException;
 
+/**
+ * The type Address.
+ */
 public class Address {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/CheckMalicousAddress" target="_blank">Tatum API documentation</a>
+     *
+     * @param address the address
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public String checkMaliciousAddress(String address) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/security/address/" + address;

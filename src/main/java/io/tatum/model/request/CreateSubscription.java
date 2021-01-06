@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+/**
+ * The type Create subscription.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
