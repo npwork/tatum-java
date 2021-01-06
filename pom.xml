@@ -177,9 +177,11 @@
                     <additionalOptions>
                         <additionalOption>-Xdoclint:none</additionalOption>
                     </additionalOptions>
-                    <reportOutputDirectory>./docs</reportOutputDirectory>
+                    <reportOutputDirectory>${basedir}</reportOutputDirectory>
+                    <destDir>docs</destDir>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
