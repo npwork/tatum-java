@@ -1,9 +1,7 @@
 package io.tatum.transaction;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.io.BaseEncoding;
 import io.tatum.blockchain.XRP;
 import io.tatum.model.request.Currency;
 import io.tatum.model.request.TransferXrp;
@@ -11,17 +9,18 @@ import io.tatum.model.response.common.TransactionHash;
 import io.tatum.model.response.kms.TransactionKMS;
 import io.tatum.model.response.xrp.AccountData;
 import io.tatum.transaction.xrp.TransactionJSON;
+import io.tatum.transaction.xrp.XrpUtil;
 import io.tatum.utils.ObjectValidator;
 import io.xpring.xrpl.Signer;
 import io.xpring.xrpl.Wallet;
-import io.xpring.xrpl.XrpException;
 import lombok.extern.log4j.Log4j2;
-import org.xrpl.rpc.v1.*;
-import org.xrpl.rpc.v1.Common.Account;
-import org.xrpl.rpc.v1.Common.Amount;
+import org.bitcoinj.core.Base58;
 import org.xrpl.rpc.v1.Common.*;
+import org.xrpl.rpc.v1.CurrencyAmount;
+import org.xrpl.rpc.v1.Payment;
+import org.xrpl.rpc.v1.Transaction;
+import org.xrpl.rpc.v1.XRPDropsAmount;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -77,28 +76,19 @@ public class XrpTx {
 
                 XRPDropsAmount feeAmount = XRPDropsAmount.newBuilder().setDrops(fee.longValue()).build();
 
-                AccountAddress senderAddress = AccountAddress.newBuilder().setAddress(fromAccount).build();
-                Account account = Account.newBuilder().setValue(senderAddress).build();
-
-                XRPDropsAmount sendAmount = XRPDropsAmount.newBuilder().setDrops(body.getAmount().longValue()).build();
-                CurrencyAmount paymentAmount = CurrencyAmount.newBuilder().setXrpAmount(sendAmount).build();
-                Amount amount = Amount.newBuilder().setValue(paymentAmount).build();
-
-                AccountAddress destinationAddress = AccountAddress.newBuilder().setAddress(body.getTo()).build();
-                Destination destination = Destination.newBuilder().setValue(destinationAddress).build();
+                Account account = XrpUtil.createSenderAccount(fromAccount);
+                CurrencyAmount paymentAmount = XrpUtil.createPayment(body.getAmount().longValue());
+                Amount amount = XrpUtil.createSenderAmount(paymentAmount);
+                Destination destination = XrpUtil.createDestination(body.getTo());
+                SendMax sendMax = SendMax.newBuilder().setValue(paymentAmount).build();
 
                 AccountData accountDataInfo = xrp.xrpGetAccountInfo(fromAccount);
 
                 var sequenceInt = accountDataInfo.getSequence();
                 Sequence sequence = Sequence.newBuilder().setValue(sequenceInt).build();
-
                 var maxLedgerVersion = accountDataInfo.getLedgerCurrentIndex() + 5;
                 LastLedgerSequence lastLedgerSequence = LastLedgerSequence.newBuilder().setValue(maxLedgerVersion).build();
-
-                SendMax sendMax = SendMax.newBuilder().setValue(paymentAmount).build();
-
                 SourceTag sourceTag = SourceTag.newBuilder().setValue(body.getSourceTag()).build();
-
                 DestinationTag destinationTag = DestinationTag.newBuilder().setValue(body.getDestinationTag()).build();
 
                 Payment payment = Payment.newBuilder()
@@ -118,7 +108,7 @@ public class XrpTx {
                         .build();
 
                 Wallet wallet = new Wallet(body.getFromSecret());
-                return BaseEncoding.base16().lowerCase().encode(Signer.signTransaction(transaction, wallet));
+                return Base58.encode(Signer.signTransaction(transaction, wallet));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -146,8 +136,7 @@ public class XrpTx {
 
         return CompletableFuture.supplyAsync(() -> {
             try {
-                XRP xrp = new XRP();
-                Wallet wallet = new Wallet(secret);
+
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
 
@@ -155,25 +144,18 @@ public class XrpTx {
 
                 XRPDropsAmount feeAmount = XRPDropsAmount.newBuilder().setDrops(txJSON.getFee()).build();
 
-                AccountAddress senderAddress = AccountAddress.newBuilder().setAddress(txJSON.getAccount()).build();
-                Account account = Account.newBuilder().setValue(senderAddress).build();
+                Account account = XrpUtil.createSenderAccount(txJSON.getAccount());
+                CurrencyAmount paymentAmount = XrpUtil.createPayment(txJSON.getAmount());
+                Amount amount = XrpUtil.createSenderAmount(paymentAmount);
+                SendMax sendMax = SendMax.newBuilder().setValue(paymentAmount).build();
+                Destination destination = XrpUtil.createDestination(txJSON.getDestination());
 
-                XRPDropsAmount sendAmount = XRPDropsAmount.newBuilder().setDrops(txJSON.getAmount()).build();
-                CurrencyAmount paymentAmount = CurrencyAmount.newBuilder().setXrpAmount(sendAmount).build();
-                Amount amount = Amount.newBuilder().setValue(paymentAmount).build();
-
-                AccountAddress destinationAddress = AccountAddress.newBuilder().setAddress(txJSON.getDestination()).build();
-                Destination destination = Destination.newBuilder().setValue(destinationAddress).build();
-
-                AccountData accountDataInfo = xrp.xrpGetAccountInfo(txJSON.getAccount());
+                AccountData accountDataInfo = new XRP().xrpGetAccountInfo(txJSON.getAccount());
 
                 var sequenceInt = accountDataInfo.getSequence();
                 Sequence sequence = Sequence.newBuilder().setValue(sequenceInt).build();
-
                 var maxLedgerVersion = accountDataInfo.getLedgerCurrentIndex() + 5;
                 LastLedgerSequence lastLedgerSequence = LastLedgerSequence.newBuilder().setValue(maxLedgerVersion).build();
-
-                SendMax sendMax = SendMax.newBuilder().setValue(paymentAmount).build();
 
                 Payment payment = Payment.newBuilder()
                         .setDestination(destination)
@@ -189,8 +171,8 @@ public class XrpTx {
                         .setPayment(payment)
                         .build();
 
-
-                return BaseEncoding.base16().lowerCase().encode(Signer.signTransaction(transaction, wallet));
+                Wallet wallet = new Wallet(secret);
+                return Base58.encode(Signer.signTransaction(transaction, wallet));
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;

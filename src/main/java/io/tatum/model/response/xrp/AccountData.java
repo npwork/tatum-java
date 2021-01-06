@@ -26,4 +26,7 @@ public class AccountData {
     @NotNull
     @Min(0)
     private Integer sequence;
+
+    @NotNull
+    private String account;
 }
