@@ -177,7 +177,7 @@
                     <additionalOptions>
                         <additionalOption>-Xdoclint:none</additionalOption>
                     </additionalOptions>
-                    <reportOutputDirectory>./apidocs</reportOutputDirectory>
+                    <reportOutputDirectory>./docs</reportOutputDirectory>
                 </configuration>
             </plugin>
         </plugins>
