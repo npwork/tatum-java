@@ -100,11 +100,6 @@
             <version>0.15.9</version>
         </dependency>
         <dependency>
-            <groupId>org.bitcoinj</groupId>
-            <artifactId>bitcoinj-core</artifactId>
-            <version>0.15.9</version>
-        </dependency>
-        <dependency>
             <groupId>io.xpring</groupId>
             <artifactId>xpring4j</artifactId>
             <version>6.1.1</version>
@@ -167,6 +162,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
