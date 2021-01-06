@@ -181,7 +181,6 @@
                     <destDir>docs</destDir>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 
