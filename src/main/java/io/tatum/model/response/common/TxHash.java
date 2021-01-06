@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * The type Tx hash.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

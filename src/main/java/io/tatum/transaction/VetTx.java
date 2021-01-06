@@ -26,6 +26,9 @@ import java.util.concurrent.ExecutionException;
 import static io.tatum.constants.Constant.*;
 import static org.web3j.utils.Convert.Unit.ETHER;
 
+/**
+ * The type Vet tx.
+ */
 public class VetTx {
 
     /**
@@ -35,6 +38,8 @@ public class VetTx {
      * @param fromPrivateKey private key to sign transaction with.
      * @param testnet        mainnet or testnet version
      * @param provider       url of the VeChain Server to connect to. If not set, default public server will be used.
+     * @return the string
+     * @throws Exception the exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String signVetKMSTransaction(TransactionKMS tx, String fromPrivateKey, boolean testnet, String provider) throws Exception {
@@ -75,6 +80,10 @@ public class VetTx {
      * @param testnet  mainnet or testnet version
      * @param body     content of the transaction to broadcast
      * @param provider url of the VeChain Server to connect to. If not set, default public server will be used.
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
+     * @throws IOException          the io exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareVetSignedTransaction(boolean testnet, TransferVet body, String provider) throws ExecutionException, InterruptedException, IOException {

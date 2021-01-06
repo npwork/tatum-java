@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
+/**
+ * The type Vet fee.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

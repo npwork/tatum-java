@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * The type Eth block.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

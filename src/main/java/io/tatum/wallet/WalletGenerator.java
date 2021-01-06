@@ -18,6 +18,9 @@ import java.util.concurrent.ExecutionException;
 
 import static io.tatum.constants.Constant.*;
 
+/**
+ * The type Wallet generator.
+ */
 public class WalletGenerator {
 
     /**
@@ -25,6 +28,9 @@ public class WalletGenerator {
      *
      * @param testnet testnet or mainnet version of address
      * @param mnem    mnemonic seed to use
+     * @return the wallet
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns io.tatum.wallet
      */
     public static Wallet generateBtcWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
@@ -44,6 +50,9 @@ public class WalletGenerator {
      *
      * @param testnet testnet or mainnet version of address
      * @param mnem    mnemonic seed to use
+     * @return the wallet
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns wallet
      */
     public static Wallet generateLtcWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
@@ -58,6 +67,15 @@ public class WalletGenerator {
         }).get();
     }
 
+    /**
+     * Generate bch wallet wallet.
+     *
+     * @param testnet the testnet
+     * @param mnem    the mnem
+     * @return the wallet
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
+     */
     public static Wallet generateBchWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             NetworkParameters network = testnet ? BITCOIN_TESTNET : BITCOIN_MAINNET;
@@ -75,6 +93,9 @@ public class WalletGenerator {
      *
      * @param testnet testnet or mainnet version of address
      * @param mnem    mnemonic seed to use
+     * @return the wallet
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns wallet
      */
     public static Wallet generateVetWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
@@ -94,6 +115,9 @@ public class WalletGenerator {
      *
      * @param testnet testnet or mainnet version of address
      * @param mnem    mnemonic seed to use
+     * @return the wallet
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns wallet
      */
     public static Wallet generateEthWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
@@ -110,6 +134,10 @@ public class WalletGenerator {
 
     /**
      * Generate Xrp address and secret.
+     *
+     * @return the wallet
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public static Wallet generateXrpWallet() throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
@@ -132,6 +160,8 @@ public class WalletGenerator {
      * @param currency blockchain to generate wallet for
      * @param testnet  testnet or mainnet version of address
      * @param mnemonic mnemonic seed to use. If not present, new one will be generated
+     * @return the wallet
+     * @throws Exception the exception
      * @returns wallet or a combination of address and private key
      */
     public Wallet generateWallet(Currency currency, boolean testnet, String mnemonic) throws Exception {

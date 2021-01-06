@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * The type Broadcast withdrawal.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

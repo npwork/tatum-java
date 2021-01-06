@@ -17,11 +17,19 @@ import java.util.concurrent.ExecutionException;
 
 import static io.tatum.constants.Constant.EMPTY_BODY;
 
+/**
+ * The type Ledger account.
+ */
 @Log4j2
 public class LedgerAccount {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getAccountByAccountId" target="_blank">Tatum API documentation</a>
+     *
+     * @param id the id
+     * @return the account by id
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public Account getAccountById(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/" + id;
@@ -30,6 +38,12 @@ public class LedgerAccount {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/createAccount" target="_blank">Tatum API documentation</a>
+     *
+     * @param account the account
+     * @return the account
+     * @throws IOException          the io exception
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public Account createAccount(CreateAccount account) throws IOException, ExecutionException, InterruptedException {
         if (!ObjectValidator.isValidated(account)) {
@@ -41,6 +55,12 @@ public class LedgerAccount {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/createAccountBatch" target="_blank">Tatum API documentation</a>
+     *
+     * @param accounts the accounts
+     * @return the account [ ]
+     * @throws IOException          the io exception
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public Account[] createAccounts(CreateAccountsBatch accounts) throws IOException, ExecutionException, InterruptedException {
         if (!ObjectValidator.isValidated(accounts)) {
@@ -52,6 +72,13 @@ public class LedgerAccount {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getBlockAmount" target="_blank">Tatum API documentation</a>
+     *
+     * @param id       the id
+     * @param pageSize the page size
+     * @param offset   the offset
+     * @return the blockage [ ]
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public Blockage[] getBlockedAmountsByAccountId(String id, Integer pageSize, Integer offset) throws ExecutionException, InterruptedException {
         Integer _pageSize = (pageSize == null || pageSize < 0 || pageSize > 50) ? 50 : pageSize;
@@ -62,6 +89,13 @@ public class LedgerAccount {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/blockAmount" target="_blank">Tatum API documentation</a>
+     *
+     * @param id    the id
+     * @param block the block
+     * @return the string
+     * @throws IOException          the io exception
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public String blockAmount(String id, BlockAmount block) throws IOException, ExecutionException, InterruptedException {
         if (!ObjectValidator.isValidated(block)) {
@@ -78,6 +112,10 @@ public class LedgerAccount {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/deleteBlockAmount" target="_blank">Tatum API documentation</a>
+     *
+     * @param id the id
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public void deleteBlockedAmount(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/block/" + id;
@@ -86,6 +124,10 @@ public class LedgerAccount {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/deleteAllBlockAmount" target="_blank">Tatum API documentation</a>
+     *
+     * @param id the id
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public void deleteBlockedAmountForAccount(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/block/account/" + id;
@@ -94,6 +136,10 @@ public class LedgerAccount {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/activateAccount" target="_blank">Tatum API documentation</a>
+     *
+     * @param id the id
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public void activateAccount(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/" + id + "/activate";
@@ -102,6 +148,10 @@ public class LedgerAccount {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/deactivateAccount" target="_blank">Tatum API documentation</a>
+     *
+     * @param id the id
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public void deactivateAccount(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/" + id + "/deactivate";
@@ -110,6 +160,10 @@ public class LedgerAccount {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/freezeAccount" target="_blank">Tatum API documentation</a>
+     *
+     * @param id the id
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public void freezeAccount(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/" + id + "/freeze";
@@ -118,6 +172,10 @@ public class LedgerAccount {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/unfreezeAccount" target="_blank">Tatum API documentation</a>
+     *
+     * @param id the id
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public void unfreezeAccount(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/" + id + "/unfreeze";
@@ -126,6 +184,13 @@ public class LedgerAccount {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getAccountsByCustomerId" target="_blank">Tatum API documentation</a>
+     *
+     * @param id       the id
+     * @param pageSize the page size
+     * @param offset   the offset
+     * @return the account [ ]
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public Account[] getAccountsByCustomerId(String id, Integer pageSize, Integer offset) throws ExecutionException, InterruptedException {
         Integer _pageSize = (pageSize == null || pageSize < 0 || pageSize > 50) ? 50 : pageSize;
@@ -136,6 +201,12 @@ public class LedgerAccount {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getAllAccounts" target="_blank">Tatum API documentation</a>
+     *
+     * @param pageSize the page size
+     * @param offset   the offset
+     * @return the account [ ]
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public Account[] getAllAccounts(Integer pageSize, Integer offset) throws ExecutionException, InterruptedException {
         Integer _pageSize = (pageSize == null || pageSize < 0 || pageSize > 50) ? 50 : pageSize;
@@ -146,6 +217,11 @@ public class LedgerAccount {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getAccountBalance" target="_blank">Tatum API documentation</a>
+     *
+     * @param id the id
+     * @return the account balance
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public AccountBalance getAccountBalance(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/" + id + "/balance";

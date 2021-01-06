@@ -19,6 +19,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
+/**
+ * The type Bcash tx.
+ */
 public class BcashTx {
 
     /**
@@ -26,6 +29,9 @@ public class BcashTx {
      *
      * @param network mainnet or testnet version
      * @param body    content of the transaction to broadcast
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareBitcoinCashSignedTransaction(NetworkParameters network, TransferBchBlockchain body) throws ExecutionException, InterruptedException {
@@ -64,6 +70,14 @@ public class BcashTx {
 
     }
 
+    /**
+     * Gets transactions.
+     *
+     * @param txHash the tx hash
+     * @return the transactions
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
+     */
     public List<BchTx> getTransactions(String[] txHash) throws ExecutionException, InterruptedException {
         List<CompletableFuture<BchTx>> futures = new ArrayList<>();
         if (ArrayUtils.isEmpty(txHash)) {

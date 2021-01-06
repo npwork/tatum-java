@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * The type Btc utxo.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

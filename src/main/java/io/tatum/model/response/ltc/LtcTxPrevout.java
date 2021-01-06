@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * The type Ltc tx prevout.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

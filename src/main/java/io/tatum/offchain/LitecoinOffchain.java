@@ -21,6 +21,9 @@ import static io.tatum.constants.Constant.LITECOIN_MAINNET;
 import static io.tatum.constants.Constant.LITECOIN_TESTNET;
 import static org.bitcoinj.core.Utils.HEX;
 
+/**
+ * The type Litecoin offchain.
+ */
 public class LitecoinOffchain {
 
     /**
@@ -29,6 +32,8 @@ public class LitecoinOffchain {
      *
      * @param testnet mainnet or testnet version
      * @param body    content of the transaction to broadcast
+     * @return the broadcast result
+     * @throws Exception the exception
      * @returns transaction id of the transaction in the blockchain
      */
     public BroadcastResult sendLitecoinOffchainTransaction(boolean testnet, TransferBtcBasedOffchain body) throws Exception {
@@ -79,6 +84,8 @@ public class LitecoinOffchain {
      * @param tx       pending transaction from KMS
      * @param mnemonic mnemonic to generate private keys to sign transaction with.
      * @param testnet  mainnet or testnet version
+     * @return the string
+     * @throws Exception the exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String signLitecoinOffchainKMSTransaction(TransactionKMS tx, String mnemonic, boolean testnet) throws Exception {
@@ -117,6 +124,8 @@ public class LitecoinOffchain {
      * @param mnemonic      mnemonic to sign transaction from. mnemonic or keyPair must be present
      * @param keyPair       keyPair to sign transaction from. keyPair or mnemonic must be present
      * @param changeAddress address to send the rest of the unused coins
+     * @return the string
+     * @throws Exception the exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareLitecoinSignedOffchainTransaction(boolean testnet, WithdrawalResponseData[] data, String amount, String address, String mnemonic, KeyPair[] keyPair, String changeAddress) throws Exception {

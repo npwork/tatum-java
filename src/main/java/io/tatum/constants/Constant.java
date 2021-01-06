@@ -18,44 +18,101 @@ import java.util.Map;
 
 import static io.tatum.model.request.Currency.*;
 
+/**
+ * The type Constant.
+ */
 public class Constant {
+    /**
+     * The constant TATUM_API_URL.
+     */
     public static final String TATUM_API_URL = "https://api-eu1.tatum.io";
 
+    /**
+     * The constant TEST_VET_URL.
+     */
     public static final String TEST_VET_URL = "https://sync-testnet.vechain.org/";
+    /**
+     * The constant VET_URL.
+     */
     public static final String VET_URL = "https://sync-mainnet.vechain.org/";
 
+    /**
+     * The constant EMPTY_BODY.
+     */
     public static final String EMPTY_BODY = "{}";
 
+    /**
+     * The constant BITCOIN_MAINNET.
+     */
     public static final NetworkParameters BITCOIN_MAINNET = MainNetParams.get();
 
+    /**
+     * The constant BITCOIN_TESTNET.
+     */
     public static final NetworkParameters BITCOIN_TESTNET = TestNet3Params.get();
 
+    /**
+     * The constant LITECOIN_MAINNET.
+     */
     public static final NetworkParameters LITECOIN_MAINNET = LtcMainNetParams.get();
 
+    /**
+     * The constant LITECOIN_TESTNET.
+     */
     public static final NetworkParameters LITECOIN_TESTNET = LtcTestNet3Params.get();
 
+    /**
+     * The constant ETHEREUM_MAINNET.
+     */
     public static final NetworkParameters ETHEREUM_MAINNET = EthMainNetParams.get();
 
+    /**
+     * The constant VET_MAINNET.
+     */
     public static final NetworkParameters VET_MAINNET = VetMainNetParams.get();
 
 
-    // TESTNET_DERIVATION_PATH = 'm/44\'/1\'/0\'/0'
+    /**
+     * The constant TESTNET_DERIVATION_PATH.
+     */
+// TESTNET_DERIVATION_PATH = 'm/44\'/1\'/0\'/0'
     public static final String TESTNET_DERIVATION_PATH = "M/44H/1H/0H/0";
 
-    // BTC_DERIVATION_PATH = 'm/44\'/0\'/0\'/0';
+    /**
+     * The constant BTC_DERIVATION_PATH.
+     */
+// BTC_DERIVATION_PATH = 'm/44\'/0\'/0\'/0';
     public static final String BTC_DERIVATION_PATH = "M/44H/0H/0H/0";
 
-    //LTC_DERIVATION_PATH = 'm/44\'/2\'/0\'/0';
+    /**
+     * The constant LTC_DERIVATION_PATH.
+     */
+//LTC_DERIVATION_PATH = 'm/44\'/2\'/0\'/0';
     public static final String LTC_DERIVATION_PATH = "M/44H/2H/0H/0";
 
+    /**
+     * The constant BCH_DERIVATION_PATH.
+     */
     public static final String BCH_DERIVATION_PATH = "M/44H/145H/0H/0";
 
+    /**
+     * The constant ETH_DERIVATION_PATH.
+     */
     public static final String ETH_DERIVATION_PATH = "M/44H/60H/0H/0";
 
+    /**
+     * The constant VET_DERIVATION_PATH.
+     */
     public static final String VET_DERIVATION_PATH = "M/44H/818H/0H/0";
 
+    /**
+     * The constant ADA_DERIVATION_PATH.
+     */
     public static final String ADA_DERIVATION_PATH = "M/44H/1815H/0H/0/0";
 
+    /**
+     * The constant TRANSFER_METHOD_ABI.
+     */
     public static final String TRANSFER_METHOD_ABI = "{" +
             "   \"constant\":false," +
             "   \"inputs\":[" +
@@ -80,6 +137,9 @@ public class Constant {
             "   \"type\":\"function\"" +
             "}";
 
+    /**
+     * The constant CONTRACT_ADDRESSES.
+     */
     public static final Map<String, String> CONTRACT_ADDRESSES = Map.ofEntries(
             new AbstractMap.SimpleEntry<>(USDT.toString(), "0xdac17f958d2ee523a2206206994597c13d831ec7"),
             new AbstractMap.SimpleEntry<>(LEO.toString(), "0x2af5d2ad76741191d15dfe7bf6ac92d4bd912ca3"),
@@ -98,6 +158,9 @@ public class Constant {
     );
 
 
+    /**
+     * The constant CONTRACT_DECIMALS.
+     */
     public static final Map<String, Integer> CONTRACT_DECIMALS = Map.ofEntries(
             new AbstractMap.SimpleEntry<>(USDT.toString(), 6),
             new AbstractMap.SimpleEntry<>(LEO.toString(), 18),
@@ -116,6 +179,9 @@ public class Constant {
     );
 
 
+    /**
+     * The constant ETH_BASED_CURRENCIES.
+     */
     public static final List<Currency> ETH_BASED_CURRENCIES = new ArrayList<>(Arrays.asList(USDT,
             LEO,
             UNI,

@@ -12,6 +12,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.math.BigInteger;
 
+/**
+ * The type Create record.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

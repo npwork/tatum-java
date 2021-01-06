@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
+/**
+ * The type Transfer bch blockchain.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * The type Bch block.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

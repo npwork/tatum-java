@@ -11,6 +11,9 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.math.BigInteger;
 
+/**
+ * The type Base transfer eth erc 20 offchain.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

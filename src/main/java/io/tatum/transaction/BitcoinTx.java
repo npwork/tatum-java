@@ -21,6 +21,9 @@ import java.util.concurrent.ExecutionException;
 
 import static org.bitcoinj.core.Utils.HEX;
 
+/**
+ * The type Bitcoin tx.
+ */
 @Log4j2
 public class BitcoinTx {
 
@@ -29,6 +32,9 @@ public class BitcoinTx {
      *
      * @param network mainnet or testnet version
      * @param body    content of the transaction to broadcast
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareSignedTransaction(NetworkParameters network, TransferBtcBasedBlockchain body) throws ExecutionException, InterruptedException {
@@ -88,9 +94,12 @@ public class BitcoinTx {
     /**
      * Sign Bitcoin pending transaction from Tatum KMS
      *
+     * @param network     mainnet or testnet version
      * @param tx          pending transaction from KMS
      * @param privateKeys private keys to sign transaction with.
-     * @param network     mainnet or testnet version
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String signBitcoinKMSTransaction(NetworkParameters network, TransactionKMS tx, String[] privateKeys) throws ExecutionException, InterruptedException {
@@ -117,6 +126,10 @@ public class BitcoinTx {
      *
      * @param network mainnet or testnet version
      * @param body    content of the transaction to broadcast
+     * @return the transaction hash
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
+     * @throws IOException          the io exception
      * @returns transaction id of the transaction in the blockchain
      */
     public TransactionHash sendBitcoinTransaction(NetworkParameters network, TransferBtcBasedBlockchain body) throws ExecutionException, InterruptedException, IOException {

@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * The type Block hash.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

@@ -24,6 +24,9 @@ import org.bitcoinj.params.AbstractBitcoinNetParams;
  */
 public class VetMainNetParams extends AbstractBitcoinNetParams {
 
+    /**
+     * Instantiates a new Vet main net params.
+     */
     public VetMainNetParams() {
         super();
 
@@ -35,6 +38,12 @@ public class VetMainNetParams extends AbstractBitcoinNetParams {
     }
 
     private static VetMainNetParams instance;
+
+    /**
+     * Get vet main net params.
+     *
+     * @return the vet main net params
+     */
     public static synchronized VetMainNetParams get() {
         if (instance == null) {
             instance = new VetMainNetParams();

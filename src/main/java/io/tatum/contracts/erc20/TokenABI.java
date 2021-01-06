@@ -1,7 +1,13 @@
 package io.tatum.contracts.erc20;
 
+/**
+ * The type Token abi.
+ */
 public class TokenABI {
 
+    /**
+     * The constant TOKEN_ABI.
+     */
     public static final String TOKEN_ABI = "[" +
             "   {" +
             "      \"constant\":true," +

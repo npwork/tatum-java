@@ -6,6 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 import javax.validation.*;
 import java.util.Set;
 
+/**
+ * The type Object validator.
+ */
 @Log4j2
 public class ObjectValidator {
 
@@ -14,6 +17,12 @@ public class ObjectValidator {
     private final static ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private final static Validator validator = factory.getValidator();
 
+    /**
+     * Is validated boolean.
+     *
+     * @param value the value
+     * @return the boolean
+     */
     public static Boolean isValidated(Object value) {
         Set<ConstraintViolation<Object>> violations = validator.validate(value);
         for (ConstraintViolation<Object> violation : violations) {

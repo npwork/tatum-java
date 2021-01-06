@@ -11,6 +11,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+/**
+ * The type Create account.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

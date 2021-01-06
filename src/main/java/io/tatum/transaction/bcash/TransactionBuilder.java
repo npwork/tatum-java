@@ -12,6 +12,9 @@ import java.util.List;
 
 import static org.bitcoinj.core.Utils.HEX;
 
+/**
+ * The type Transaction builder.
+ */
 public class TransactionBuilder {
 
     private NetworkParameters network;
@@ -25,6 +28,11 @@ public class TransactionBuilder {
     private long version;
     private long lockTime;
 
+    /**
+     * Instantiates a new Transaction builder.
+     *
+     * @param network the network
+     */
     public TransactionBuilder(NetworkParameters network) {
         this.init(network);
     }
@@ -35,6 +43,9 @@ public class TransactionBuilder {
         this.reset();
     }
 
+    /**
+     * Reset.
+     */
     public void reset() {
         this.transaction = new Transaction(this.network);
         this.transaction.setVersion(2);
@@ -42,6 +53,12 @@ public class TransactionBuilder {
         this.amountToSign = new ArrayList<>();
     }
 
+    /**
+     * Add output.
+     *
+     * @param address the address
+     * @param value   the value
+     */
     public void addOutput(String address, BigDecimal value) {
         Address p2SHAddress = null;//Address.fromBase58(this.network, address);
         Script scriptPubKey = ScriptBuilder.createOutputScript(p2SHAddress);
@@ -50,6 +67,14 @@ public class TransactionBuilder {
         this.transaction.addOutput(coin, scriptPubKey);
     }
 
+    /**
+     * Add input.
+     *
+     * @param txHash the tx hash
+     * @param index  the index
+     * @param key    the key
+     * @param amount the amount
+     */
     public void addInput(String txHash, long index, String key, long amount) {
         ECKey ecKey = DumpedPrivateKey.fromBase58(network, key).getKey();
         Script p2PKHOutputScript = null;//ScriptBuilder.createOutputScript(ecKey);
@@ -68,6 +93,11 @@ public class TransactionBuilder {
         }
     }
 
+    /**
+     * Build transaction builder.
+     *
+     * @return the transaction builder
+     */
     public TransactionBuilder build() {
         this.signInput();
         this.transaction.verify();
@@ -77,22 +107,52 @@ public class TransactionBuilder {
         return this;
     }
 
+    /**
+     * To hex string.
+     *
+     * @return the string
+     */
     public String toHex() {
         return HEX.encode(this.bitcoinSerialize);
     }
 
+    /**
+     * Add output.
+     *
+     * @param value  the value
+     * @param script the script
+     */
     public void addOutput(Coin value, Script script) {
         this.transaction.addOutput(value, script);
     }
 
+    /**
+     * Add input.
+     *
+     * @param txHash the tx hash
+     * @param index  the index
+     * @param script the script
+     */
     public void addInput(Sha256Hash txHash, long index, Script script) {
         this.transaction.addInput(txHash, index, script);
     }
 
+    /**
+     * Gets network.
+     *
+     * @return the network
+     */
     public NetworkParameters getNetwork() {
         return this.network;
     }
 
+    /**
+     * From transaction transaction builder.
+     *
+     * @param transaction the transaction
+     * @param privateKeys the private keys
+     * @return the transaction builder
+     */
     public TransactionBuilder fromTransaction(Transaction transaction, String[] privateKeys) {
         // Copy transaction fields
         this.setVersion(transaction.getVersion());
@@ -112,18 +172,38 @@ public class TransactionBuilder {
         return this;
     }
 
+    /**
+     * Gets version.
+     *
+     * @return the version
+     */
     public long getVersion() {
         return version;
     }
 
+    /**
+     * Sets version.
+     *
+     * @param version the version
+     */
     public void setVersion(long version) {
         this.version = version;
     }
 
+    /**
+     * Gets lock time.
+     *
+     * @return the lock time
+     */
     public long getLockTime() {
         return lockTime;
     }
 
+    /**
+     * Sets lock time.
+     *
+     * @param lockTime the lock time
+     */
     public void setLockTime(long lockTime) {
         this.lockTime = lockTime;
     }

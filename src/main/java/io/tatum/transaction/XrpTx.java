@@ -26,13 +26,20 @@ import java.math.BigDecimal;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * The type Xrp tx.
+ */
 @Log4j2
 public class XrpTx {
 
     /**
      * Send Xrp transaction to the blockchain. This method broadcasts signed transaction to the blockchain.
      * This operation is irreversible.
+     *
      * @param body content of the transaction to broadcast
+     * @return the transaction hash
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns transaction id of the transaction in the blockchain
      */
     public TransactionHash sendXrpTransaction(TransferXrp body) throws ExecutionException, InterruptedException {
@@ -50,6 +57,9 @@ public class XrpTx {
      * Sign Xrp transaction with private keys locally. Nothing is broadcast to the blockchain.
      *
      * @param body content of the transaction to broadcast
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareXrpSignedTransaction(TransferXrp body) throws ExecutionException, InterruptedException {
@@ -123,6 +133,9 @@ public class XrpTx {
      *
      * @param tx     pending transaction from KMS
      * @param secret secret key to sign transaction with.
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String signXrpKMSTransaction(TransactionKMS tx, String secret) throws ExecutionException, InterruptedException {

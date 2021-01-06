@@ -38,6 +38,9 @@ import java.util.concurrent.ExecutionException;
 import static io.tatum.constants.Constant.*;
 import static org.web3j.utils.Convert.Unit.ETHER;
 
+/**
+ * The type Eth offchain.
+ */
 public class EthOffchain {
 
     /**
@@ -47,6 +50,8 @@ public class EthOffchain {
      * @param testnet  mainnet or testnet version
      * @param body     content of the transaction to broadcast
      * @param provider url of the Ethereum Server to connect to. If not set, default public server will be used.
+     * @return the broadcast result
+     * @throws Exception the exception
      * @returns transaction id of the transaction in the blockchain
      */
     public BroadcastResult sendEthOffchainTransaction(boolean testnet, TransferEthOffchain body, String provider) throws Exception {
@@ -104,6 +109,8 @@ public class EthOffchain {
      * @param testnet  mainnet or testnet version
      * @param body     content of the transaction to broadcast
      * @param provider url of the Ethereum Server to connect to. If not set, default public server will be used.
+     * @return the broadcast result
+     * @throws Exception the exception
      * @returns transaction id of the transaction in the blockchain
      */
     public BroadcastResult sendEthErc20OffchainTransaction(boolean testnet, TransferEthErc20Offchain body, String provider) throws Exception {
@@ -161,6 +168,8 @@ public class EthOffchain {
      * @param fromPrivateKey private key to sign transaction with.
      * @param testnet        mainnet or testnet version
      * @param provider       url of the Ethereum Server to connect to. If not set, default public server will be used.
+     * @return the string
+     * @throws Exception the exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String signEthOffchainKMSTransaction(TransactionKMS tx, String fromPrivateKey, boolean testnet, String provider) throws Exception {
@@ -203,6 +212,8 @@ public class EthOffchain {
      * @param web3       instance of the web3 client
      * @param gasPrice   gas price of the blockchain fee
      * @param nonce      nonce of the transaction. this is counter of the transactions from given address. should be + 1 from previous one.
+     * @return the prepare eth tx
+     * @throws Exception the exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public PrepareEthTx prepareEthSignedOffchainTransaction(String amount, String privateKey, String address,
@@ -257,10 +268,13 @@ public class EthOffchain {
      * @param amount       amount to send
      * @param privateKey   private key to sign transaction and send funds from
      * @param address      recipient address
-     * @param tokenAddress blockchain address of the custom ERC20 token
      * @param web3         instance of the web3 client
+     * @param tokenAddress blockchain address of the custom ERC20 token
      * @param gasPrice     gas price of the blockchain fee
      * @param nonce        nonce of the transaction. this is counter of the transactions from given address. should be + 1 from previous one.
+     * @return the prepare eth tx
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public PrepareEthTx prepareEthErc20SignedOffchainTransaction(String amount, String privateKey, String address,

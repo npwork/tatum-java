@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * The type Bch tx script pub key.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

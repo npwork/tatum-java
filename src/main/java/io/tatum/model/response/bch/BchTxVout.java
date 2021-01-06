@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * The type Bch tx vout.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

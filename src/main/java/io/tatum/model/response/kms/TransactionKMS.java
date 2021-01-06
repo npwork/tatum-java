@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 
+/**
+ * The type Transaction kms.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

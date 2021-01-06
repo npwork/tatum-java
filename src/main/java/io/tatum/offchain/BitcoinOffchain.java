@@ -22,6 +22,9 @@ import static io.tatum.constants.Constant.BITCOIN_MAINNET;
 import static io.tatum.constants.Constant.BITCOIN_TESTNET;
 import static org.bitcoinj.core.Utils.HEX;
 
+/**
+ * The type Bitcoin offchain.
+ */
 @Log4j2
 public class BitcoinOffchain {
 
@@ -31,6 +34,8 @@ public class BitcoinOffchain {
      *
      * @param testnet mainnet or testnet version
      * @param body    content of the transaction to broadcast
+     * @return the broadcast result
+     * @throws Exception the exception
      * @returns transaction id of the transaction in the blockchain
      */
     public BroadcastResult sendBitcoinOffchainTransaction(boolean testnet, TransferBtcBasedOffchain body) throws Exception {
@@ -81,6 +86,8 @@ public class BitcoinOffchain {
      * @param tx       pending transaction from KMS
      * @param mnemonic mnemonic to generate private keys to sign transaction with.
      * @param testnet  mainnet or testnet version
+     * @return the string
+     * @throws Exception the exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String signBitcoinOffchainKMSTransaction(TransactionKMS tx, String mnemonic, boolean testnet) throws Exception {
@@ -119,6 +126,8 @@ public class BitcoinOffchain {
      * @param mnemonic      mnemonic to sign transaction from. mnemonic or keyPair must be present
      * @param keyPair       keyPair to sign transaction from. keyPair or mnemonic must be present
      * @param changeAddress address to send the rest of the unused coins
+     * @return the string
+     * @throws Exception the exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareBitcoinSignedOffchainTransaction(boolean testnet, WithdrawalResponseData[] data, String amount, String address, String mnemonic, KeyPair[] keyPair, String changeAddress) throws Exception {

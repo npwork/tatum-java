@@ -11,6 +11,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
+/**
+ * The type Transaction filter.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

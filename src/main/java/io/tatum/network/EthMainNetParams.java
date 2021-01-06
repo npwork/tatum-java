@@ -29,10 +29,22 @@ import static com.google.common.base.Preconditions.*;
  * Parameters for the main production network on which people trade goods and services.
  */
 public class EthMainNetParams extends AbstractBitcoinNetParams {
+    /**
+     * The constant MAINNET_MAJORITY_WINDOW.
+     */
     public static final int MAINNET_MAJORITY_WINDOW = 1000;
+    /**
+     * The constant MAINNET_MAJORITY_REJECT_BLOCK_OUTDATED.
+     */
     public static final int MAINNET_MAJORITY_REJECT_BLOCK_OUTDATED = 950;
+    /**
+     * The constant MAINNET_MAJORITY_ENFORCE_BLOCK_UPGRADE.
+     */
     public static final int MAINNET_MAJORITY_ENFORCE_BLOCK_UPGRADE = 750;
 
+    /**
+     * Instantiates a new Eth main net params.
+     */
     public EthMainNetParams() {
         super();
 
@@ -44,6 +56,12 @@ public class EthMainNetParams extends AbstractBitcoinNetParams {
     }
 
     private static EthMainNetParams instance;
+
+    /**
+     * Get eth main net params.
+     *
+     * @return the eth main net params
+     */
     public static synchronized EthMainNetParams get() {
         if (instance == null) {
             instance = new EthMainNetParams();

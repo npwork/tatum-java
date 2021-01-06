@@ -10,6 +10,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.math.BigInteger;
 
+/**
+ * The type Transfer eth erc 20.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

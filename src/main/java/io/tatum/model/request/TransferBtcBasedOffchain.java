@@ -9,6 +9,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+/**
+ * The type Transfer btc based offchain.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

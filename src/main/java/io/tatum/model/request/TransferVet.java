@@ -10,6 +10,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+/**
+ * The type Transfer vet.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -31,5 +34,8 @@ public class TransferVet {
     @Size(max=10000)
     private String data;
 
+    /**
+     * The Fee.
+     */
     public VetFee fee;
 }

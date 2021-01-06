@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * The type Rate.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

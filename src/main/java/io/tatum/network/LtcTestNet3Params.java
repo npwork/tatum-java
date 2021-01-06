@@ -39,10 +39,22 @@ import static com.google.common.base.Preconditions.checkState;
  * and testing of applications and new Bitcoin versions.
  */
 public class LtcTestNet3Params extends AbstractBitcoinNetParams {
+    /**
+     * The constant TESTNET_MAJORITY_WINDOW.
+     */
     public static final int TESTNET_MAJORITY_WINDOW = 100;
+    /**
+     * The constant TESTNET_MAJORITY_REJECT_BLOCK_OUTDATED.
+     */
     public static final int TESTNET_MAJORITY_REJECT_BLOCK_OUTDATED = 75;
+    /**
+     * The constant TESTNET_MAJORITY_ENFORCE_BLOCK_UPGRADE.
+     */
     public static final int TESTNET_MAJORITY_ENFORCE_BLOCK_UPGRADE = 51;
 
+    /**
+     * Instantiates a new Ltc test net 3 params.
+     */
     public LtcTestNet3Params() {
         super();
         addressHeader = 111;
@@ -58,6 +70,12 @@ public class LtcTestNet3Params extends AbstractBitcoinNetParams {
     }
 
     private static LtcTestNet3Params instance;
+
+    /**
+     * Get ltc test net 3 params.
+     *
+     * @return the ltc test net 3 params
+     */
     public static synchronized LtcTestNet3Params get() {
         if (instance == null) {
             instance = new LtcTestNet3Params();

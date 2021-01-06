@@ -14,6 +14,9 @@ import org.stellar.sdk.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * The type Xlm offchain.
+ */
 public class XlmOffchain {
 
     /**
@@ -22,6 +25,9 @@ public class XlmOffchain {
      *
      * @param testnet mainnet or testnet version
      * @param body    content of the transaction to broadcast
+     * @return the broadcast result
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns transaction id of the transaction in the blockchain
      */
     public BroadcastResult sendXlmOffchainTransaction(boolean testnet, TransferXlmOffchain body) throws ExecutionException, InterruptedException {
@@ -81,6 +87,8 @@ public class XlmOffchain {
      * @param tx      pending transaction from KMS
      * @param secret  secret key to sign transaction with.
      * @param testnet mainnet or testnet version
+     * @return the string
+     * @throws Exception the exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String signXlmOffchainKMSTransaction(TransactionKMS tx, String secret, boolean testnet) throws Exception {
@@ -112,6 +120,9 @@ public class XlmOffchain {
      * @param address recipient address
      * @param secret  secret to sign transaction with
      * @param memo    short memo to include in transaction
+     * @return the string
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareXlmSignedOffchainTransaction(boolean testnet, Account account, String amount, String address,

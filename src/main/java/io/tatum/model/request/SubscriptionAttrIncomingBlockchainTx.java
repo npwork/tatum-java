@@ -9,6 +9,9 @@ import org.hibernate.validator.constraints.URL;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+/**
+ * The type Subscription attr incoming blockchain tx.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

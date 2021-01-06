@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+/**
+ * The type Key pair.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

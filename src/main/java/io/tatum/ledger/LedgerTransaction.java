@@ -12,10 +12,18 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * The type Ledger transaction.
+ */
 public class LedgerTransaction {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getTransactionsByReference" target="_blank">Tatum API documentation</a>
+     *
+     * @param reference the reference
+     * @return the transaction [ ]
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public Transaction[] getTransactionsByReference(String reference) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/transaction/reference/" + reference;
@@ -24,6 +32,12 @@ public class LedgerTransaction {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/sendTransaction" target="_blank">Tatum API documentation</a>
+     *
+     * @param transaction the transaction
+     * @return the string
+     * @throws IOException          the io exception
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public String storeTransaction(CreateTransaction transaction) throws IOException, ExecutionException, InterruptedException {
         if (!ObjectValidator.isValidated(transaction)) {
@@ -36,6 +50,14 @@ public class LedgerTransaction {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getTransactionsByAccountId" target="_blank">Tatum API documentation</a>
+     *
+     * @param filter   the filter
+     * @param pageSize the page size
+     * @param offset   the offset
+     * @return the transaction [ ]
+     * @throws IOException          the io exception
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public Transaction[] getTransactionsByAccount(TransactionFilter filter, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
         if (!ObjectValidator.isValidated(filter)) {
@@ -49,6 +71,14 @@ public class LedgerTransaction {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getTransactionsByCustomerId" target="_blank">Tatum API documentation</a>
+     *
+     * @param filter   the filter
+     * @param pageSize the page size
+     * @param offset   the offset
+     * @return the transaction [ ]
+     * @throws IOException          the io exception
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public Transaction[] getTransactionsByCustomer(TransactionFilter filter, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
         if (!ObjectValidator.isValidated(filter)) {
@@ -62,6 +92,14 @@ public class LedgerTransaction {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getTransactions" target="_blank">Tatum API documentation</a>
+     *
+     * @param filter   the filter
+     * @param pageSize the page size
+     * @param offset   the offset
+     * @return the transaction [ ]
+     * @throws IOException          the io exception
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public Transaction[] getTransactionsByLedger(TransactionFilter filter, Integer pageSize, Integer offset) throws IOException, ExecutionException, InterruptedException {
         if (!ObjectValidator.isValidated(filter)) {
@@ -75,6 +113,12 @@ public class LedgerTransaction {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getTransactionsByAccountId" target="_blank">Tatum API documentation</a>
+     *
+     * @param filter the filter
+     * @return the big decimal
+     * @throws IOException          the io exception
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public BigDecimal countTransactionsByAccount(TransactionFilter filter) throws IOException, ExecutionException, InterruptedException {
         if (!ObjectValidator.isValidated(filter)) {
@@ -86,6 +130,12 @@ public class LedgerTransaction {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getTransactionsByCustomerId" target="_blank">Tatum API documentation</a>
+     *
+     * @param filter the filter
+     * @return the big decimal
+     * @throws IOException          the io exception
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public BigDecimal countTransactionsByCustomer(TransactionFilter filter) throws IOException, ExecutionException, InterruptedException {
         if (!ObjectValidator.isValidated(filter)) {
@@ -97,6 +147,12 @@ public class LedgerTransaction {
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getTransactions" target="_blank">Tatum API documentation</a>
+     *
+     * @param filter the filter
+     * @return the big decimal
+     * @throws IOException          the io exception
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
      */
     public BigDecimal countTransactionsByLedger(TransactionFilter filter) throws IOException, ExecutionException, InterruptedException {
         if (!ObjectValidator.isValidated(filter)) {

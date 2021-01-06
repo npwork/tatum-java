@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * The type Vet tx receipt transfers.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
