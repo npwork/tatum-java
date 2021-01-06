@@ -33,6 +33,7 @@ import java.util.concurrent.ExecutionException;
 import static io.tatum.constants.Constant.*;
 import static io.tatum.constants.Constant.VET_URL;
 import static io.tatum.model.request.Currency.ETH;
+import static org.bitcoinj.core.Utils.HEX;
 import static org.web3j.utils.Convert.Unit.ETHER;
 
 /**
@@ -62,7 +63,7 @@ public class EthTx {
                 Web3j web3j = Web3jClient.get(provider);
                 Credentials credentials = Credentials.create(fromPrivateKey);
 
-                Transaction prepareTx = MapperFactory.get().readValue(tx.getSerializedTransaction(), Transaction.class);
+                Transaction prepareTx = MapperFactory.get().readValue(HEX.decode(tx.getSerializedTransaction()), Transaction.class);
                 BigInteger gasLimit = EthUtil.estimateGas(web3j, prepareTx);
 
                 RawTransaction rawTransaction = RawTransaction.createTransaction(
@@ -73,7 +74,7 @@ public class EthTx {
                         prepareTx.getData());
 
                 byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
-                return Numeric.toHexString(signedMessage);
+                return HEX.encode(signedMessage);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -126,7 +127,7 @@ public class EthTx {
                         EthUtil.toHexString(_data));
 
                 byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
-                return Numeric.toHexString(signedMessage);
+                return HEX.encode(signedMessage);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -207,7 +208,7 @@ public class EthTx {
                         prepareTx.getData());
 
                 byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
-                return Numeric.toHexString(signedMessage);
+                return HEX.encode(signedMessage);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -273,7 +274,7 @@ public class EthTx {
                         prepareTx.getData());
 
                 byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
-                return Numeric.toHexString(signedMessage);
+                return HEX.encode(signedMessage);
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -336,7 +337,7 @@ public class EthTx {
                         prepareTx.getData());
 
                 byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
-                return Numeric.toHexString(signedMessage);
+                return HEX.encode(signedMessage);
 
             } catch (Exception e) {
                 e.printStackTrace();
