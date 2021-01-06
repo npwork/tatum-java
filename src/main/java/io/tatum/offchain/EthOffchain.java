@@ -36,6 +36,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import static io.tatum.constants.Constant.*;
+import static org.bitcoinj.core.Utils.HEX;
 import static org.web3j.utils.Convert.Unit.ETHER;
 
 /**
@@ -182,7 +183,7 @@ public class EthOffchain {
                 var web3j = Web3jClient.get(provider);
                 Credentials credentials = Credentials.create(fromPrivateKey);
 
-                Transaction prepareTx = MapperFactory.get().readValue(tx.getSerializedTransaction(), Transaction.class);
+                Transaction prepareTx = MapperFactory.get().readValue(HEX.decode(tx.getSerializedTransaction()), Transaction.class);
                 BigInteger gasLimit = EthUtil.estimateGas(web3j, prepareTx);
 
                 RawTransaction rawTransaction = RawTransaction.createTransaction(
@@ -327,6 +328,6 @@ public class EthOffchain {
 
         byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
 
-        return new PrepareEthTx(Numeric.toHexString(signedMessage), gasLimit);
+        return new PrepareEthTx(HEX.encode(signedMessage), gasLimit);
     }
 }

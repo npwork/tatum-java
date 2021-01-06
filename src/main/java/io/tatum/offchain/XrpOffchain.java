@@ -27,6 +27,8 @@ import java.math.BigDecimal;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import static org.bitcoinj.core.Utils.HEX;
+
 public class XrpOffchain {
 
     /**
@@ -96,7 +98,7 @@ public class XrpOffchain {
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
 
-                TransactionJSON txJSON = objectMapper.readValue(tx.getSerializedTransaction(), TransactionJSON.class);
+                TransactionJSON txJSON = objectMapper.readValue(HEX.decode(tx.getSerializedTransaction()), TransactionJSON.class);
 
                 XRPDropsAmount feeAmount = XRPDropsAmount.newBuilder().setDrops(txJSON.getFee()).build();
                 Account account = XrpUtil.createSenderAccount(txJSON.getAccount());
@@ -126,7 +128,7 @@ public class XrpOffchain {
                         .build();
 
                 Wallet wallet = new Wallet(secret);
-                return Base58.encode(Signer.signTransaction(transaction, wallet));
+                return HEX.encode(Signer.signTransaction(transaction, wallet));
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -188,7 +190,7 @@ public class XrpOffchain {
                         .build();
 
                 Wallet wallet = new Wallet(secret);
-                return Base58.encode(Signer.signTransaction(transaction, wallet));
+                return HEX.encode(Signer.signTransaction(transaction, wallet));
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
