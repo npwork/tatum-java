@@ -1,9 +1,9 @@
 package io.tatum.transaction.bcash;
 
-import org.bitcoinj.core.*;
-import org.bitcoinj.crypto.TransactionSignature;
-import org.bitcoinj.script.Script;
-import org.bitcoinj.script.ScriptBuilder;
+import org.bitcoincashj.core.*;
+import org.bitcoincashj.crypto.TransactionSignature;
+import org.bitcoincashj.script.Script;
+import org.bitcoincashj.script.ScriptBuilder;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -60,7 +60,7 @@ public class TransactionBuilder {
      * @param value   the value
      */
     public void addOutput(String address, BigDecimal value) {
-        Address p2SHAddress = null;//Address.fromBase58(this.network, address);
+        Address p2SHAddress = Address.fromBase58(this.network, address);
         Script scriptPubKey = ScriptBuilder.createOutputScript(p2SHAddress);
         BigDecimal satoshis = value.multiply(BigDecimal.valueOf(100000000)).setScale(8, RoundingMode.FLOOR);
         Coin coin = Coin.valueOf(satoshis.longValue());
