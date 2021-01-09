@@ -110,11 +110,6 @@
             <version>6.1.1</version>
         </dependency>
         <dependency>
-            <groupId>com.github.sealedtx</groupId>
-            <artifactId>bitcoin-cash-converter</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.web3j</groupId>
             <artifactId>core</artifactId>
             <version>4.5.5</version>
