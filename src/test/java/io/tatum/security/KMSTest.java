@@ -33,10 +33,35 @@ public class KMSTest {
     }
 
     @Test
-    public void getPendingTransactionsKMSByChainTest() throws InterruptedException, ExecutionException, IOException {
+    public void getPendingTransactionsKMSByChainTest() throws InterruptedException, ExecutionException {
         KMS kms = new KMS();
         TransactionKMS[] transactionKMS = kms.getPendingTransactionsKMSByChain(Currency.ETH);
         if (transactionKMS.length > 0) {
+            System.out.println(transactionKMS.length);
+            System.out.println(transactionKMS[0]);
+        }
+
+        transactionKMS = kms.getPendingTransactionsKMSByChain(Currency.BTC);
+        if (transactionKMS.length > 0) {
+            System.out.println(transactionKMS.length);
+            System.out.println(transactionKMS[0]);
+        }
+
+        transactionKMS = kms.getPendingTransactionsKMSByChain(Currency.BCH);
+        if (transactionKMS.length > 0) {
+            System.out.println(transactionKMS.length);
+            System.out.println(transactionKMS[0]);
+        }
+
+        transactionKMS = kms.getPendingTransactionsKMSByChain(Currency.XRP);
+        if (transactionKMS.length > 0) {
+            System.out.println(transactionKMS.length);
+            System.out.println(transactionKMS[0]);
+        }
+
+        transactionKMS = kms.getPendingTransactionsKMSByChain(Currency.XLM);
+        if (transactionKMS.length > 0) {
+            System.out.println(transactionKMS.length);
             System.out.println(transactionKMS[0]);
         }
     }

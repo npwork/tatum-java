@@ -22,7 +22,6 @@ public class BlockAmount {
 
     @NotEmpty
     @Size(max = 38)
-    @Pattern(regexp = "\\d+") // number string
     @Pattern(regexp="^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$")
     private String amount;
 

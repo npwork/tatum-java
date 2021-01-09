@@ -5,6 +5,7 @@ import io.tatum.network.EthMainNetParams;
 import io.tatum.network.VetMainNetParams;
 import io.tatum.network.LtcMainNetParams;
 import io.tatum.network.LtcTestNet3Params;
+import org.bitcoincashj.params.UnitTestParams;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.params.TestNet3Params;
@@ -50,6 +51,16 @@ public class Constant {
      * The constant BITCOIN_TESTNET.
      */
     public static final NetworkParameters BITCOIN_TESTNET = TestNet3Params.get();
+
+    /**
+     * The constant BCH_MAINNET.
+     */
+    public static final org.bitcoincashj.core.NetworkParameters BCH_MAINNET = org.bitcoincashj.params.MainNetParams.get();
+
+    /**
+     * The constant BCH_TESTNET.
+     */
+    public static final org.bitcoincashj.core.NetworkParameters BCH_TESTNET = org.bitcoincashj.params.TestNet3Params.get();
 
     /**
      * The constant LITECOIN_MAINNET.

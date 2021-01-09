@@ -22,8 +22,8 @@ public class FromUTXO {
     private String txHash;
 
     @Min(0)
-    @DecimalMax("4294967295")
-    private BigDecimal index;
+    @Max(4294967295L)
+    private long index;
 
     @NotEmpty
     @Size(min = 52, max = 52)

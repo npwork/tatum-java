@@ -23,7 +23,7 @@ public class TransactionBuilder {
 
     private List<ECKey> privateKeysToSign;
     private byte[] bitcoinSerialize;
-    private List<Long> amountToSign;
+    private List<Long> amountsToSign;
 
     private long version;
     private long lockTime;
@@ -50,7 +50,7 @@ public class TransactionBuilder {
         this.transaction = new Transaction(this.network);
         this.transaction.setVersion(2);
         this.privateKeysToSign = new ArrayList<>();
-        this.amountToSign = new ArrayList<>();
+        this.amountsToSign = new ArrayList<>();
     }
 
     /**
@@ -59,12 +59,10 @@ public class TransactionBuilder {
      * @param address the address
      * @param value   the value
      */
-    public void addOutput(String address, BigDecimal value) {
+    public void addOutput(String address, long value) {
         Address p2SHAddress = Address.fromBase58(this.network, address);
         Script scriptPubKey = ScriptBuilder.createOutputScript(p2SHAddress);
-        BigDecimal satoshis = value.multiply(BigDecimal.valueOf(100000000)).setScale(8, RoundingMode.FLOOR);
-        Coin coin = Coin.valueOf(satoshis.longValue());
-        this.transaction.addOutput(coin, scriptPubKey);
+        this.transaction.addOutput(Coin.valueOf(value), scriptPubKey);
     }
 
     /**
@@ -72,24 +70,26 @@ public class TransactionBuilder {
      *
      * @param txHash the tx hash
      * @param index  the index
-     * @param key    the key
+     * @param privateKey    the key
      * @param amount the amount
      */
-    public void addInput(String txHash, long index, String key, long amount) {
-        ECKey ecKey = DumpedPrivateKey.fromBase58(network, key).getKey();
-        Script p2PKHOutputScript = null;//ScriptBuilder.createOutputScript(ecKey);
+    public void addInput(String txHash, long index, String privateKey, long amount) {
+        ECKey ecKey = DumpedPrivateKey.fromBase58(network, privateKey).getKey();
+        Script p2PKHOutputScript = ScriptBuilder.createP2PKHOutputScript(ecKey);
         byte[] message = HEX.decode(txHash);
         this.transaction.addInput(Sha256Hash.wrap(message), index, p2PKHOutputScript);
         this.privateKeysToSign.add(ecKey);
-        this.amountToSign.add(amount);
+        this.amountsToSign.add(amount);
     }
 
     private void signInput() {
         for (int i = 0; i < privateKeysToSign.size(); i++) {
             ECKey key = privateKeysToSign.get(i);
-            Script scriptPubKey = null;//ScriptBuilder.createOutputScript(key);
-            TransactionSignature txSignature = transaction.calculateWitnessSignature(0, key, scriptPubKey, Coin.valueOf(this.amountToSign.get(i)), Transaction.SigHash.ALL, false);
-            this.transaction.getInput(i).setScriptSig(ScriptBuilder.createInputScript(txSignature, key));
+            if (key != null) {
+                Script scriptPubKey = ScriptBuilder.createP2PKHOutputScript(key);
+                TransactionSignature txSignature = transaction.calculateWitnessSignature(i, key, scriptPubKey, Coin.valueOf(this.amountsToSign.get(i)), Transaction.SigHash.ALL, false);
+                this.transaction.getInput(i).setScriptSig(ScriptBuilder.createInputScript(txSignature, key));
+            }
         }
     }
 
@@ -153,7 +153,7 @@ public class TransactionBuilder {
      * @param privateKeys the private keys
      * @return the transaction builder
      */
-    public TransactionBuilder fromTransaction(Transaction transaction, String[] privateKeys) {
+    public TransactionBuilder fromTransaction(Transaction transaction, String[] privateKeys, Long[] amountsToSign) {
         // Copy transaction fields
         this.setVersion(transaction.getVersion());
         this.setLockTime(transaction.getLockTime());
@@ -162,11 +162,14 @@ public class TransactionBuilder {
         transaction.getOutputs().forEach(txOut -> this.addOutput(txOut.getValue(), txOut.getScriptPubKey()));
 
         // Copy inputs
-        transaction.getInputs().forEach(txIn -> this.addInput(txIn.getHash(), txIn.getOutpoint().getIndex(), txIn.getScriptSig()));
+        transaction.getInputs().forEach(txIn -> {
+            this.addInput(txIn.getHash(), txIn.getOutpoint().getIndex(), txIn.getScriptSig());
+        });
 
-        for (String privKey : privateKeys) {
-            ECKey ecKey = DumpedPrivateKey.fromBase58(this.network, privKey).getKey();
-            this.privateKeysToSign.add(ecKey);
+        int length = privateKeys.length;
+        for (int i = 0; i < length; i++) {
+            this.privateKeysToSign.add(DumpedPrivateKey.fromBase58(this.network, privateKeys[i]).getKey());
+            this.amountsToSign.add(amountsToSign[i]);
         }
 
         return this;

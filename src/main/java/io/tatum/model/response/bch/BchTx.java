@@ -19,8 +19,8 @@ import java.math.BigDecimal;
 public class BchTx {
 
     private String txid;
-    private BigDecimal version;
-    private BigDecimal locktime;
+    private int version;
+    private long locktime;
     private BchTxVin[] vin;
     private BchTxVout[] vout;
 
