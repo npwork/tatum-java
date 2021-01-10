@@ -120,6 +120,11 @@
             <version>0.21.2</version>
         </dependency>
         <dependency>
+            <groupId>com.vechain.client</groupId>
+            <artifactId>thor-client-sdk4j</artifactId>
+            <version>0.0.10</version>
+        </dependency>
+        <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-module-junit4</artifactId>
             <version>1.6.4</version>
@@ -142,6 +147,11 @@
             <id>repsy</id>
             <name>Tatumio Maven Repositoty on Repsy</name>
             <url>https://repo.repsy.io/mvn/tatumio/bitcoincashj</url>
+        </repository>
+        <repository>
+            <id>repsy thor</id>
+            <name>Tatumio Maven Repositoty on Repsy</name>
+            <url>https://repo.repsy.io/mvn/tatumio/thor</url>
         </repository>
     </repositories>
 
