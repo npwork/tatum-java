@@ -5,12 +5,10 @@ import org.bitcoincashj.crypto.TransactionSignature;
 import org.bitcoincashj.script.Script;
 import org.bitcoincashj.script.ScriptBuilder;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.bitcoinj.core.Utils.HEX;
+import static org.bitcoincashj.core.Utils.HEX;
 
 /**
  * The type Transaction builder.
