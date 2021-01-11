@@ -16,8 +16,8 @@ import java.math.BigDecimal;
 @EqualsAndHashCode
 public class BchTxVout {
 
-    private String value;
-    private BigDecimal n;
+    private BigDecimal value;
+    private long n;
     private BchTxScriptPubKey scriptPubKey;
 
 }

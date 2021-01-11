@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import static io.tatum.constants.Constant.BITCOIN_MAINNET;
+import static io.tatum.constants.Constant.BITCOIN_TESTNET;
 import static org.bitcoinj.core.Utils.HEX;
 
 /**
@@ -30,14 +32,14 @@ public class BitcoinTx {
     /**
      * Sign Bitcoin transaction with private keys locally. Nothing is broadcast to the blockchain.
      *
-     * @param network mainnet or testnet version
+     * @param testnet mainnet or testnet version
      * @param body    content of the transaction to broadcast
      * @return the string
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      * @returns transaction data to be broadcast to blockchain.
      */
-    public String prepareSignedTransaction(NetworkParameters network, TransferBtcBasedBlockchain body) throws ExecutionException, InterruptedException {
+    public String prepareSignedTransaction(boolean testnet, TransferBtcBasedBlockchain body) throws ExecutionException, InterruptedException {
 
         if (!ObjectValidator.isValidated(body)) {
             return null;
@@ -54,6 +56,7 @@ public class BitcoinTx {
             var to = body.getTo();
             var fromAddress = body.getFromAddress();
 
+            var network = testnet ? BITCOIN_TESTNET : BITCOIN_MAINNET;
             Bitcoin bitcoin = new Bitcoin();
             TransactionBuilder transactionBuilder = new TransactionBuilder(network);
 
@@ -79,7 +82,7 @@ public class BitcoinTx {
                     }
                 } else if (ArrayUtils.isNotEmpty(fromUTXO)) {
                     for (var item : fromUTXO) {
-                        transactionBuilder.addInput(item.getTxHash(), item.getIndex().longValue(), item.getPrivateKey());
+                        transactionBuilder.addInput(item.getTxHash(), item.getIndex(), item.getPrivateKey());
                     }
                 }
             } catch (ExecutionException | InterruptedException e) {
@@ -124,7 +127,7 @@ public class BitcoinTx {
      * Send Bitcoin transaction to the blockchain. This method broadcasts signed transaction to the blockchain.
      * This operation is irreversible.
      *
-     * @param network mainnet or testnet version
+     * @param testnet mainnet or testnet version
      * @param body    content of the transaction to broadcast
      * @return the transaction hash
      * @throws ExecutionException   the execution exception
@@ -132,9 +135,9 @@ public class BitcoinTx {
      * @throws IOException          the io exception
      * @returns transaction id of the transaction in the blockchain
      */
-    public TransactionHash sendBitcoinTransaction(NetworkParameters network, TransferBtcBasedBlockchain body) throws ExecutionException, InterruptedException, IOException {
+    public TransactionHash sendBitcoinTransaction(boolean testnet, TransferBtcBasedBlockchain body) throws ExecutionException, InterruptedException, IOException {
         Bitcoin bitcoin = new Bitcoin();
-        String txData = new BitcoinTx().prepareSignedTransaction(network, body);
+        String txData = new BitcoinTx().prepareSignedTransaction(testnet, body);
         return bitcoin.btcBroadcast(txData, null);
     }
 }

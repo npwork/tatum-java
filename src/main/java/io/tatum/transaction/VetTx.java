@@ -1,35 +1,46 @@
 package io.tatum.transaction;
 
+import com.vechain.thorclient.clients.BlockchainClient;
+import com.vechain.thorclient.clients.TransactionClient;
+import com.vechain.thorclient.core.model.clients.*;
+import com.vechain.thorclient.core.model.clients.base.AbstractToken;
+import com.vechain.thorclient.utils.BytesUtils;
+import com.vechain.thorclient.utils.CryptoUtils;
+import com.vechain.thorclient.utils.Prefix;
+import com.vechain.thorclient.utils.RawTransactionFactory;
+import com.vechain.thorclient.utils.crypto.ECKeyPair;
+import io.tatum.blockchain.VET;
 import io.tatum.model.request.Currency;
 import io.tatum.model.request.TransferVet;
+import io.tatum.model.response.common.TransactionHash;
 import io.tatum.model.response.kms.TransactionKMS;
-import io.tatum.transaction.eth.EthUtil;
-import io.tatum.transaction.eth.Web3jClient;
-import io.tatum.utils.ApiKey;
+import io.tatum.transaction.vet.TransactionJSON;
 import io.tatum.utils.MapperFactory;
 import io.tatum.utils.ObjectValidator;
-import org.apache.commons.lang3.StringUtils;
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.RawTransaction;
-import org.web3j.crypto.TransactionEncoder;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.http.HttpService;
-import org.web3j.utils.Convert;
-import org.web3j.utils.Numeric;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static io.tatum.constants.Constant.*;
-import static org.web3j.utils.Convert.Unit.ETHER;
+import static org.bitcoinj.core.Utils.HEX;
 
 /**
  * The type Vet tx.
  */
 public class VetTx {
+
+    /**
+     * Send VeChain transaction to the blockchain. This method broadcasts signed transaction to the blockchain.
+     * This operation is irreversible.
+     *
+     * @param testnet  mainnet or testnet version
+     * @param body     content of the transaction to broadcast
+     * @param provider url of the VeChain Server to connect to. If not set, default public server will be used.
+     * @returns transaction id of the transaction in the blockchain
+     */
+    public TransactionHash sendVetTransaction(boolean testnet, TransferVet body, String provider) throws InterruptedException, ExecutionException, IOException {
+        return new VET().vetBroadcast(prepareVetSignedTransaction(testnet, body, provider), null);
+    }
 
     /**
      * Sign VeChain pending transaction from Tatum KMS
@@ -50,22 +61,22 @@ public class VetTx {
 
         return CompletableFuture.supplyAsync(() -> {
             try {
-                String _provider = StringUtils.isEmpty(provider) ? (testnet == true ? TEST_VET_URL : VET_URL) : provider;
-                Web3j web3j = Web3jClient.get(_provider);
-                Credentials credentials = Credentials.create(fromPrivateKey);
+                TransactionJSON json = MapperFactory.get().readValue(HEX.decode(tx.getSerializedTransaction()), TransactionJSON.class);
+                Amount amount = Amount.createFromToken(AbstractToken.VET);
+                amount.setDecimalAmount(json.getAmount());
+                ToClause clause = TransactionClient.buildVETToClause(Address.fromHexString(json.getTo()), amount, ToData.ZERO);
+                RawTransaction rawTransaction = RawTransactionFactory.getInstance().createRawTransaction(
+                        (byte) json.getChainTag(),
+                        HEX.decode(json.getBlockRef()),
+                        720,
+                        21000,
+                        (byte) 0x0,
+                        HEX.decode(json.getNonce()),
+                        clause);
 
-                Transaction prepareTx = MapperFactory.get().readValue(tx.getSerializedTransaction(), Transaction.class);
-                BigInteger gasLimit = EthUtil.estimateGas(web3j, prepareTx);
+                RawTransaction result = TransactionClient.sign(rawTransaction, ECKeyPair.create(fromPrivateKey));
 
-                RawTransaction rawTransaction = RawTransaction.createTransaction(
-                        new BigInteger(prepareTx.getNonce()),
-                        new BigInteger(prepareTx.getGasPrice()), gasLimit,
-                        prepareTx.getTo(),
-                        new BigInteger(prepareTx.getValue()),
-                        prepareTx.getData());
-
-                byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
-                return Numeric.toHexString(signedMessage);
+                return BytesUtils.toHexString(result.encode(), Prefix.ZeroLowerX);
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -93,38 +104,14 @@ public class VetTx {
 
         return CompletableFuture.supplyAsync(() -> {
             try {
-                var url = StringUtils.isNotEmpty(provider) ? provider : (testnet == true ? TEST_VET_URL : VET_URL);
-                Web3j web3j = Web3j.build(new HttpService(url));
-
-                Credentials credentials = Credentials.create(body.getFromPrivateKey());
-
-                Transaction prepareTx = new Transaction(
-                        credentials.getAddress(),
-                        BigInteger.ZERO,
-                        BigInteger.ZERO,
-                        null,
-                        body.getTo(),
-                        Convert.toWei(body.getAmount(), ETHER).toBigInteger(),
-                        EthUtil.toHexString(body.getData()));
-
-                BigInteger gasLimit;
-                if (body.getFee() != null) {
-                    gasLimit = new BigInteger(body.getFee().getGasLimit());
-                } else {
-                    gasLimit = EthUtil.estimateGas(web3j, prepareTx);
-                }
-
-                RawTransaction rawTransaction = RawTransaction.createTransaction(
-                        Numeric.decodeQuantity(prepareTx.getNonce()),
-                        Numeric.decodeQuantity(prepareTx.getGasPrice()),
-                        gasLimit,
-                        prepareTx.getTo(),
-                        Numeric.decodeQuantity(prepareTx.getValue()), // amount
-                        prepareTx.getData());
-
-
-                byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
-                return Numeric.toHexString(signedMessage);
+                byte chainTag = BlockchainClient.getChainTag();
+                byte[] blockRef = BlockchainClient.getBlockRef(Revision.BEST).toByteArray();
+                Amount amount = Amount.createFromToken(AbstractToken.VET);
+                amount.setDecimalAmount(body.getAmount());
+                ToClause clause = TransactionClient.buildVETToClause(Address.fromHexString(body.getTo()), amount, ToData.ZERO);
+                RawTransaction rawTransaction = RawTransactionFactory.getInstance().createRawTransaction(chainTag, blockRef, 720, 21000, (byte) 0x0, CryptoUtils.generateTxNonce(), clause);
+                RawTransaction result = TransactionClient.sign(rawTransaction, ECKeyPair.create(body.getFromPrivateKey()));
+                return BytesUtils.toHexString(result.encode(), Prefix.ZeroLowerX);
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;

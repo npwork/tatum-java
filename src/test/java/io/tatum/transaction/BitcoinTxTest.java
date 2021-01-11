@@ -36,7 +36,7 @@ public class BitcoinTxTest {
         var body = new TransferBtcBasedBlockchain();
         FromUTXO[] fromUTXO = new FromUTXO[1];
         fromUTXO[0] = new FromUTXO("53faa103e8217e1520f5149a4e8c84aeb58e55bdab11164a95e69a8ca50f8fcc",
-                BigDecimal.valueOf(0),
+                0,
                 "cVX7YtgL5muLTPncHFhP95oitV1mqUUA5VeSn8HeCRJbPqipzobf");
         body.setFromUTXO(fromUTXO);
 
@@ -46,7 +46,7 @@ public class BitcoinTxTest {
 
         BitcoinTx tx = new BitcoinTx();
 
-        var txData = tx.prepareSignedTransaction(BITCOIN_TESTNET, body);
+        var txData = tx.prepareSignedTransaction(true, body);
         assertEquals("02000000" + // version
                 "01" + // num txIn
                 "cc8f0fa58c9ae6954a1611abbd558eb5ae848c4e9a14f520157e21e803a1fa53" + // txHash

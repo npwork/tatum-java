@@ -1,20 +1,17 @@
 package io.tatum.wallet;
 
-import org.bitcoinj.core.ECKey;
-import org.bitcoinj.core.LegacyAddress;
-import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.crypto.ChildNumber;
-import org.bitcoinj.crypto.DeterministicKey;
-import org.bitcoinj.crypto.HDKeyDerivation;
-import org.web3j.crypto.Keys;
-
-import java.math.BigInteger;
-import java.util.Arrays;
+import org.bitcoincashj.core.Address;
+import org.bitcoincashj.core.CashAddressFactory;
+import org.bitcoincashj.core.ECKey;
+import org.bitcoincashj.core.NetworkParameters;
+import org.bitcoincashj.crypto.ChildNumber;
+import org.bitcoincashj.crypto.DeterministicKey;
+import org.bitcoincashj.crypto.HDKeyDerivation;
 
 /**
  * The type Address builder.
  */
-public class AddressBuilder {
+public class BchAddressBuilder {
 
     /**
      * The Index pub key.
@@ -26,7 +23,7 @@ public class AddressBuilder {
     DeterministicKey normalPubKey;
     private NetworkParameters network;
 
-    private AddressBuilder() {
+    private BchAddressBuilder() {
     }
 
     /**
@@ -34,8 +31,8 @@ public class AddressBuilder {
      *
      * @return the address builder
      */
-    public static AddressBuilder build() {
-        return new AddressBuilder();
+    public static BchAddressBuilder build() {
+        return new BchAddressBuilder();
     }
 
     /**
@@ -44,7 +41,7 @@ public class AddressBuilder {
      * @param network the network
      * @return the address builder
      */
-    public AddressBuilder network(NetworkParameters network) {
+    public BchAddressBuilder network(NetworkParameters network) {
         this.network = network;
         return this;
     }
@@ -55,7 +52,7 @@ public class AddressBuilder {
      * @param xpub the xpub
      * @return the address builder
      */
-    public AddressBuilder fromBase58(String xpub) {
+    public BchAddressBuilder fromBase58(String xpub) {
         this.normalPubKey = DeterministicKey.deserializeB58(xpub, this.network);
         return this;
     }
@@ -66,7 +63,7 @@ public class AddressBuilder {
      * @param path the path
      * @return the address builder
      */
-    public AddressBuilder derivePath(ChildNumber path) {
+    public BchAddressBuilder derivePath(ChildNumber path) {
         this.indexPubKey = HDKeyDerivation.deriveChildKey(this.normalPubKey, path);
         return this;
     }
@@ -77,17 +74,15 @@ public class AddressBuilder {
      * @return the string
      */
     public String toBase58() {
-        return LegacyAddress.fromKey(this.network, ECKey.fromPublicOnly(this.indexPubKey.getPubKeyPoint())).toBase58();
+        return Address.fromKey(this.network, ECKey.fromPublicOnly(this.indexPubKey.getPubKeyPoint(), true)).toBase58();
     }
 
     /**
-     * To ether address string.
+     * To cash address string.
      *
      * @return the string
      */
-    public String toEtherAddress() {
-        byte[] encoded = this.indexPubKey.getPubKeyPoint().getEncoded(false);
-        BigInteger publicKey = new BigInteger(1, Arrays.copyOfRange(encoded, 1, encoded.length));
-        return Keys.getAddress(publicKey);
+    public String toCashAddress() {
+        return CashAddressFactory.create().getFromBase58(this.network, this.toBase58()).toString();
     }
 }

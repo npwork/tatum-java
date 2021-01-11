@@ -1,15 +1,10 @@
 package io.tatum.wallet;
 
 import io.tatum.model.request.Currency;
-import org.bitcoinj.core.Base58;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.crypto.ChildNumber;
 import org.bitcoinj.crypto.HDUtils;
-import org.bitcoinj.script.Script;
 
-import java.math.BigInteger;
-import java.nio.ByteBuffer;
-import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -72,9 +67,9 @@ public class Address {
      */
     public String generateBchAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
-            NetworkParameters network = testnet ? BITCOIN_TESTNET : BITCOIN_MAINNET;
-            ChildNumber path = new ChildNumber(i, false);
-            return AddressBuilder.build().network(network).fromBase58(xpub).derivePath(path).toCashAddress();
+            org.bitcoincashj.core.NetworkParameters network = testnet ? BCH_TESTNET : BCH_MAINNET;
+            org.bitcoincashj.crypto.ChildNumber path = new org.bitcoincashj.crypto.ChildNumber(i, false);
+            return BchAddressBuilder.build().network(network).fromBase58(xpub).derivePath(path).toCashAddress();
         }).get();
     }
 

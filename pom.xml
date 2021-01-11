@@ -100,9 +100,29 @@
             <version>0.15.9</version>
         </dependency>
         <dependency>
+            <groupId>bitcoincashj</groupId>
+            <artifactId>bitcoincashj-core</artifactId>
+            <version>0.25</version>
+        </dependency>
+        <dependency>
             <groupId>io.xpring</groupId>
             <artifactId>xpring4j</artifactId>
             <version>6.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.web3j</groupId>
+            <artifactId>core</artifactId>
+            <version>4.5.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.stellar</groupId>
+            <artifactId>java-stellar-sdk</artifactId>
+            <version>0.21.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vechain.client</groupId>
+            <artifactId>thor-client-sdk4j</artifactId>
+            <version>0.0.10</version>
         </dependency>
         <dependency>
             <groupId>org.powermock</groupId>
@@ -116,27 +136,22 @@
             <version>1.6.4</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.github.sealedtx</groupId>
-            <artifactId>bitcoin-cash-converter</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.web3j</groupId>
-            <artifactId>core</artifactId>
-            <version>4.5.5</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.stellar</groupId>
-            <artifactId>java-stellar-sdk</artifactId>
-            <version>0.21.2</version>
-        </dependency>
     </dependencies>
 
     <repositories>
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <id>repsy</id>
+            <name>Tatumio Maven Repositoty on Repsy</name>
+            <url>https://repo.repsy.io/mvn/tatumio/bitcoincashj</url>
+        </repository>
+        <repository>
+            <id>repsy thor</id>
+            <name>Tatumio Maven Repositoty on Repsy</name>
+            <url>https://repo.repsy.io/mvn/tatumio/thor</url>
         </repository>
     </repositories>
 
@@ -173,7 +188,6 @@
                 </executions>
                 <configuration>
                     <source>11</source>
-                    <target>11</target>
                     <additionalOptions>
                         <additionalOption>-Xdoclint:none</additionalOption>
                     </additionalOptions>

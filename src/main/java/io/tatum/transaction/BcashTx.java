@@ -1,15 +1,20 @@
 package io.tatum.transaction;
 
 import io.tatum.blockchain.Bcash;
+import io.tatum.model.request.Currency;
 import io.tatum.model.request.transaction.FromUTXO;
 import io.tatum.model.request.transaction.To;
 import io.tatum.model.request.transaction.TransferBchBlockchain;
 import io.tatum.model.response.bch.BchTx;
+import io.tatum.model.response.kms.TransactionKMS;
 import io.tatum.transaction.bcash.TransactionBuilder;
 import io.tatum.utils.ObjectValidator;
 import io.tatum.utils.Promise;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.bitcoinj.core.NetworkParameters;
+import org.bitcoincashj.core.Coin;
+import org.bitcoincashj.core.NetworkParameters;
+import org.bitcoincashj.core.Transaction;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,22 +24,50 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
+import static io.tatum.constants.Constant.BCH_MAINNET;
+import static io.tatum.constants.Constant.BCH_TESTNET;
+import static org.bitcoinj.core.Utils.HEX;
+
 /**
  * The type Bcash tx.
  */
 public class BcashTx {
 
     /**
+     * Sign Bitcoin Cash pending transaction from Tatum KMS
+     *
+     * @param tx          pending transaction from KMS
+     * @param privateKeys private keys to sign transaction with.
+     * @param testnet     mainnet or testnet version
+     * @returns transaction data to be broadcast to blockchain.
+     */
+    public String signBitcoinCashKMSTransaction(TransactionKMS tx, String[] privateKeys, boolean testnet) throws Exception {
+        if (tx.getChain() != Currency.BCH) {
+            throw new Exception("Unsupported chain.");
+        }
+//    const [data, amountsToDecode] = tx.serializedTransaction.split(':');
+//    const transaction = Transaction.fromHex(data);
+//    const amountsToSign = JSON.parse(amountsToDecode);
+//        var data = String.
+        var network = testnet ? BCH_TESTNET : BCH_MAINNET;
+        Long[] amountsToSign = new Long[0];
+        TransactionBuilder transactionBuilder = new TransactionBuilder(network);
+        Transaction transaction = new Transaction(network, HEX.decode(tx.getSerializedTransaction()));
+        transactionBuilder.fromTransaction(transaction, privateKeys, amountsToSign);
+        return transactionBuilder.build().toHex();
+    }
+
+    /**
      * Sign Bitcoin Cash transaction with private keys locally. Nothing is broadcast to the blockchain.
      *
-     * @param network mainnet or testnet version
+     * @param testnet mainnet or testnet version
      * @param body    content of the transaction to broadcast
      * @return the string
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      * @returns transaction data to be broadcast to blockchain.
      */
-    public String prepareBitcoinCashSignedTransaction(NetworkParameters network, TransferBchBlockchain body) throws ExecutionException, InterruptedException {
+    public String prepareBitcoinCashSignedTransaction(boolean testnet, TransferBchBlockchain body) throws ExecutionException, InterruptedException {
         if (!ObjectValidator.isValidated(body)) {
             return null;
         }
@@ -44,21 +77,25 @@ public class BcashTx {
                 FromUTXO[] fromUTXO = body.getFromUTXO();
                 To[] to = body.getTo();
 
+                var network = testnet ? BCH_TESTNET : BCH_MAINNET;
                 var transactionBuilder = new TransactionBuilder(network);
                 for (var item : to) {
-                    transactionBuilder.addOutput(item.getAddress(), item.getValue());
+                    transactionBuilder.addOutput(item.getAddress(), Coin.btcToSatoshi(item.getValue()));
                 }
 
                 String[] txHashs = Stream.of(fromUTXO).map(u -> u.getTxHash()).toArray(size -> new String[size]);
                 List<BchTx> txs = getTransactions(txHashs);
 
-
-                for (int i = 0; i < fromUTXO.length; i++) {
-                    FromUTXO item = fromUTXO[i];
-                    BigDecimal value = new BigDecimal(txs.get(i).getVout()[item.getIndex().intValue()].getValue())
-                            .setScale(8, RoundingMode.FLOOR);
-                    long satoshis = value.multiply(BigDecimal.valueOf(100000000)).longValue();
-                    transactionBuilder.addInput(item.getTxHash(), item.getIndex().longValue(), item.getPrivateKey(), satoshis);
+                if (CollectionUtils.isNotEmpty(txs)) {
+                    long satoshis;
+                    for (int i = 0; i < fromUTXO.length; i++) {
+                        FromUTXO item = fromUTXO[i];
+                        if (txs.get(i) != null) {
+                            satoshis = Coin.btcToSatoshi(txs.get(i).getVout()[Math.toIntExact(item.getIndex())].getValue());
+                            transactionBuilder.addInput(item.getTxHash(), item.getIndex(), item.getPrivateKey(), satoshis);
+                        }
+                        return null;
+                    }
                 }
 
                 return transactionBuilder.build().toHex();
@@ -78,7 +115,7 @@ public class BcashTx {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public List<BchTx> getTransactions(String[] txHash) throws ExecutionException, InterruptedException {
+    private List<BchTx> getTransactions(String[] txHash) throws ExecutionException, InterruptedException {
         List<CompletableFuture<BchTx>> futures = new ArrayList<>();
         if (ArrayUtils.isEmpty(txHash)) {
             Bcash bcash = new Bcash();
@@ -89,12 +126,17 @@ public class BcashTx {
                         return bcash.bcashGetTransaction(tx);
                     } catch (ExecutionException | InterruptedException e) {
                         e.printStackTrace();
+                        return null;
                     }
-                    return null;
                 });
                 futures.add(future);
             }
         }
-        return Promise.all(futures).get();
+
+        if (!futures.isEmpty()) {
+            return Promise.all(futures).get();
+        }
+
+        return new ArrayList<>();
     }
 }

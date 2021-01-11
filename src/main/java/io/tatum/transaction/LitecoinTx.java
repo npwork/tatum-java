@@ -77,7 +77,7 @@ public class LitecoinTx {
                     }
                 } else if (ArrayUtils.isNotEmpty(fromUTXO)) {
                     for (var item : fromUTXO) {
-                        transactionBuilder.addInput(item.getTxHash(), item.getIndex().longValue(), item.getPrivateKey());
+                        transactionBuilder.addInput(item.getTxHash(), item.getIndex(), item.getPrivateKey());
                     }
                 }
             } catch (ExecutionException | InterruptedException e) {
