@@ -20,6 +20,6 @@ import java.math.BigDecimal;
 @EqualsAndHashCode
 public class FromUTXOBcash extends FromUTXO {
 
-    @PositiveOrZero
-    public BigDecimal value;
+    @Pattern(regexp = "^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$")
+    public String value;
 }

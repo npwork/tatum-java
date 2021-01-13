@@ -17,6 +17,7 @@ import org.bitcoincashj.core.Coin;
 import org.bitcoincashj.core.Transaction;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -89,8 +90,7 @@ public class BcashTx {
                 var network = testnet ? BCH_TESTNET : BCH_MAINNET;
                 var transactionBuilder = new TransactionBuilder(network);
                 for (var item : to) {
-                    System.out.println(Coin.btcToSatoshi(item.getValue()));
-                    transactionBuilder.addOutput(item.getAddress(), Coin.btcToSatoshi(item.getValue()));
+                    transactionBuilder.addOutput(item.getAddress(), Coin.btcToSatoshi(new BigDecimal(item.getValue())));
                 }
 
                 String[] txHashs = Stream.of(fromUTXO).map(u -> u.getTxHash()).toArray(size -> new String[size]);
