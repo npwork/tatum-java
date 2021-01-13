@@ -10,7 +10,6 @@ import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -66,7 +65,7 @@ public final class Bitcoin {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public BlockHash btcGetBlockHash(BigDecimal i) throws ExecutionException, InterruptedException {
+    public BlockHash btcGetBlockHash(long i) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/bitcoin/block/hash/" + i;
         return Async.get(uri, BlockHash.class);
     }
@@ -80,7 +79,7 @@ public final class Bitcoin {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public BtcUTXO btcGetUTXO(String hash, BigDecimal i) throws ExecutionException, InterruptedException {
+    public BtcUTXO btcGetUTXO(String hash, long i) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/bitcoin/utxo/" + hash + "/" + i;
         return Async.get(uri, BtcUTXO.class);
     }
@@ -95,9 +94,9 @@ public final class Bitcoin {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public BtcTx[] btcGetTxForAccount(String address, Integer pageSize, Integer offset) throws ExecutionException, InterruptedException {
-        Integer _pageSize = (pageSize == null || pageSize < 0 || pageSize > 50) ? 50 : pageSize;
-        Integer _offset = (offset == null || offset < 0) ? 0 : offset;
+    public BtcTx[] btcGetTxForAccount(String address, int pageSize, int offset) throws ExecutionException, InterruptedException {
+        int _pageSize = (pageSize < 0 || pageSize > 50) ? 50 : pageSize;
+        int _offset = Math.max(offset, 0);
         String uri = BaseUrl.getInstance().getUrl() + "/v3/bitcoin/transaction/address/" + address + "?pageSize=" + _pageSize + "&offset=" + _offset;
         return Async.get(uri, BtcTx[].class);
     }
