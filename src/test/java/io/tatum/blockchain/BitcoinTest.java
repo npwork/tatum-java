@@ -40,7 +40,7 @@ public class BitcoinTest {
 
     @Test
     public void btcGetBlockHashTest() throws InterruptedException, ExecutionException {
-        BlockHash blockHash = new Bitcoin().btcGetBlockHash(new BigDecimal(1580));
+        BlockHash blockHash = new Bitcoin().btcGetBlockHash(1580);
         if (blockHash != null) {
             System.out.println(blockHash.toString());
             assertThat(blockHash, hasProperty("hash"));
@@ -51,14 +51,14 @@ public class BitcoinTest {
     public void btcGetUTXOTest() throws InterruptedException, ExecutionException {
         String hash = "0000000000000000000e775008c6749deb78f666b88fb285b5951ecb7894367f";
         Bitcoin bitcoin = new Bitcoin();
-        BtcUTXO btcUTXO = bitcoin.btcGetUTXO(hash, new BigDecimal(5));
+        BtcUTXO btcUTXO = bitcoin.btcGetUTXO(hash, 5);
     }
 
     @Test
     public void btcGetTxForAccountTest() throws InterruptedException, ExecutionException {
         Bitcoin bitcoin = new Bitcoin();
         // https://www.blockchain.com/btc/address/bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh
-        BtcTx[] btcTxes = bitcoin.btcGetTxForAccount("bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh", null, null);
+        BtcTx[] btcTxes = bitcoin.btcGetTxForAccount("bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh", -1, 0);
         System.out.println(btcTxes[0]);
         assertThat(btcTxes[0], hasProperty("hash"));
         assertThat(btcTxes[0], hasProperty("fee"));

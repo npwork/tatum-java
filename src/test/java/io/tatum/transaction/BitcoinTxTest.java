@@ -21,16 +21,6 @@ import static org.junit.Assert.assertEquals;
 public class BitcoinTxTest {
 
     @Test
-    public void testP2SHOutputScript() {
-        String P2SHAddressString = "35b9vsyH1KoFT5a5KtrKusaCcPLkiSo1tU";
-        Address P2SHAddress = LegacyAddress.fromBase58(BITCOIN_MAINNET, P2SHAddressString);
-        Script script = ScriptBuilder.createOutputScript(P2SHAddress);
-        Transaction tx = new Transaction(BITCOIN_MAINNET);
-        tx.addOutput(Coin.COIN, script);
-        assertEquals(P2SHAddressString, tx.getOutput(0).getScriptPubKey().getToAddress(BITCOIN_MAINNET).toString());
-    }
-
-    @Test
     public void prepareSignedTransactionTest() throws ExecutionException, InterruptedException {
 
         var body = new TransferBtcBasedBlockchain();
