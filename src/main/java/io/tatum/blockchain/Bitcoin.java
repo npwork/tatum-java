@@ -85,6 +85,19 @@ public final class Bitcoin {
     }
 
     /**
+     * For more details, see <a href="https://tatum.io/apidoc#operation/BtcGetRawTransaction" target="_blank">Tatum API documentation</a>
+     *
+     * @param hash the hash
+     * @return the btc tx
+     * @throws ExecutionException   the execution exception
+     * @throws InterruptedException the interrupted exception
+     */
+    public BtcTx btcGetTransaction(String hash) throws ExecutionException, InterruptedException {
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/bitcoin/transaction/" + hash;
+        return Async.get(uri, BtcTx.class);
+    }
+
+    /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/BtcGetTxByAddress" target="_blank">Tatum API documentation</a>
      *
      * @param address  the address
@@ -99,18 +112,5 @@ public final class Bitcoin {
         int _offset = Math.max(offset, 0);
         String uri = BaseUrl.getInstance().getUrl() + "/v3/bitcoin/transaction/address/" + address + "?pageSize=" + _pageSize + "&offset=" + _offset;
         return Async.get(uri, BtcTx[].class);
-    }
-
-    /**
-     * For more details, see <a href="https://tatum.io/apidoc#operation/BtcGetRawTransaction" target="_blank">Tatum API documentation</a>
-     *
-     * @param hash the hash
-     * @return the btc tx
-     * @throws ExecutionException   the execution exception
-     * @throws InterruptedException the interrupted exception
-     */
-    public BtcTx btcGetTransaction(String hash) throws ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().getUrl() + "/v3/bitcoin/transaction/" + hash;
-        return Async.get(uri, BtcTx.class);
     }
 }
