@@ -27,8 +27,7 @@ public class WalletBuilder {
      * @return the wallet builder
      */
     public static WalletBuilder build() {
-        walletBuilder = new WalletBuilder();
-        return walletBuilder;
+        return new WalletBuilder();
     }
 
     /**
@@ -37,9 +36,9 @@ public class WalletBuilder {
      * @param network the network
      * @return the wallet builder
      */
-    public static WalletBuilder network(NetworkParameters network) {
-        walletBuilder.network = network;
-        return walletBuilder;
+    public WalletBuilder network(NetworkParameters network) {
+        this.network = network;
+        return this;
     }
 
     /**
@@ -48,12 +47,12 @@ public class WalletBuilder {
      * @param mnemonic the mnemonic
      * @return the wallet builder
      */
-    public static WalletBuilder fromSeed(String mnemonic) {
+    public WalletBuilder fromSeed(String mnemonic) {
         List<String> mnemonicCode = WHITESPACE_SPLITTER.splitToList(mnemonic);
         byte[] seed = MnemonicCode.toSeed(mnemonicCode, "");
         DeterministicKey masterPrivateKey = HDKeyDerivation.createMasterPrivateKey(seed);
-        walletBuilder.dh = new DeterministicHierarchy(masterPrivateKey);
-        return walletBuilder;
+        this.dh = new DeterministicHierarchy(masterPrivateKey);
+        return this;
     }
 
     /**
@@ -62,10 +61,10 @@ public class WalletBuilder {
      * @param path the path
      * @return the wallet builder
      */
-    public static WalletBuilder derivePath(List<ChildNumber> path) {
+    public WalletBuilder derivePath(List<ChildNumber> path) {
         int depth = path.size() - 1;
-        walletBuilder.ehkey = walletBuilder.dh.deriveChild(path.subList(0, depth), false, true, path.get(depth));
-        return walletBuilder;
+        this.ehkey = this.dh.deriveChild(path.subList(0, depth), false, true, path.get(depth));
+        return this;
     }
 
     /**
@@ -73,7 +72,7 @@ public class WalletBuilder {
      *
      * @return the string
      */
-    public static String toBase58() {
-        return walletBuilder.ehkey.serializePubB58(walletBuilder.network);
+    public String toBase58() {
+        return this.ehkey.serializePubB58(this.network);
     }
 }
