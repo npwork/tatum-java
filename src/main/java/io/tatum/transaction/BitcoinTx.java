@@ -69,13 +69,13 @@ public class BitcoinTx {
             try {
                 if (ArrayUtils.isNotEmpty(fromAddress)) {
                     for (var item : fromAddress) {
-                        BtcTx[] txs = bitcoin.btcGetTxForAccount(item.getAddress(), null, null);
+                        BtcTx[] txs = bitcoin.btcGetTxForAccount(item.getAddress(), -1, 0);
                         for (var tx : txs) {
                             BtcTxOutputs[] outputs = tx.getOutputs();
                             for (int i = 0; i < outputs.length; i++) {
                                 if (outputs[i].getAddress().equals(item.getAddress())) {
                                     BtcUTXO utxo = bitcoin.btcGetUTXO(tx.getHash(), outputs[i].getValue());
-                                    transactionBuilder.addInput(tx.getHash(), utxo.getIndex().longValue(), item.getPrivateKey());
+                                    transactionBuilder.addInput(tx.getHash(), i, item.getPrivateKey());
                                 }
                             }
                         }
