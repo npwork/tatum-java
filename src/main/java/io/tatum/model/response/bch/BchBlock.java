@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  * The type Bch block.
@@ -19,18 +19,18 @@ import java.math.BigDecimal;
 public class BchBlock {
 
     private String hash;
-    private BigDecimal size;
-    private BigDecimal height;
-    private BigDecimal version;
+    private long size;
+    private long height;
+    private int version;
     private String merkleroot;
     private BchTx[] tx;
     private String versionHex;
     private String bits;
-    private BigDecimal strippedsize;
-    private BigDecimal time;
-    private BigDecimal nonce;
-    private BigDecimal difficulty;
-    private BigDecimal confirmations;
+    private long strippedsize;
+    private long time;
+    private BigInteger nonce;
+    private BigInteger difficulty;
+    private int confirmations;
     private String previousblockhash;
     private String nextblockhash;
 

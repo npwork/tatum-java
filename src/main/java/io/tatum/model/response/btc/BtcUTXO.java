@@ -16,13 +16,13 @@ import java.math.BigDecimal;
 @EqualsAndHashCode
 public class BtcUTXO {
 
-    private BigDecimal version;
-    private BigDecimal height;
-    private BigDecimal value;
+    private int version;
+    private long height;
+    private long value;
     private BigDecimal script;
     private String address;
     private Boolean coinbase;
     private String hash;
-    private BigDecimal index;
+    private int index;
 
 }

@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode
 public class BtcTxOutputs {
 
-    private BigDecimal value;
+    private long value;
     private String script;
     private String address;
 

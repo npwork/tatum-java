@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  * The type Bch info.
@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 public class BchInfo {
 
     private String chain;
-    private BigDecimal blocks;
+    private long blocks;
     private String bestblockhash;
-    private BigDecimal difficulty;
+    private BigInteger difficulty;
 }

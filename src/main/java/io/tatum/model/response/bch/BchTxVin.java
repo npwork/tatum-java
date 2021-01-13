@@ -20,6 +20,6 @@ public class BchTxVin {
     private BigDecimal vout;
     private BchTxScriptSig scriptSig;
     private String coinbase;
-    private BigDecimal sequence;
+    private long sequence;
 
 }

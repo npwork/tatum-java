@@ -16,11 +16,11 @@ import java.math.BigDecimal;
 @EqualsAndHashCode
 public class BtcTxCoin {
 
-    private BigDecimal version;
-    private BigDecimal height;
-    private BigDecimal value;
+    private int version;
+    private long height;
+    private long value;
     private String script;
     private String address;
-    private Boolean coinbase;
+    private boolean coinbase;
 
 }

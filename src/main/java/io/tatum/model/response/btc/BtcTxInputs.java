@@ -19,7 +19,7 @@ public class BtcTxInputs {
     private BtcTxPrevout prevout;
     private String script;
     private String witness;
-    private BigDecimal sequence;
+    private long sequence;
     private BtcTxCoin coin;
 
 }
