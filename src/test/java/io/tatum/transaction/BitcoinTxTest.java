@@ -31,7 +31,7 @@ public class BitcoinTxTest {
         body.setFromUTXO(fromUTXO);
 
         To[] to = new To[1];
-        to[0] = new To("2MzNGwuKvMEvKMQogtgzSqJcH2UW3Tc5oc7", new BigDecimal(0.02969944));
+        to[0] = new To("2MzNGwuKvMEvKMQogtgzSqJcH2UW3Tc5oc7", "0.02969944");
         body.setTo(to);
 
         BitcoinTx tx = new BitcoinTx();
