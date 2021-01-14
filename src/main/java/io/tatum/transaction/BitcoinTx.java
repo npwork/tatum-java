@@ -1,5 +1,6 @@
 package io.tatum.transaction;
 
+import com.google.common.base.Preconditions;
 import io.tatum.blockchain.Bitcoin;
 import io.tatum.model.request.Currency;
 import io.tatum.model.request.transaction.TransferBtcBasedBlockchain;
@@ -42,15 +43,12 @@ public class BitcoinTx {
      */
     public String prepareSignedTransaction(boolean testnet, TransferBtcBasedBlockchain body) throws ExecutionException, InterruptedException {
 
-        if (!ObjectValidator.isValidated(body)) {
-            return null;
-        }
+        Preconditions.checkArgument(ObjectValidator.isValidated(body));
 
-        if ((ArrayUtils.isEmpty(body.getFromAddress()) && ArrayUtils.isEmpty(body.getFromUTXO())) |
-                (ArrayUtils.isNotEmpty(body.getFromAddress()) && ArrayUtils.isNotEmpty(body.getFromUTXO()))) {
-            log.error("Only accept from either addresses or utxo");
-            return null;
-        }
+        Preconditions.checkArgument(
+                        ((ArrayUtils.isEmpty(body.getFromAddress()) && ArrayUtils.isEmpty(body.getFromUTXO())) ||
+                        (ArrayUtils.isNotEmpty(body.getFromAddress()) && ArrayUtils.isNotEmpty(body.getFromUTXO()))),
+                "Only accept from either addresses or utxo");
 
         return CompletableFuture.supplyAsync(() -> {
             var fromUTXO = body.getFromUTXO();
@@ -63,7 +61,7 @@ public class BitcoinTx {
 
             // adding outputs before adding inputs
             for (var item : to) {
-                transactionBuilder.addOutput(item.getAddress(), new BigDecimal(item.getValue()));
+                transactionBuilder.addOutput(item.getAddress(), item.getValue());
             }
 
             // adding inputs

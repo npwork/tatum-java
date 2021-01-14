@@ -1,5 +1,6 @@
 package io.tatum.transaction;
 
+import com.google.common.base.Preconditions;
 import io.tatum.blockchain.Bcash;
 import io.tatum.model.request.Currency;
 import io.tatum.model.request.transaction.FromUTXO;
@@ -13,11 +14,9 @@ import io.tatum.utils.ObjectValidator;
 import io.tatum.utils.Promise;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.bitcoincashj.core.Coin;
 import org.bitcoincashj.core.Transaction;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -78,9 +77,8 @@ public class BcashTx {
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareBitcoinCashSignedTransaction(boolean testnet, TransferBchBlockchain body) throws ExecutionException, InterruptedException {
-        if (!ObjectValidator.isValidated(body)) {
-            return null;
-        }
+
+        Preconditions.checkArgument(ObjectValidator.isValidated(body));
 
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -90,7 +88,7 @@ public class BcashTx {
                 var network = testnet ? BCH_TESTNET : BCH_MAINNET;
                 var transactionBuilder = new TransactionBuilder(network);
                 for (var item : to) {
-                    transactionBuilder.addOutput(item.getAddress(), Coin.btcToSatoshi(new BigDecimal(item.getValue())));
+                    transactionBuilder.addOutput(item.getAddress(), item.getValue());
                 }
 
                 String[] txHashs = Stream.of(fromUTXO).map(u -> u.getTxHash()).toArray(size -> new String[size]);
@@ -104,7 +102,7 @@ public class BcashTx {
                             return null;
                         }
 
-                        satoshis = Coin.btcToSatoshi(txs.get(i).getVout()[Math.toIntExact(item.getIndex())].getValue());
+                        satoshis = txs.get(i).getVout()[Math.toIntExact(item.getIndex())].getValue();
                         transactionBuilder.addInput(item.getTxHash(), item.getIndex(), item.getPrivateKey(), satoshis);
                     }
                 }
