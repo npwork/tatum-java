@@ -6,7 +6,6 @@ import org.bitcoinj.script.Script;
 import org.bitcoinj.script.ScriptBuilder;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,12 +56,26 @@ public class TransactionBuilder {
      * @param address the address
      * @param value   the value
      */
-    public void addOutput(String address, BigDecimal value) {
-        Address p2SHAddress = LegacyAddress.fromBase58(this.network, address);
-        Script scriptPubKey = ScriptBuilder.createOutputScript(p2SHAddress);
-        BigDecimal satoshis = value.multiply(BigDecimal.valueOf(100000000)).setScale(8, RoundingMode.FLOOR);
-        Coin coin = Coin.valueOf(satoshis.longValue());
+    public void addOutput(String address, String value, boolean bech32) {
+        Address _address;
+        if (bech32) {
+            _address = SegwitAddress.fromBech32(this.network, address);
+        } else {
+            _address = LegacyAddress.fromBase58(this.network, address);
+        }
+        Script scriptPubKey = ScriptBuilder.createOutputScript(_address);
+        Coin coin = Coin.parseCoin(value);
         this.transaction.addOutput(coin, scriptPubKey);
+    }
+
+    /**
+     * Add output.
+     *
+     * @param address the address
+     * @param value   the value
+     */
+    public void addOutput(String address, String value) {
+        this.addOutput(address, value, false);
     }
 
     /**

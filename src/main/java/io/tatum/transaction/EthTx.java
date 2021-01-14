@@ -1,5 +1,6 @@
 package io.tatum.transaction;
 
+import com.google.common.base.Preconditions;
 import io.tatum.blockchain.Ethereum;
 import io.tatum.contracts.erc20.TokenBytecode;
 import io.tatum.model.request.*;
@@ -95,9 +96,8 @@ public class EthTx {
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareStoreDataTransaction(CreateRecord body, String provider) throws ExecutionException, InterruptedException {
-        if (!ObjectValidator.isValidated(body)) {
-            return null;
-        }
+
+        Preconditions.checkArgument(ObjectValidator.isValidated(body));
 
         return CompletableFuture.supplyAsync(() -> {
             try {

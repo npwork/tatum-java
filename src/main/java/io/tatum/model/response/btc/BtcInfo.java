@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  * The type Btc info.
@@ -17,9 +17,9 @@ import java.math.BigDecimal;
 public class BtcInfo {
 
     private String chain;
-    private BigDecimal blocks;
-    private BigDecimal headers;
+    private long blocks;
+    private long headers;
     private String bestblockhash;
-    private BigDecimal difficulty;
+    private BigInteger difficulty;
 
 }

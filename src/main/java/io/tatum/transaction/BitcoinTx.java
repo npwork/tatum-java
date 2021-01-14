@@ -1,5 +1,6 @@
 package io.tatum.transaction;
 
+import com.google.common.base.Preconditions;
 import io.tatum.blockchain.Bitcoin;
 import io.tatum.model.request.Currency;
 import io.tatum.model.request.transaction.TransferBtcBasedBlockchain;
@@ -16,6 +17,7 @@ import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -41,15 +43,12 @@ public class BitcoinTx {
      */
     public String prepareSignedTransaction(boolean testnet, TransferBtcBasedBlockchain body) throws ExecutionException, InterruptedException {
 
-        if (!ObjectValidator.isValidated(body)) {
-            return null;
-        }
+        Preconditions.checkArgument(ObjectValidator.isValidated(body));
 
-        if ((ArrayUtils.isEmpty(body.getFromAddress()) && ArrayUtils.isEmpty(body.getFromUTXO())) |
-                (ArrayUtils.isNotEmpty(body.getFromAddress()) && ArrayUtils.isNotEmpty(body.getFromUTXO()))) {
-            log.error("Only accept from either addresses or utxo");
-            return null;
-        }
+        Preconditions.checkArgument(
+                        ((ArrayUtils.isEmpty(body.getFromAddress()) && ArrayUtils.isEmpty(body.getFromUTXO())) ||
+                        (ArrayUtils.isNotEmpty(body.getFromAddress()) && ArrayUtils.isNotEmpty(body.getFromUTXO()))),
+                "Only accept from either addresses or utxo");
 
         return CompletableFuture.supplyAsync(() -> {
             var fromUTXO = body.getFromUTXO();
@@ -69,13 +68,13 @@ public class BitcoinTx {
             try {
                 if (ArrayUtils.isNotEmpty(fromAddress)) {
                     for (var item : fromAddress) {
-                        BtcTx[] txs = bitcoin.btcGetTxForAccount(item.getAddress(), null, null);
+                        BtcTx[] txs = bitcoin.btcGetTxForAccount(item.getAddress(), -1, 0);
                         for (var tx : txs) {
                             BtcTxOutputs[] outputs = tx.getOutputs();
                             for (int i = 0; i < outputs.length; i++) {
                                 if (outputs[i].getAddress().equals(item.getAddress())) {
                                     BtcUTXO utxo = bitcoin.btcGetUTXO(tx.getHash(), outputs[i].getValue());
-                                    transactionBuilder.addInput(tx.getHash(), utxo.getIndex().longValue(), item.getPrivateKey());
+                                    transactionBuilder.addInput(tx.getHash(), i, item.getPrivateKey());
                                 }
                             }
                         }

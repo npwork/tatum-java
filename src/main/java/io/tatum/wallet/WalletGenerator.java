@@ -10,6 +10,7 @@ import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.crypto.ChildNumber;
 import org.bitcoinj.crypto.HDUtils;
 import org.bitcoinj.wallet.DeterministicSeed;
+import org.stellar.sdk.KeyPair;
 
 import java.security.SecureRandom;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import static io.tatum.constants.Constant.*;
+import static org.bitcoinj.core.Utils.HEX;
 
 /**
  * The type Wallet generator.
@@ -100,9 +102,8 @@ public class WalletGenerator {
      */
     public static Wallet generateVetWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
-            NetworkParameters network = VET_MAINNET;
             List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(VET_DERIVATION_PATH);
-            WalletBuilder walletBuilder = WalletBuilder.build().network(network).fromSeed(mnem).derivePath(path);
+            WalletBuilder walletBuilder = WalletBuilder.build().network(VET_MAINNET).fromSeed(mnem).derivePath(path);
             Wallet wallet = new Wallet();
             wallet.setMnemonic(mnem);
             wallet.setXpub(walletBuilder.toBase58());
@@ -122,9 +123,8 @@ public class WalletGenerator {
      */
     public static Wallet generateEthWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
-            NetworkParameters network = ETHEREUM_MAINNET;
             List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(ETH_DERIVATION_PATH);
-            WalletBuilder walletBuilder = WalletBuilder.build().network(network).fromSeed(mnem).derivePath(path);
+            WalletBuilder walletBuilder = WalletBuilder.build().network(ETHEREUM_MAINNET).fromSeed(mnem).derivePath(path);
             Wallet wallet = new Wallet();
             wallet.setMnemonic(mnem);
             wallet.setXpub(walletBuilder.toBase58());
@@ -152,6 +152,18 @@ public class WalletGenerator {
             }
             return null;
         }).get();
+    }
+
+    /**
+     * Generate Stellar address and secret.
+     * @param secret secret of the account to generate address
+     */
+    public Wallet generateXlmWallet(String secret) {
+        KeyPair keyPair = StringUtils.isNotEmpty(secret) ? KeyPair.fromSecretSeed(secret) : KeyPair.random();
+        Wallet result = new Wallet();
+        result.setAddress(HEX.encode(keyPair.getPublicKey()));
+        result.setSecret(new String(keyPair.getSecretSeed()));
+        return result;
     }
 
     /**
@@ -199,8 +211,8 @@ public class WalletGenerator {
                 return generateEthWallet(testnet, mnem);
             case XRP:
                 return generateXrpWallet();
-//            case Currency.XLM:
-//                return generateXlmWallet();
+            case XLM:
+                return generateXlmWallet(mnem);
             case VET:
                 return generateVetWallet(testnet, mnem);
 //            case Currency.NEO:

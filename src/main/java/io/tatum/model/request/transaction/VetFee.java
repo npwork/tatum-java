@@ -17,7 +17,6 @@ import javax.validation.constraints.Pattern;
 @EqualsAndHashCode
 public class VetFee {
     @NotEmpty
-    @Pattern(regexp = "\\d+") // number string
-    @Pattern(regexp = "^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$")
+    @Pattern(regexp = "^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$") // number string
     private String gasLimit;
 }

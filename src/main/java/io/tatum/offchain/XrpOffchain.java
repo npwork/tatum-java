@@ -2,6 +2,7 @@ package io.tatum.offchain;
 
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Preconditions;
 import io.tatum.blockchain.XRP;
 import io.tatum.model.request.Currency;
 import io.tatum.model.request.TransferXrpOffchain;
@@ -40,9 +41,8 @@ public class XrpOffchain {
      * @returns transaction id of the transaction in the blockchain
      */
     public BroadcastResult sendXrpOffchainTransaction(boolean testnet, TransferXrpOffchain body) throws ExecutionException, InterruptedException, IOException, XrpException {
-        if (!ObjectValidator.isValidated(body)) {
-            return null;
-        }
+
+        Preconditions.checkArgument(ObjectValidator.isValidated(body));
 
         return CompletableFuture.supplyAsync(() -> {
             try {

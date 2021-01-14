@@ -26,6 +26,7 @@ io.tatum.transaction
 io.tatum.transaction.bcash
 io.tatum.transaction.bitcoin
 io.tatum.transaction.eth
+io.tatum.transaction.vet
 io.tatum.transaction.xrp
 io.tatum.utils
 io.tatum.wallet

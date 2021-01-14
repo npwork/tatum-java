@@ -2,6 +2,7 @@ package io.tatum.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -15,6 +16,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * The type Async.
  */
+@Log4j2
 public class Async implements Serializable {
 
     private Async() {}
@@ -58,7 +60,7 @@ public class Async implements Serializable {
         var client = HttpClient.newHttpClient();
         return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(response -> {
-                    System.out.println(response.statusCode());
+                    log.info(response.statusCode());
                     if (response.statusCode() == 200) {
                         return response.body();
                     }
@@ -89,8 +91,8 @@ public class Async implements Serializable {
         var client = HttpClient.newHttpClient();
         return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(response -> {
-                    System.out.println(response.statusCode());
-                    System.out.println(response.body());
+                    log.info(response.statusCode());
+                    log.info(response.body());
                     if (response.statusCode() == 200) {
                         try {
                             return objectMapper.readValue(response.body(), valueType);
@@ -160,8 +162,8 @@ public class Async implements Serializable {
         var client = HttpClient.newHttpClient();
         return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(response -> {
-                    System.out.println(response.statusCode());
-                    System.out.println(response.body());
+                    log.info(response.statusCode());
+                    log.info(response.body());
                     if (response.statusCode() == 200) {
                         try {
                             return objectMapper.readValue(response.body(), valueType);
@@ -196,8 +198,8 @@ public class Async implements Serializable {
         var client = HttpClient.newHttpClient();
         return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(response -> {
-                    System.out.println(response.statusCode());
-                    System.out.println(response.body());
+                    log.info(response.statusCode());
+                    log.info(response.body());
                     return response;
                 })
                 .thenApply(HttpResponse::body).get();
@@ -225,8 +227,6 @@ public class Async implements Serializable {
         var client = HttpClient.newHttpClient();
         return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(response -> {
-                    System.out.println(response.statusCode());
-                    System.out.println(response.body());
                     if (response.statusCode() == 200) {
                         try {
                             return objectMapper.readValue(response.body(), valueType);
@@ -235,6 +235,8 @@ public class Async implements Serializable {
                             return null;
                         }
                     }
+                    log.info(response.statusCode());
+                    log.info(response.body());
                     return null;
                 }).get();
     }
@@ -259,8 +261,8 @@ public class Async implements Serializable {
         var client = HttpClient.newHttpClient();
         return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(response -> {
-                    System.out.println(response.statusCode());
-                    System.out.println(response.body());
+                    log.info(response.statusCode());
+                    log.info(response.body());
                     if (response.statusCode() == 200) {
                         return response.body();
                     }
@@ -315,7 +317,7 @@ public class Async implements Serializable {
         var client = HttpClient.newHttpClient();
         return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(response -> {
-                    System.out.println(response.statusCode());
+                    log.info(response.statusCode());
                     return response;
                 }).get();
     }
@@ -340,8 +342,8 @@ public class Async implements Serializable {
         var client = HttpClient.newHttpClient();
         return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(response -> {
-                    System.out.println(response.statusCode());
-                    System.out.println(response);
+                    log.info(response.statusCode());
+                    log.info(response);
                     return response;
                 })
                 .thenApply(HttpResponse::body).get();

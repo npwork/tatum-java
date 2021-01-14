@@ -17,9 +17,9 @@ import java.math.BigDecimal;
 public class BchTxVin {
 
     private String txid;
-    private BigDecimal vout;
+    private int vout;
     private BchTxScriptSig scriptSig;
     private String coinbase;
-    private BigDecimal sequence;
+    private long sequence;
 
 }

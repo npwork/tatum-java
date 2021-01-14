@@ -1,5 +1,6 @@
 package io.tatum.offchain;
 
+import com.google.common.base.Preconditions;
 import io.tatum.blockchain.XLM;
 import io.tatum.model.request.Currency;
 import io.tatum.model.request.TransferXlmOffchain;
@@ -32,9 +33,7 @@ public class XlmOffchain {
      */
     public BroadcastResult sendXlmOffchainTransaction(boolean testnet, TransferXlmOffchain body) throws ExecutionException, InterruptedException {
 
-        if (!ObjectValidator.isValidated(body)) {
-            return null;
-        }
+        Preconditions.checkArgument(ObjectValidator.isValidated(body));
 
         return CompletableFuture.supplyAsync(() -> {
             try {

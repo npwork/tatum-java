@@ -22,14 +22,14 @@ public class BtcTx {
     private String witnessHash;
     private BigDecimal fee;
     private BigDecimal rate;
-    private BigDecimal mtime;
-    private BigDecimal height;
+    private long mtime;
+    private long height;
     private String block;
-    private BigDecimal time;
-    private BigDecimal index;
-    private BigDecimal version;
+    private long time;
+    private int index;
+    private int version;
     private BtcTxInputs[] inputs;
     private BtcTxOutputs[] outputs;
-    private BigDecimal locktime;
+    private long locktime;
 
 }

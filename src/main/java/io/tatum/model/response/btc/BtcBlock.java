@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /**
  * The type Btc block.
@@ -19,14 +19,14 @@ import java.math.BigDecimal;
 public class BtcBlock {
 
     private String hash;
-    private BigDecimal height;
-    private BigDecimal depth;
-    private BigDecimal version;
+    private long height;
+    private long depth;
+    private int version;
     private String prevBlock;
     private String merkleRoot;
-    private BigDecimal time;
-    private BigDecimal bits;
-    private BigDecimal nonce;
+    private long time;
+    private long bits;
+    private BigInteger nonce;
     private BtcTx[] txs;
 
 }

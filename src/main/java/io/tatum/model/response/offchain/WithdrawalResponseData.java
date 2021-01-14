@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 
 /**
@@ -29,7 +30,8 @@ public class WithdrawalResponseData {
      * @type {number}
      * @memberof WithdrawalResponseData
      */
-    private BigDecimal amount;
+    @Pattern(regexp = "^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$")
+    private String amount;
 
     /**
      * Last used unprocessed transaction output, that can be used.
@@ -46,7 +48,7 @@ public class WithdrawalResponseData {
      * @type {number}
      * @memberof WithdrawalResponseData
      */
-    private long vInIndex;
+    private int vInIndex;
 
     /**
      * Script of last unprocessed UTXO. Bitcoin SV only.

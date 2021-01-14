@@ -1,5 +1,6 @@
 package io.tatum.transaction;
 
+import com.google.common.base.Preconditions;
 import com.vechain.thorclient.clients.BlockchainClient;
 import com.vechain.thorclient.clients.TransactionClient;
 import com.vechain.thorclient.core.model.clients.*;
@@ -98,9 +99,8 @@ public class VetTx {
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareVetSignedTransaction(boolean testnet, TransferVet body, String provider) throws ExecutionException, InterruptedException, IOException {
-        if (!ObjectValidator.isValidated(body)) {
-            return null;
-        }
+
+        Preconditions.checkArgument(ObjectValidator.isValidated(body));
 
         return CompletableFuture.supplyAsync(() -> {
             try {

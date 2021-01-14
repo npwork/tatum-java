@@ -5,6 +5,7 @@ import org.bitcoincashj.crypto.TransactionSignature;
 import org.bitcoincashj.script.Script;
 import org.bitcoincashj.script.ScriptBuilder;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,10 +58,11 @@ public class TransactionBuilder {
      * @param address the address
      * @param value   the value
      */
-    public void addOutput(String address, long value) {
+    public void addOutput(String address, String value) {
         Address p2SHAddress = Address.fromBase58(this.network, address);
         Script scriptPubKey = ScriptBuilder.createOutputScript(p2SHAddress);
-        this.transaction.addOutput(Coin.valueOf(value), scriptPubKey);
+        long satoshis = Coin.btcToSatoshi(new BigDecimal(value));
+        this.transaction.addOutput(Coin.valueOf(satoshis), scriptPubKey);
     }
 
     /**
@@ -71,13 +73,31 @@ public class TransactionBuilder {
      * @param privateKey    the key
      * @param amount the amount
      */
-    public void addInput(String txHash, long index, String privateKey, long amount) {
+    public void addInput(String txHash, long index, String privateKey, String amount) {
         ECKey ecKey = DumpedPrivateKey.fromBase58(network, privateKey).getKey();
         Script p2PKHOutputScript = ScriptBuilder.createP2PKHOutputScript(ecKey);
         byte[] message = HEX.decode(txHash);
         this.transaction.addInput(Sha256Hash.wrap(message), index, p2PKHOutputScript);
         this.privateKeysToSign.add(ecKey);
-        this.amountsToSign.add(amount);
+        long satoshis = Coin.btcToSatoshi(new BigDecimal(amount));
+        this.amountsToSign.add(satoshis);
+    }
+
+    /**
+     * Add input.
+     *
+     * @param txHash the tx hash
+     * @param index  the index
+     * @param privateKey    the key
+     * @param amount the amount
+     */
+    public void addInput(String txHash, long index, String privateKey, long satoshis) {
+        ECKey ecKey = DumpedPrivateKey.fromBase58(network, privateKey).getKey();
+        Script p2PKHOutputScript = ScriptBuilder.createP2PKHOutputScript(ecKey);
+        byte[] message = HEX.decode(txHash);
+        this.transaction.addInput(Sha256Hash.wrap(message), index, p2PKHOutputScript);
+        this.privateKeysToSign.add(ecKey);
+        this.amountsToSign.add(satoshis);
     }
 
     private void signInput() {
