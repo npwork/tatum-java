@@ -1,5 +1,6 @@
 package io.tatum.transaction;
 
+import com.google.common.base.Preconditions;
 import io.tatum.blockchain.XLM;
 import io.tatum.model.request.Currency;
 import io.tatum.model.request.TransferXlm;
@@ -85,9 +86,8 @@ public class XlmTx {
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareXlmSignedTransaction(boolean testnet, TransferXlm body) throws ExecutionException, InterruptedException {
-        if (!ObjectValidator.isValidated(body)) {
-            return null;
-        }
+
+        Preconditions.checkArgument(ObjectValidator.isValidated(body));
 
         return CompletableFuture.supplyAsync(() -> {
             try {

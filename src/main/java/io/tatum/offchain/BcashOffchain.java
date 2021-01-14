@@ -1,5 +1,6 @@
 package io.tatum.offchain;
 
+import com.google.common.base.Preconditions;
 import io.tatum.model.request.*;
 import io.tatum.model.response.kms.TransactionKMS;
 import io.tatum.model.response.offchain.BroadcastResult;
@@ -129,38 +130,37 @@ public class BcashOffchain {
                                                               String address, String mnemonic, KeyPair[] keyPair,
                                                               String changeAddress) throws Exception {
 
+        Preconditions.checkArgument(StringUtils.isNotEmpty(mnemonic) || ArrayUtils.isNotEmpty(keyPair),
+                "Impossible to prepare transaction. Either mnemonic or keyPair and attr must be present.");
+
         var network = testnet ? BCH_TESTNET : BCH_MAINNET;
         var tx = new TransactionBuilder(network);
-
-        tx.addOutput(address, Coin.btcToSatoshi(new BigDecimal(amount)));
+        tx.addOutput(address, amount);
 
         var lastVin = Arrays.stream(data).filter(d -> "-1".equals(d.getVIn())).findFirst().get();
-
-        long last = Coin.btcToSatoshi(lastVin.getAmount());
+        String last = lastVin.getAmount();
 
         Address _address = new Address();
 
         if (StringUtils.isNotEmpty(mnemonic)) {
             var xpub = WalletGenerator.generateBchWallet(testnet, mnemonic).getXpub();
             tx.addOutput(_address.generateAddressFromXPub(Currency.BCH, testnet, xpub, 0), last);
-
-        } else if (keyPair != null && StringUtils.isNotEmpty(changeAddress)) {
-            tx.addOutput(changeAddress, last);
-        } else {
-            throw new Exception("Impossible to prepare transaction. Either mnemonic or keyPair and attr must be present.");
-        }
-
-        for (int i = 0; i < data.length; i++) {
-            WithdrawalResponseData input = data[i];
-            if ("-1".equals(input.getVIn())) {
-                long value = Coin.btcToSatoshi(input.getAmount());
-                if (StringUtils.isNotEmpty(mnemonic)) {
+            for (int i = 0; i < data.length; i++) {
+                WithdrawalResponseData input = data[i];
+                if (!"-1".equals(input.getVIn())) {
+                    String value = input.getAmount();
                     var derivationKey = input.getAddress() != null ? input.getAddress().getDerivationKey() : 0;
                     String privKey = _address.generatePrivateKeyFromMnemonic(Currency.BCH, testnet, mnemonic, derivationKey);
                     tx.addInput(input.getVIn(), input.getVInIndex(), privKey, value);
-
-                } else if (keyPair != null) {
-                    String privKey = Arrays.stream(keyPair).filter(k -> k.getAddress() == input.getAddress().getAddress()).findFirst().get().getPrivateKey();
+                }
+            }
+        } else if (keyPair != null && StringUtils.isNotEmpty(changeAddress)) {
+            tx.addOutput(changeAddress, last);
+            for (int i = 0; i < data.length; i++) {
+                WithdrawalResponseData input = data[i];
+                if (!"-1".equals(input.getVIn())) {
+                    String value = input.getAmount();
+                    String privKey = Arrays.stream(keyPair).filter(k -> k.getAddress().equals(input.getAddress().getAddress())).findFirst().get().getPrivateKey();
                     if (StringUtils.isNotEmpty(privKey)) {
                         tx.addInput(input.getVIn(), input.getVInIndex(), privKey, value);
                     }

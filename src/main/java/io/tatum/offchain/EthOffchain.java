@@ -1,5 +1,6 @@
 package io.tatum.offchain;
 
+import com.google.common.base.Preconditions;
 import io.tatum.ledger.LedgerAccount;
 import io.tatum.ledger.LedgerVC;
 import io.tatum.model.request.CreateWithdrawal;
@@ -56,9 +57,8 @@ public class EthOffchain {
      * @returns transaction id of the transaction in the blockchain
      */
     public BroadcastResult sendEthOffchainTransaction(boolean testnet, TransferEthOffchain body, String provider) throws Exception {
-        if (!ObjectValidator.isValidated(body)) {
-            return null;
-        }
+
+        Preconditions.checkArgument(ObjectValidator.isValidated(body));
 
         return CompletableFuture.supplyAsync(() -> {
             try {
