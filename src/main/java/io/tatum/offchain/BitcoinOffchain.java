@@ -134,12 +134,10 @@ public class BitcoinOffchain {
 
         var network = testnet ? BITCOIN_TESTNET : BITCOIN_MAINNET;
         var tx = new TransactionBuilder(network);
-
-        BigDecimal satoshis = Convert.toSatoshis(amount);
-        tx.addOutput(address, satoshis);
+        tx.addOutput(address, amount);
 
         var lastVin = Arrays.stream(data).filter(d -> "-1".equals(d.getVIn())).findFirst().get();
-        BigDecimal last = Convert.toSatoshis(lastVin.getAmount());
+        String last = lastVin.getAmount();
 
         Address _address = new Address();
 

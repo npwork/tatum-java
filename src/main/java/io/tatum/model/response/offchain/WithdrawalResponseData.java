@@ -29,7 +29,7 @@ public class WithdrawalResponseData {
      * @type {number}
      * @memberof WithdrawalResponseData
      */
-    private BigDecimal amount;
+    private String amount;
 
     /**
      * Last used unprocessed transaction output, that can be used.
