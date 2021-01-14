@@ -15,6 +15,7 @@ import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -57,7 +58,7 @@ public class LitecoinTx {
 
             // adding outputs before adding inputs
             for (var item : to) {
-                transactionBuilder.addOutput(item.getAddress(), item.getValue());
+                transactionBuilder.addOutput(item.getAddress(), new BigDecimal(item.getValue()));
             }
 
             // adding inputs
