@@ -1,12 +1,12 @@
 package io.tatum.offchain;
 
+import com.google.common.base.Preconditions;
 import io.tatum.model.request.*;
 import io.tatum.model.response.kms.TransactionKMS;
 import io.tatum.model.response.offchain.BroadcastResult;
 import io.tatum.model.response.offchain.WithdrawalResponse;
 import io.tatum.model.response.offchain.WithdrawalResponseData;
 import io.tatum.transaction.bitcoin.TransactionBuilder;
-import io.tatum.utils.Convert;
 import io.tatum.utils.ObjectValidator;
 import io.tatum.wallet.Address;
 import io.tatum.wallet.WalletGenerator;
@@ -14,7 +14,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bitcoinj.core.Transaction;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 
 import static io.tatum.constants.Constant.LITECOIN_MAINNET;
@@ -128,39 +127,38 @@ public class LitecoinOffchain {
      * @throws Exception the exception
      * @returns transaction data to be broadcast to blockchain.
      */
-    public String prepareLitecoinSignedOffchainTransaction(boolean testnet, WithdrawalResponseData[] data, String amount, String address, String mnemonic, KeyPair[] keyPair, String changeAddress) throws Exception {
+    public String prepareLitecoinSignedOffchainTransaction(boolean testnet, WithdrawalResponseData[] data, String amount,
+                                                           String address, String mnemonic, KeyPair[] keyPair,
+                                                           String changeAddress) throws Exception {
+
+        Preconditions.checkArgument(StringUtils.isNotEmpty(mnemonic) || ArrayUtils.isNotEmpty(keyPair),
+                "Impossible to prepare transaction. Either mnemonic or keyPair and attr must be present.");
 
         var network = testnet ? LITECOIN_TESTNET : LITECOIN_MAINNET;
         var tx = new TransactionBuilder(network);
-
-        BigDecimal satoshis = Convert.toSatoshis(amount);
-        tx.addOutput(address, satoshis);
+        tx.addOutput(address, amount);
 
         var lastVin = Arrays.stream(data).filter(d -> "-1".equals(d.getVIn())).findFirst().get();
-        BigDecimal last = Convert.toSatoshis(lastVin.getAmount());
+        String last = lastVin.getAmount();
 
         Address _address = new Address();
 
         if (StringUtils.isNotEmpty(mnemonic)) {
             var xpub = WalletGenerator.generateBtcWallet(testnet, mnemonic).getXpub();
             tx.addOutput(_address.generateAddressFromXPub(Currency.LTC, testnet, xpub, 0), last);
-        } else if (keyPair != null && StringUtils.isNotEmpty(changeAddress)) {
-            tx.addOutput(changeAddress, last);
-        } else {
-            throw new Exception("Impossible to prepare transaction. Either mnemonic or keyPair and attr must be present.");
-        }
-
-        for (WithdrawalResponseData input : data) {
-            if ("-1".equals(input.getVIn())) {
-                if (StringUtils.isNotEmpty(mnemonic)) {
+            for (WithdrawalResponseData input : data) {
+                if ("-1".equals(input.getVIn())) {
                     var derivationKey = input.getAddress() != null ? input.getAddress().getDerivationKey() : 0;
                     String privKey = _address.generatePrivateKeyFromMnemonic(Currency.LTC, testnet, mnemonic, derivationKey);
                     tx.addInput(input.getVIn(), input.getVInIndex(), privKey);
-                } else if (keyPair != null) {
+                }
+            }
+        } else if (keyPair != null && StringUtils.isNotEmpty(changeAddress)) {
+            tx.addOutput(changeAddress, last);
+            for (WithdrawalResponseData input : data) {
+                if ("-1".equals(input.getVIn())) {
                     String privKey = Arrays.stream(keyPair).filter(k -> k.getAddress() == input.getAddress().getAddress()).findFirst().get().getPrivateKey();
                     tx.addInput(input.getVIn(), input.getVInIndex(), privKey);
-                } else {
-                    throw new Exception("Impossible to prepare transaction. Either mnemonic or keyPair and attr must be present.");
                 }
             }
         }
