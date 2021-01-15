@@ -105,7 +105,7 @@ public class LitecoinOffchain {
                 continue;
             }
             int k = withdrawalResponses[i].getAddress() != null ? withdrawalResponses[i].getAddress().getDerivationKey() : 0;
-            String privKey = new Address().generatePrivateKeyFromMnemonic(Currency.LTC, testnet, mnemonic, k);
+            String privKey = Address.generatePrivateKeyFromMnemonic(Currency.LTC, testnet, mnemonic, k);
             privateKeys[i] = privKey;
         }
         builder.fromTransaction(transaction, privateKeys);
@@ -141,15 +141,13 @@ public class LitecoinOffchain {
         var lastVin = Arrays.stream(data).filter(d -> "-1".equals(d.getVIn())).findFirst().get();
         String last = lastVin.getAmount();
 
-        Address _address = new Address();
-
         if (StringUtils.isNotEmpty(mnemonic)) {
-            var xpub = WalletGenerator.generateBtcWallet(testnet, mnemonic).getXpub();
-            tx.addOutput(_address.generateAddressFromXPub(Currency.LTC, testnet, xpub, 0), last);
+            var xpub = WalletGenerator.generateWallet(Currency.LTC, testnet, mnemonic).getXpub();
+            tx.addOutput(Address.generateAddressFromXPub(Currency.LTC, testnet, xpub, 0), last);
             for (WithdrawalResponseData input : data) {
                 if ("-1".equals(input.getVIn())) {
                     var derivationKey = input.getAddress() != null ? input.getAddress().getDerivationKey() : 0;
-                    String privKey = _address.generatePrivateKeyFromMnemonic(Currency.LTC, testnet, mnemonic, derivationKey);
+                    String privKey = Address.generatePrivateKeyFromMnemonic(Currency.LTC, testnet, mnemonic, derivationKey);
                     tx.addInput(input.getVIn(), input.getVInIndex(), privKey);
                 }
             }
