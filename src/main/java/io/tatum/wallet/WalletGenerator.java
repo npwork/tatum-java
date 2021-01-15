@@ -35,7 +35,7 @@ public class WalletGenerator {
      * @throws InterruptedException the interrupted exception
      * @returns io.tatum.wallet
      */
-    public static Wallet generateBtcWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
+    private static Wallet generateBtcWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             NetworkParameters network = testnet ? BITCOIN_TESTNET : BITCOIN_MAINNET;
             List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(BTC_DERIVATION_PATH);
@@ -57,7 +57,7 @@ public class WalletGenerator {
      * @throws InterruptedException the interrupted exception
      * @returns wallet
      */
-    public static Wallet generateLtcWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
+    private static Wallet generateLtcWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             NetworkParameters network = testnet ? LITECOIN_TESTNET : LITECOIN_MAINNET;
             List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(LTC_DERIVATION_PATH);
@@ -78,7 +78,7 @@ public class WalletGenerator {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public static Wallet generateBchWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
+    private static Wallet generateBchWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             NetworkParameters network = testnet ? BITCOIN_TESTNET : BITCOIN_MAINNET;
             List<ChildNumber> path = HDUtils.parsePath(BCH_DERIVATION_PATH);
@@ -100,7 +100,7 @@ public class WalletGenerator {
      * @throws InterruptedException the interrupted exception
      * @returns wallet
      */
-    public static Wallet generateVetWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
+    private static Wallet generateVetWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(VET_DERIVATION_PATH);
             WalletBuilder walletBuilder = WalletBuilder.build().network(VET_MAINNET).fromSeed(mnem).derivePath(path);
@@ -121,7 +121,7 @@ public class WalletGenerator {
      * @throws InterruptedException the interrupted exception
      * @returns wallet
      */
-    public static Wallet generateEthWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
+    private static Wallet generateEthWallet(Boolean testnet, String mnem) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(ETH_DERIVATION_PATH);
             WalletBuilder walletBuilder = WalletBuilder.build().network(ETHEREUM_MAINNET).fromSeed(mnem).derivePath(path);
@@ -139,7 +139,7 @@ public class WalletGenerator {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public static Wallet generateXrpWallet() throws ExecutionException, InterruptedException {
+    private static Wallet generateXrpWallet() throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 WalletGenerationResult generationResult = io.xpring.xrpl.Wallet.generateRandomWallet();
@@ -158,7 +158,7 @@ public class WalletGenerator {
      * Generate Stellar address and secret.
      * @param secret secret of the account to generate address
      */
-    public Wallet generateXlmWallet(String secret) {
+    private static Wallet generateXlmWallet(String secret) {
         KeyPair keyPair = StringUtils.isNotEmpty(secret) ? KeyPair.fromSecretSeed(secret) : KeyPair.random();
         Wallet result = new Wallet();
         result.setAddress(HEX.encode(keyPair.getPublicKey()));
@@ -176,7 +176,7 @@ public class WalletGenerator {
      * @throws Exception the exception
      * @returns wallet or a combination of address and private key
      */
-    public Wallet generateWallet(Currency currency, boolean testnet, String mnemonic) throws Exception {
+    public static Wallet generateWallet(Currency currency, boolean testnet, String mnemonic) throws Exception {
         String mnem = null;
         if (StringUtils.isNotEmpty(mnemonic)) {
             mnem = mnemonic;

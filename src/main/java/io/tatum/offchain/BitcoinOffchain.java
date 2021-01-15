@@ -111,7 +111,7 @@ public class BitcoinOffchain {
                 continue;
             }
             int k = withdrawalResponses[i].getAddress() != null ? withdrawalResponses[i].getAddress().getDerivationKey() : 0;
-            String privKey = new Address().generatePrivateKeyFromMnemonic(Currency.BTC, testnet, mnemonic, k);
+            String privKey = Address.generatePrivateKeyFromMnemonic(Currency.BTC, testnet, mnemonic, k);
             privateKeys[i] = privKey;
         }
         builder.fromTransaction(transaction, privateKeys);
@@ -168,15 +168,13 @@ public class BitcoinOffchain {
         var lastVin = Arrays.stream(data).filter(d -> "-1".equals(d.getVIn())).findFirst();
         String last = lastVin.isPresent() ? lastVin.get().getAmount() : "0";
 
-        Address _address = new Address();
-
         if (StringUtils.isNotEmpty(mnemonic)) {
-            var xpub = WalletGenerator.generateBtcWallet(testnet, mnemonic).getXpub();
-            tx.addOutput(_address.generateAddressFromXPub(Currency.BTC, testnet, xpub, 0), last);
+            var xpub = WalletGenerator.generateWallet(Currency.BTC, testnet, mnemonic).getXpub();
+            tx.addOutput(Address.generateAddressFromXPub(Currency.BTC, testnet, xpub, 0), last);
             for (WithdrawalResponseData input : data) {
                 if (!"-1".equals(input.getVIn())) {
                     var derivationKey = input.getAddress() != null ? input.getAddress().getDerivationKey() : 0;
-                    String privKey = _address.generatePrivateKeyFromMnemonic(Currency.BTC, testnet, mnemonic, derivationKey);
+                    String privKey = Address.generatePrivateKeyFromMnemonic(Currency.BTC, testnet, mnemonic, derivationKey);
                     tx.addInput(input.getVIn(), input.getVInIndex(), privKey);
                 }
             }

@@ -33,13 +33,13 @@ Library provides you these main blockchain functionalities:
 - BONUS offchain creating and managing users for your own applications
 
 Add your Tatum API-key to your IDE environment variables (or your system variables).
-Key name has to be XAPIKEY, value is actual token.
+Key name has to be TATUM_API_KEY, value is actual token.
 
 Examples:
 
-`XAPIKEY=replace-with-your-tatum-token`
+`TATUM_API_KEY=replace-with-your-tatum-token`
   
-`XAPIKEY=01234ab6-78cd-910e-f111-2g1314151617`
+`TATUM_API_KEY=01234ab6-78cd-910e-f111-2g1314151617`
 
 If you plan to run tatum-java tests, for some tests the FAUCET_MNEMONIC environment variable has to be provided.
 This mnemonic should contain some funds at index 0 address to be able to successfully send coins in tests.

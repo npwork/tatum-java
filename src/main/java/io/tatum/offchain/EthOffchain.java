@@ -94,7 +94,7 @@ public class EthOffchain {
     private String getPrivKey(boolean testnet, String mnemonic, int index, String privateKey) throws Exception {
         String fromPriv;
         if (StringUtils.isNotEmpty(mnemonic)) {
-            fromPriv = index > 0 ? new io.tatum.wallet.Address().generatePrivateKeyFromMnemonic(Currency.ETH, testnet, mnemonic, index) : privateKey;
+            fromPriv = index > 0 ? io.tatum.wallet.Address.generatePrivateKeyFromMnemonic(Currency.ETH, testnet, mnemonic, index) : privateKey;
         } else if (StringUtils.isNotEmpty(privateKey)) {
             fromPriv = privateKey;
         } else {

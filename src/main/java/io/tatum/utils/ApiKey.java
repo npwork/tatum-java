@@ -14,20 +14,7 @@ public class ApiKey {
     private String apiKey;
 
     private ApiKey() {
-
-        Properties appProps = new Properties();
-        String appConfigPath = "config.properties";
-        InputStream input = ApiKey.class.getClassLoader().getResourceAsStream(appConfigPath);
-        if (input == null) {
-            apiKey = null;
-        }
-        try {
-            appProps.load(input);
-        } catch (IOException e) {
-            e.printStackTrace();
-            apiKey = null;
-        }
-        apiKey = appProps.getProperty("tatum.api.key");
+        apiKey = System.getenv().get("TATUM_API_KEY");
     }
 
     /**
