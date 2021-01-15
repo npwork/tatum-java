@@ -27,7 +27,7 @@ public class Address {
      * @throws InterruptedException the interrupted exception
      * @returns blockchain address
      */
-    public String generateBtcAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
+    private String generateBtcAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             NetworkParameters network = testnet ? BITCOIN_TESTNET : BITCOIN_MAINNET;
             ChildNumber path = new ChildNumber(i, false);
@@ -46,7 +46,7 @@ public class Address {
      * @throws InterruptedException the interrupted exception
      * @returns blockchain address
      */
-    public String generateLtcAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
+    private String generateLtcAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             NetworkParameters network = testnet ? LITECOIN_TESTNET : LITECOIN_MAINNET;
             ChildNumber path = new ChildNumber(i, false);
@@ -65,7 +65,7 @@ public class Address {
      * @throws InterruptedException the interrupted exception
      * @returns blockchain address
      */
-    public String generateBchAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
+    private String generateBchAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             org.bitcoincashj.core.NetworkParameters network = testnet ? BCH_TESTNET : BCH_MAINNET;
             org.bitcoincashj.crypto.ChildNumber path = new org.bitcoincashj.crypto.ChildNumber(i, false);
@@ -84,7 +84,7 @@ public class Address {
      * @throws InterruptedException the interrupted exception
      * @returns blockchain address
      */
-    public String generateEthAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
+    private String generateEthAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             ChildNumber path = new ChildNumber(i, false);
             NetworkParameters network = ETHEREUM_MAINNET;
@@ -103,7 +103,7 @@ public class Address {
      * @throws InterruptedException the interrupted exception
      * @returns blockchain address
      */
-    public String generateVetAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
+    private String generateVetAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             ChildNumber path = new ChildNumber(i, false);
             NetworkParameters network = VET_MAINNET;
@@ -122,7 +122,7 @@ public class Address {
      * @throws InterruptedException the interrupted exception
      * @returns blockchain private key to the address
      */
-    public String generateBtcPrivateKey(Boolean testnet, String mnemonic, int i) throws ExecutionException, InterruptedException {
+    private String generateBtcPrivateKey(Boolean testnet, String mnemonic, int i) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             NetworkParameters network = testnet ? BITCOIN_TESTNET : BITCOIN_MAINNET;
             List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(BTC_DERIVATION_PATH);
@@ -146,7 +146,7 @@ public class Address {
      * @throws InterruptedException the interrupted exception
      * @returns blockchain private key to the address
      */
-    public String generateLtcPrivateKey(Boolean testnet, String mnemonic, int i) throws ExecutionException, InterruptedException {
+    private String generateLtcPrivateKey(Boolean testnet, String mnemonic, int i) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             NetworkParameters network = testnet ? LITECOIN_TESTNET : LITECOIN_MAINNET;
             List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(LTC_DERIVATION_PATH);
@@ -170,7 +170,7 @@ public class Address {
      * @throws InterruptedException the interrupted exception
      * @returns blockchain private key to the address
      */
-    public String generateBchPrivateKey(Boolean testnet, String mnemonic, int i) throws ExecutionException, InterruptedException {
+    private String generateBchPrivateKey(Boolean testnet, String mnemonic, int i) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             NetworkParameters network = testnet ? BITCOIN_TESTNET : BITCOIN_MAINNET;
             List<ChildNumber> path = HDUtils.parsePath(BCH_DERIVATION_PATH);
@@ -194,7 +194,7 @@ public class Address {
      * @throws InterruptedException the interrupted exception
      * @returns blockchain private key to the address
      */
-    public String generateEthPrivateKey(Boolean testnet, String mnemonic, int i) throws ExecutionException, InterruptedException {
+    private String generateEthPrivateKey(Boolean testnet, String mnemonic, int i) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(ETH_DERIVATION_PATH);
             return "0x" + PrivateKeyBuilder.build()
@@ -216,7 +216,7 @@ public class Address {
      * @throws InterruptedException the interrupted exception
      * @returns blockchain private key to the address
      */
-    public String generateVetPrivateKey(Boolean testnet, String mnemonic, int i) throws ExecutionException, InterruptedException {
+    private String generateVetPrivateKey(Boolean testnet, String mnemonic, int i) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(VET_DERIVATION_PATH);
             return "0x" + PrivateKeyBuilder.build()
@@ -238,7 +238,7 @@ public class Address {
      * @throws InterruptedException the interrupted exception
      * @returns blockchain private key to the address
      */
-    public String generateAdaPrivateKey(Boolean testnet, String mnemonic, int i) throws ExecutionException, InterruptedException {
+    private String generateAdaPrivateKey(Boolean testnet, String mnemonic, int i) throws ExecutionException, InterruptedException {
         return CompletableFuture.supplyAsync(() -> {
             List<ChildNumber> path = HDUtils.parsePath(ADA_DERIVATION_PATH);
             return PrivateKeyBuilder.build()
