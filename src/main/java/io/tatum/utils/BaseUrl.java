@@ -18,20 +18,7 @@ public class BaseUrl {
     private String url;
 
     private BaseUrl() {
-
-        Properties appProps = new Properties();
-        String appConfigPath = "config.properties";
-        InputStream input = BaseUrl.class.getClassLoader().getResourceAsStream(appConfigPath);
-        if (input == null) {
-            url = null;
-        }
-        try {
-            appProps.load(input);
-        } catch (IOException e) {
-            e.printStackTrace();
-            url = null;
-        }
-        url = appProps.getProperty("tatum.api.url");
+        url = System.getenv().get("TATUM_API_URL");
         url = Strings.isNullOrEmpty(url) ? TATUM_API_URL : url;
     }
 
