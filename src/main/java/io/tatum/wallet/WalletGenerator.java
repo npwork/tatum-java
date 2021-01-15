@@ -158,7 +158,7 @@ public class WalletGenerator {
      * Generate Stellar address and secret.
      * @param secret secret of the account to generate address
      */
-    private Wallet generateXlmWallet(String secret) {
+    private static Wallet generateXlmWallet(String secret) {
         KeyPair keyPair = StringUtils.isNotEmpty(secret) ? KeyPair.fromSecretSeed(secret) : KeyPair.random();
         Wallet result = new Wallet();
         result.setAddress(HEX.encode(keyPair.getPublicKey()));
@@ -176,7 +176,7 @@ public class WalletGenerator {
      * @throws Exception the exception
      * @returns wallet or a combination of address and private key
      */
-    public Wallet generateWallet(Currency currency, boolean testnet, String mnemonic) throws Exception {
+    public static Wallet generateWallet(Currency currency, boolean testnet, String mnemonic) throws Exception {
         String mnem = null;
         if (StringUtils.isNotEmpty(mnemonic)) {
             mnem = mnemonic;

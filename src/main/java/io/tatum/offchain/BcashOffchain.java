@@ -18,6 +18,7 @@ import org.bitcoincashj.core.Transaction;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Optional;
 
 import static io.tatum.constants.Constant.BCH_MAINNET;
 import static io.tatum.constants.Constant.BCH_TESTNET;
@@ -106,7 +107,7 @@ public class BcashOffchain {
                 continue;
             }
             int k = withdrawalResponses[i].getAddress() != null ? withdrawalResponses[i].getAddress().getDerivationKey() : 0;
-            String privKey = new Address().generatePrivateKeyFromMnemonic(Currency.BCH, testnet, mnemonic, k);
+            String privKey = Address.generatePrivateKeyFromMnemonic(Currency.BCH, testnet, mnemonic, k);
             privateKeys[i] = privKey;
         }
         builder.fromTransaction(transaction, privateKeys, amountsToSign);
@@ -137,31 +138,28 @@ public class BcashOffchain {
         var tx = new TransactionBuilder(network);
         tx.addOutput(address, amount);
 
-        var lastVin = Arrays.stream(data).filter(d -> "-1".equals(d.getVIn())).findFirst().get();
-        String last = lastVin.getAmount();
-
-        Address _address = new Address();
+        var lastVin = Arrays.stream(data).filter(d -> "-1".equals(d.getVIn())).findFirst();
+        String last = lastVin.isPresent() ? lastVin.get().getAmount() : "0";
 
         if (StringUtils.isNotEmpty(mnemonic)) {
-            var xpub = WalletGenerator.generateBchWallet(testnet, mnemonic).getXpub();
-            tx.addOutput(_address.generateAddressFromXPub(Currency.BCH, testnet, xpub, 0), last);
-            for (int i = 0; i < data.length; i++) {
-                WithdrawalResponseData input = data[i];
+            var xpub = WalletGenerator.generateWallet(Currency.BCH, testnet, mnemonic).getXpub();
+            tx.addOutput(Address.generateAddressFromXPub(Currency.BCH, testnet, xpub, 0), last);
+            for (WithdrawalResponseData input : data) {
                 if (!"-1".equals(input.getVIn())) {
                     String value = input.getAmount();
                     var derivationKey = input.getAddress() != null ? input.getAddress().getDerivationKey() : 0;
-                    String privKey = _address.generatePrivateKeyFromMnemonic(Currency.BCH, testnet, mnemonic, derivationKey);
+                    String privKey = Address.generatePrivateKeyFromMnemonic(Currency.BCH, testnet, mnemonic, derivationKey);
                     tx.addInput(input.getVIn(), input.getVInIndex(), privKey, value);
                 }
             }
         } else if (keyPair != null && StringUtils.isNotEmpty(changeAddress)) {
             tx.addOutput(changeAddress, last);
-            for (int i = 0; i < data.length; i++) {
-                WithdrawalResponseData input = data[i];
+            for (WithdrawalResponseData input : data) {
                 if (!"-1".equals(input.getVIn())) {
                     String value = input.getAmount();
-                    String privKey = Arrays.stream(keyPair).filter(k -> k.getAddress().equals(input.getAddress().getAddress())).findFirst().get().getPrivateKey();
-                    if (StringUtils.isNotEmpty(privKey)) {
+                    Optional<KeyPair> pair = Arrays.stream(keyPair).filter(k -> k.getAddress().equals(input.getAddress().getAddress())).findFirst();
+                    if (pair.isPresent()) {
+                        String privKey = pair.get().getPrivateKey();
                         tx.addInput(input.getVIn(), input.getVInIndex(), privKey, value);
                     }
                 }
