@@ -1,5 +1,7 @@
 package io.tatum.blockchain;
 
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import io.tatum.model.response.btc.BtcBlock;
 import io.tatum.model.response.btc.BtcInfo;
 import io.tatum.model.response.btc.BtcTx;
@@ -10,6 +12,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.http.HttpResponse;
 import java.util.concurrent.ExecutionException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,14 +21,22 @@ import static org.hamcrest.Matchers.hasProperty;
 public class BitcoinTest {
 
     @Test
-    public void btcBroadcastTest() throws InterruptedException, ExecutionException, IOException {
-        String txData = "62BD544D1B9031EFC330A3E855CC3A0D51CA5131455C1AB3BCAC6D243F65460D";
-        TransactionHash hash = new Bitcoin().btcBroadcast(txData, null);
+    public void btcBroadcastTest() throws InterruptedException, ExecutionException, IOException, UnirestException {
+//        String txData = "e93e9c0bc64f34170b0c0c6a97763b05584310b8034272abfb364a9e21cdc03e";
+//        TransactionHash hash = new Bitcoin().btcBroadcast(txData, null);
+//        System.out.println(hash);
+
+        HttpResponse<String> response = (HttpResponse<String>) Unirest.post("https://api-eu1.tatum.io/v3/bitcoin/broadcast")
+                .header("content-type", "application/json")
+                .header("x-api-key", "2d443c87-212f-460f-a330-25be2c654750")
+                .body("{\"txData\":\"62BD544D1B9031EFC330A3E855CC3A0D51CA5131455C1AB3BCAC6D243F65460D\"}")
+                .asString();
     }
 
     @Test
     public void btcGetCurrentBlockTest() throws InterruptedException, ExecutionException {
         BtcInfo btcInfo = new Bitcoin().btcGetCurrentBlock();
+        System.out.println(btcInfo);
         assertThat(btcInfo, hasProperty("chain"));
         assertThat(btcInfo, hasProperty("blocks"));
         assertThat(btcInfo, hasProperty("bestblockhash"));
@@ -35,7 +46,7 @@ public class BitcoinTest {
     @Test
     public void btcGetBlockTest() throws InterruptedException, ExecutionException {
         // https://explorer.bitcoin.com/btc/block/0000000000000000000e775008c6749deb78f666b88fb285b5951ecb7894367f
-        BtcBlock btcBlock = new Bitcoin().btcGetBlock("0000000000000000000e775008c6749deb78f666b88fb285b5951ecb7894367f");
+        BtcBlock btcBlock = new Bitcoin().btcGetBlock("000000000000000f965504aec02813eef6cf7056a1e919d24e2d2675385865fa");
     }
 
     @Test
@@ -58,8 +69,9 @@ public class BitcoinTest {
     public void btcGetTxForAccountTest() throws InterruptedException, ExecutionException {
         Bitcoin bitcoin = new Bitcoin();
         // https://www.blockchain.com/btc/address/bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh
-        BtcTx[] btcTxes = bitcoin.btcGetTxForAccount("bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh", -1, 0);
+        BtcTx[] btcTxes = bitcoin.btcGetTxForAccount("mfbPS2yrNc1fopS9aHwPNJeQHqrpFw9wLW", 4, 0);
         System.out.println(btcTxes[0]);
+        System.out.println(btcTxes[0].getHeight());
         assertThat(btcTxes[0], hasProperty("hash"));
         assertThat(btcTxes[0], hasProperty("fee"));
         assertThat(btcTxes[0], hasProperty("inputs"));
