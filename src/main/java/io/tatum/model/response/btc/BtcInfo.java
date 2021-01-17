@@ -20,6 +20,6 @@ public class BtcInfo {
     private long blocks;
     private long headers;
     private String bestblockhash;
-    private BigInteger difficulty;
+    private String difficulty;
 
 }
