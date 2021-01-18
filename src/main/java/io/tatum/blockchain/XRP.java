@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutionException;
@@ -80,12 +81,12 @@ public class XRP {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public BigDecimal xrpGetCurrentLedger() throws ExecutionException, InterruptedException {
+    public BigInteger xrpGetCurrentLedger() throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/info";
         var res = Async.get(uri);
         if (res != null) {
             JSONObject jsonObject = new JSONObject(res);
-            return jsonObject.getBigDecimal("ledger_index");
+            return jsonObject.getBigInteger("ledger_index");
         }
         return null;
     }
@@ -111,12 +112,12 @@ public class XRP {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public BigDecimal xrpGetAccountBalance(String address) throws ExecutionException, InterruptedException {
+    public BigInteger xrpGetAccountBalance(String address) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/account/" + address + "/balance";
         var res = Async.get(uri);
         if (res != null) {
             JSONObject jsonObject = new JSONObject(res);
-            return jsonObject.getBigDecimal("balance");
+            return jsonObject.getBigInteger("balance");
         }
         return null;
     }

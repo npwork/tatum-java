@@ -17,6 +17,6 @@ import java.math.BigDecimal;
 public class BtcTxPrevout {
 
     private String hash;
-    private int index;
+    private long index;
 
 }
