@@ -61,9 +61,9 @@ public class XLM {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public BigDecimal xlmGetFee() throws ExecutionException, InterruptedException {
+    public long xlmGetFee() throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/fee";
-        return Async.get(uri, BigDecimal.class);
+        return Async.get(uri, Long.class);
     }
 
     /**
