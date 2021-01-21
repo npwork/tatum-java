@@ -9,6 +9,7 @@ import io.tatum.utils.BaseUrl;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -54,11 +55,11 @@ public class VET {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public BigDecimal vetGetCurrentBlock() throws ExecutionException, InterruptedException {
+    public BigInteger vetGetCurrentBlock() throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/block/current";
         var res = Async.get(uri, String.class);
         if (res != null) {
-            return new BigDecimal(res);
+            return new BigInteger(res);
         }
         return null;
     }

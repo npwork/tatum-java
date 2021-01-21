@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -32,7 +33,7 @@ public class XRPTest {
     @Test
     public void xrpGetCurrentLedgerTest() throws InterruptedException, ExecutionException {
         XRP xrp = new XRP();
-        BigDecimal current = xrp.xrpGetCurrentLedger();
+        BigInteger current = xrp.xrpGetCurrentLedger();
         System.out.println(current);
     }
 
@@ -48,7 +49,7 @@ public class XRPTest {
         XRP xrp = new XRP();
         // https://xrpscan.com/account/rQ3fNyLjbvcDaPNS4EAJY8aT9zR3uGk17c
         String address = "rQ3fNyLjbvcDaPNS4EAJY8aT9zR3uGk17c";
-        BigDecimal balance = xrp.xrpGetAccountBalance(address);
+        BigInteger balance = xrp.xrpGetAccountBalance(address);
         System.out.println(balance);
 
     }
