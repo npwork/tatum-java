@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -38,14 +39,14 @@ public class XLMTest {
     @Test
     public void xlmGetLedgerTest() throws ExecutionException, InterruptedException {
         XLM xlm = new XLM();
-        String ledger = xlm.xlmGetLedger(new BigDecimal(33073186));
+        String ledger = xlm.xlmGetLedger(new BigInteger("1466790"));
         System.out.println(ledger);
     }
 
     @Test
     public void xlmGetFeeTest() throws ExecutionException, InterruptedException {
         XLM xlm = new XLM();
-        BigDecimal fee = xlm.xlmGetFee();
+        long fee = xlm.xlmGetFee();
         System.out.println(fee);
     }
 

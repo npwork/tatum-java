@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
+import java.math.BigInteger;
 
 /**
  * The type Estimate gas vet.
@@ -25,8 +26,7 @@ public class EstimateGasVet {
     private String to;
 
     @NotEmpty
-    @Pattern(regexp = "\\d+") // number string
-    @Pattern(regexp = "^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$")
+    @Pattern(regexp = "^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$") // number string
     private String value;
 
     @Size(max = 10000)
@@ -34,6 +34,6 @@ public class EstimateGasVet {
 
     @Min(0)
     @PositiveOrZero
-    private Integer nonce;
+    private BigInteger nonce;
 
 }

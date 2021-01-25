@@ -7,6 +7,7 @@ import io.tatum.utils.BaseUrl;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -74,7 +75,7 @@ public class XLM {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public String xlmGetLedger(BigDecimal sequence) throws ExecutionException, InterruptedException {
+    public String xlmGetLedger(BigInteger sequence) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/ledger/" + sequence;
         return Async.get(uri);
     }

@@ -1,11 +1,13 @@
 package io.tatum.blockchain;
 
+import com.google.common.base.Preconditions;
 import io.tatum.model.request.EstimateGasVet;
 import io.tatum.model.response.common.TransactionHash;
 import io.tatum.model.response.eth.Balance;
 import io.tatum.model.response.vet.*;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
+import io.tatum.utils.ObjectValidator;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -42,8 +44,7 @@ public class VET {
      * @throws IOException          the io exception
      */
     public VetEstimateGas vetEstimateGas(EstimateGasVet body) throws ExecutionException, InterruptedException, IOException {
-        // TO-DO
-        // await validateOrReject(body);
+        Preconditions.checkArgument(ObjectValidator.isValidated(body));
         String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/transaction/gas";
         return Async.post(uri, body, VetEstimateGas.class);
     }

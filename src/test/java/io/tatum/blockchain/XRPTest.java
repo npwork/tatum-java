@@ -40,7 +40,7 @@ public class XRPTest {
     @Test
     public void xrpGetLedgerTest() throws ExecutionException, InterruptedException {
         XRP xrp = new XRP();
-        String ledger = xrp.xrpGetLedger(new BigDecimal(60208452));
+        String ledger = xrp.xrpGetLedger(new BigInteger("14374504"));
         System.out.println(ledger);
     }
 
@@ -67,8 +67,8 @@ public class XRPTest {
     public void xrpGetAccountTransactionsTest() throws ExecutionException, InterruptedException, IOException {
         XRP xrp = new XRP();
         // https://xrpscan.com/account/rQ3fNyLjbvcDaPNS4EAJY8aT9zR3uGk17c
-        String address = "rQ3fNyLjbvcDaPNS4EAJY8aT9zR3uGk17c";
-        BigDecimal min = BigDecimal.ZERO;
+        String address = "rHb9CJAWyB4rj91VRWn96DkukG4bwdtyTh";
+        BigInteger min = BigInteger.ZERO;
         String marker = "{\"ledger\": 60208452,\"seq\": 60208452}";
         String transaction = xrp.xrpGetAccountTransactions(address, min, marker);
         System.out.println(transaction);
