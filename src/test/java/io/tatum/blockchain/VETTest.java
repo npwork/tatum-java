@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,18 +21,18 @@ public class VETTest {
     public void vetEstimateGasTest() throws InterruptedException, ExecutionException, IOException {
         VET vet = new VET();
         EstimateGasVet body = new EstimateGasVet();
-        body.setData("afsdfhsdfhs");
-        body.setFrom("sduifgsdiufhdsihfdsihfdshfdshfdshfdfpofrdsfdsfds");
-        body.setTo("efdfdfdfdfdsfdfdfdfgfgfgfdg");
-        body.setNonce(100);
-        body.setValue("dsfdsfdfdsfdggfgf");
+        body.setData("0x0d7A1a48a8996Dd51F94d9e9118cCb028562B955");
+        body.setFrom("123456789012345678901234567890123456789012345678901234567890123456");
+        body.setTo("0x0d7A1a48a8996Dd51F94d9e9118cCb028562B955");
+        body.setNonce(new BigInteger("100"));
+        body.setValue("123321");
         VetEstimateGas vetEstimateGas = vet.vetEstimateGas(body);
     }
 
     @Test
     public void vetGetCurrentBlockTest() throws ExecutionException, InterruptedException {
         VET vet = new VET();
-        BigDecimal block = vet.vetGetCurrentBlock();
+        BigInteger block = vet.vetGetCurrentBlock();
         System.out.println(block);
     }
 

@@ -1,5 +1,6 @@
 package io.tatum.ledger;
 
+import com.google.common.base.Preconditions;
 import io.tatum.model.request.BlockAmount;
 import io.tatum.model.request.CreateAccount;
 import io.tatum.model.request.CreateAccountsBatch;
@@ -46,9 +47,7 @@ public class LedgerAccount {
      * @throws InterruptedException the interrupted exception
      */
     public Account createAccount(CreateAccount account) throws IOException, ExecutionException, InterruptedException {
-        if (!ObjectValidator.isValidated(account)) {
-            return null;
-        }
+        Preconditions.checkArgument(ObjectValidator.isValidated(account));
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account";
         return Async.post(uri, account, Account.class);
     }

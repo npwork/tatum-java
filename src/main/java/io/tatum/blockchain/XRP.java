@@ -99,7 +99,7 @@ public class XRP {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public String xrpGetLedger(BigDecimal ledgerIndex) throws ExecutionException, InterruptedException {
+    public String xrpGetLedger(BigInteger ledgerIndex) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/ledger/" + ledgerIndex;
         return Async.get(uri);
     }
@@ -145,7 +145,7 @@ public class XRP {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public String xrpGetAccountTransactions(String address, BigDecimal min, String marker) throws ExecutionException, InterruptedException {
+    public String xrpGetAccountTransactions(String address, BigInteger min, String marker) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/account/tx/" + address + "?min=" + min + "&marker=" + URLEncoder.encode(marker, StandardCharsets.UTF_8);
         System.out.println(uri);
         return Async.get(uri);

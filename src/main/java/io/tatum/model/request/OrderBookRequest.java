@@ -21,19 +21,16 @@ public class OrderBookRequest {
     private TradeType type;
 
     @NotEmpty
-    @Pattern(regexp = "\\d+") // number string
-    @Pattern(regexp = "^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$")
+    @Pattern(regexp = "^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$") // number string
     @Size(max = 38)
     private String price;
 
     @NotEmpty
-    @Pattern(regexp = "\\d+") // number string
-    @Pattern(regexp = "^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$")
+    @Pattern(regexp = "^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$") // number string
     @Size(max = 38)
     private String amount;
 
     @NotEmpty
-    @Pattern(regexp = "[a-zA-Z]+")
     @Pattern(regexp = "^[A-a-zZ0-9_\\-]+\\/[A-Za-z0-9_\\-]+$")
     @Size(min = 3, max = 30)
     private String pair;

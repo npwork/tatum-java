@@ -147,9 +147,7 @@ public class EthTx {
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareEthOrErc20SignedTransaction(TransferEthErc20 body, String provider) throws ExecutionException, InterruptedException {
-        if (!ObjectValidator.isValidated(body)) {
-            return null;
-        }
+        Preconditions.checkArgument(ObjectValidator.isValidated(body));
 
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -229,9 +227,7 @@ public class EthTx {
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareCustomErc20SignedTransaction(TransferCustomErc20 body, String provider) throws ExecutionException, InterruptedException, IOException {
-        if (!ObjectValidator.isValidated(body)) {
-            return null;
-        }
+        Preconditions.checkArgument(ObjectValidator.isValidated(body));
 
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -295,9 +291,7 @@ public class EthTx {
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareDeployErc20SignedTransaction(DeployEthErc20 body, String provider) throws ExecutionException, InterruptedException, IOException {
-        if (!ObjectValidator.isValidated(body)) {
-            return null;
-        }
+        Preconditions.checkArgument(ObjectValidator.isValidated(body));
 
         return CompletableFuture.supplyAsync(() -> {
             try {

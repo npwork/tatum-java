@@ -18,7 +18,7 @@ public class EthereumTest {
     public void ethGetTransactionsCountTest() throws InterruptedException, ExecutionException {
         Ethereum ethereum = new Ethereum();
         // https://etherscan.io/address/0xec5a91b107775d267879e8474ced81a70bcfd7a9
-        String address = "0xec5a91b107775d267879e8474ced81a70bcfd7a9";
+        String address = "0x78c115F1c8B7D0804FbDF3CF7995B030c512ee78";
         BigInteger count = ethereum.ethGetTransactionsCount(address);
         System.out.println(count);
     }
@@ -45,7 +45,7 @@ public class EthereumTest {
     @Test
     public void ethGetAccountBalanceTest() throws InterruptedException, ExecutionException {
         Ethereum ethereum = new Ethereum();
-        String address = "0x8d056d457a52c4daf71cef45f540a040c143ea05";
+        String address = "0x78c115F1c8B7D0804FbDF3CF7995B030c512ee78";
         BigDecimal balance = ethereum.ethGetAccountBalance(address);
         System.out.println(balance);
     }

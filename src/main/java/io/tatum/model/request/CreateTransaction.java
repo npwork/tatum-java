@@ -27,8 +27,7 @@ public class CreateTransaction {
 
     @NotEmpty
     @Size(max = 38)
-    @Pattern(regexp = "\\d+") // number string
-    @Pattern(regexp = "^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$")
+    @Pattern(regexp = "^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$") // number string
     private String amount;
 
     @Size(min = 1, max = 100)

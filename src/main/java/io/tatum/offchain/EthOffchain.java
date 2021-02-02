@@ -115,9 +115,7 @@ public class EthOffchain {
      * @returns transaction id of the transaction in the blockchain
      */
     public BroadcastResult sendEthErc20OffchainTransaction(boolean testnet, TransferEthErc20Offchain body, String provider) throws Exception {
-        if (!ObjectValidator.isValidated(body)) {
-            return null;
-        }
+        Preconditions.checkArgument(ObjectValidator.isValidated(body));
 
         return CompletableFuture.supplyAsync(() -> {
             try {
