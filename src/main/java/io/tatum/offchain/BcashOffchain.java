@@ -39,9 +39,7 @@ public class BcashOffchain {
      * @returns transaction id of the transaction in the blockchain
      */
     public BroadcastResult sendBitcoinCashOffchainTransaction(boolean testnet, TransferBtcBasedOffchain body) throws Exception {
-        if (!ObjectValidator.isValidated(body)) {
-            return null;
-        }
+        Preconditions.checkArgument(ObjectValidator.isValidated(body));
 
         CreateWithdrawal withdrawal = body.getWithdrawal();
         if (withdrawal.getFee() != null) {

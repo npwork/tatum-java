@@ -44,10 +44,11 @@ public class BitcoinTx {
     public String prepareSignedTransaction(boolean testnet, TransferBtcBasedBlockchain body) throws ExecutionException, InterruptedException {
 
         Preconditions.checkArgument(ObjectValidator.isValidated(body));
-
         Preconditions.checkArgument(
-                        ((ArrayUtils.isEmpty(body.getFromAddress()) && ArrayUtils.isEmpty(body.getFromUTXO())) ||
-                        (ArrayUtils.isNotEmpty(body.getFromAddress()) && ArrayUtils.isNotEmpty(body.getFromUTXO()))),
+                (ArrayUtils.isNotEmpty(body.getFromAddress()) || ArrayUtils.isNotEmpty(body.getFromUTXO())),
+                "Both addresses and utxo must not be empty");
+        Preconditions.checkArgument(
+                        (ArrayUtils.isEmpty(body.getFromAddress()) || ArrayUtils.isEmpty(body.getFromUTXO())),
                 "Only accept from either addresses or utxo");
 
         return CompletableFuture.supplyAsync(() -> {
