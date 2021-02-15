@@ -19,29 +19,29 @@ import javax.validation.constraints.Size;
 public class BlockageTransaction {
     @NotEmpty
     @Size(min = 24, max = 24)
-    public String recipientAccountId;
+    private String recipientAccountId;
 
     @NotEmpty
     @Size(max = 38)
     @Pattern(regexp = "^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$") // number string
-    public String amount;
+    private String amount;
 
     @Size(min = 1, max = 100)
-    public String paymentId;
+    private String paymentId;
 
     @Size(min = 1, max = 100)
-    public String transactionCode;
+    private String transactionCode;
 
     @Size(min = 1, max = 500)
-    public String senderNote;
+    private String senderNote;
 
     @Size(min = 1, max = 500)
-    public String recipientNote;
+    private String recipientNote;
 
     @Min(0)
-    public long baseRate;
+    private long baseRate;
 
-    public boolean anonymous;
+    private boolean anonymous;
 
-    public boolean compliant;
+    private boolean compliant;
 }
