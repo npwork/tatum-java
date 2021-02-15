@@ -2,10 +2,7 @@ package io.tatum.ledger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Preconditions;
-import io.tatum.model.request.BlockAmount;
-import io.tatum.model.request.BlockageTransaction;
-import io.tatum.model.request.CreateAccount;
-import io.tatum.model.request.CreateAccountsBatch;
+import io.tatum.model.request.*;
 import io.tatum.model.response.common.Id;
 import io.tatum.model.response.ledger.Account;
 import io.tatum.model.response.ledger.AccountBalance;
@@ -71,6 +68,15 @@ public class LedgerAccount {
         }
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/batch";
         return Async.post(uri, accounts, Account[].class);
+    }
+
+    /**
+     * For more details, see <a href="https://tatum.io/apidoc#operation/updateAccountByAccountId" target="_blank">Tatum API documentation</a>
+     */
+    public Account updateAccount(String id, UpdateAccount account) throws InterruptedException, ExecutionException, JsonProcessingException {
+        Preconditions.checkArgument(ObjectValidator.isValidated(account));
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/" + id;
+        return Async.put(uri, account, Account.class);
     }
 
     /**
