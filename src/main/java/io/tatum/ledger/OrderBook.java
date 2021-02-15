@@ -5,6 +5,7 @@ import io.tatum.model.response.common.Id;
 import io.tatum.model.response.ledger.OrderBookResponse;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -23,10 +24,16 @@ public class OrderBook {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public OrderBookResponse[] getHistoricalTrades(Integer pageSize, Integer offset) throws ExecutionException, InterruptedException {
+    public OrderBookResponse[] getHistoricalTrades(Integer pageSize, Integer offset, String id, String pair) throws ExecutionException, InterruptedException {
         Integer _pageSize = (pageSize == null || pageSize < 0 || pageSize > 50) ? 50 : pageSize;
         Integer _offset = (offset == null || offset < 0) ? 0 : offset;
         String uri = BaseUrl.getInstance().getUrl() + "/v3/trade/history?pageSize=" + _pageSize + "&offset=" + _offset;
+        if (StringUtils.isNotEmpty(id)) {
+            uri += "&id=" + id;
+        }
+        if (StringUtils.isNotEmpty(pair)) {
+            uri += "&pair=" + pair;
+        }
         return Async.get(uri, OrderBookResponse[].class);
     }
 
