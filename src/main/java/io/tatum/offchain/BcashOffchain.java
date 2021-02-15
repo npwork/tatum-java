@@ -139,7 +139,7 @@ public class BcashOffchain {
         var lastVin = Arrays.stream(data).filter(d -> "-1".equals(d.getVIn())).findFirst();
         String last = lastVin.isPresent() ? lastVin.get().getAmount() : "0";
 
-        if (StringUtils.isNotEmpty(mnemonic)) {
+        if (StringUtils.isNotEmpty(mnemonic) && StringUtils.isEmpty(changeAddress)) {
             var xpub = WalletGenerator.generateWallet(Currency.BCH, testnet, mnemonic).getXpub();
             tx.addOutput(Address.generateAddressFromXPub(Currency.BCH, testnet, xpub, 0), last);
             for (WithdrawalResponseData input : data) {
@@ -150,7 +150,7 @@ public class BcashOffchain {
                     tx.addInput(input.getVIn(), input.getVInIndex(), privKey, value);
                 }
             }
-        } else if (keyPair != null && StringUtils.isNotEmpty(changeAddress)) {
+        } else if (StringUtils.isNotEmpty(changeAddress)) {
             tx.addOutput(changeAddress, last);
             for (WithdrawalResponseData input : data) {
                 if (!"-1".equals(input.getVIn())) {

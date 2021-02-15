@@ -168,7 +168,7 @@ public class BitcoinOffchain {
         var lastVin = Arrays.stream(data).filter(d -> "-1".equals(d.getVIn())).findFirst();
         String last = lastVin.isPresent() ? lastVin.get().getAmount() : "0";
 
-        if (StringUtils.isNotEmpty(mnemonic)) {
+        if (StringUtils.isNotEmpty(mnemonic) && StringUtils.isEmpty(changeAddress)) {
             var xpub = WalletGenerator.generateWallet(Currency.BTC, testnet, mnemonic).getXpub();
             tx.addOutput(Address.generateAddressFromXPub(Currency.BTC, testnet, xpub, 0), last);
             for (WithdrawalResponseData input : data) {
@@ -178,7 +178,7 @@ public class BitcoinOffchain {
                     tx.addInput(input.getVIn(), input.getVInIndex(), privKey);
                 }
             }
-        } else if (keyPair != null && StringUtils.isNotEmpty(changeAddress)) {
+        } else if (StringUtils.isNotEmpty(changeAddress)) {
             tx.addOutput(changeAddress, last, bech32);
             for (WithdrawalResponseData input : data) {
                 if (!"-1".equals(input.getVIn())) {
