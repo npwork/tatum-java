@@ -31,6 +31,7 @@ import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
@@ -39,6 +40,7 @@ import java.util.concurrent.ExecutionException;
 import static io.tatum.constants.Constant.*;
 import static org.bitcoinj.core.Utils.HEX;
 import static org.web3j.utils.Convert.Unit.ETHER;
+import static org.web3j.utils.Convert.Unit.GWEI;
 
 /**
  * The type Eth offchain.
@@ -67,7 +69,13 @@ public class EthOffchain {
                 withdrawal.setAddress(body.getBaseTransferEthErc20Offchain().getAddress());
 
                 var fromPriv = getPrivKey(testnet, body.getMnemonic(), body.getIndex(), body.getPrivateKey());
-                var gasPrice = EthUtil.ethGetGasPriceInWei();
+
+                BigDecimal gasPrice;
+                if (StringUtils.isNotEmpty(body.getBaseTransferEthErc20Offchain().getGasPrice())) {
+                    gasPrice = Convert.fromWei(body.getBaseTransferEthErc20Offchain().getGasPrice(), GWEI);
+                } else {
+                    gasPrice = EthUtil.ethGetGasPriceInWei();
+                }
                 var currency = new LedgerAccount().getAccountById(withdrawal.getSenderAccountId()).getCurrency();
                 var web3 = Web3jClient.get(provider);
 
@@ -80,8 +88,17 @@ public class EthOffchain {
                         gasPrice.toString(),
                         body.getBaseTransferEthErc20Offchain().getNonce());
 
-                withdrawal.setFee(Convert.fromWei(prepareEthTx.getGasLimit().multiply(gasPrice.toBigInteger()).toString(), ETHER).toString());
+                BigInteger gasLimit;
+
+                if (StringUtils.isNotEmpty(body.getBaseTransferEthErc20Offchain().getGasLimit())) {
+                    gasLimit = new BigInteger(body.getBaseTransferEthErc20Offchain().getGasLimit());
+                } else {
+                    gasLimit = prepareEthTx.getGasLimit();
+                }
+
+                withdrawal.setFee(Convert.fromWei(gasLimit.multiply(gasPrice.toBigInteger()).toString(), ETHER).toString());
                 WithdrawalResponse withdrawalResponse = Common.offchainStoreWithdrawal(withdrawal);
+
                 return OffchainUtil.broadcast(prepareEthTx.getTx(), withdrawalResponse.getId(), Currency.ETH.getCurrency());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -124,7 +141,12 @@ public class EthOffchain {
                 withdrawal.setAmount(body.getBaseTransferEthErc20Offchain().getAddress());
 
                 var fromPriv = getPrivKey(testnet, body.getMnemonic(), body.getIndex(), body.getPrivateKey());
-                var gasPrice = EthUtil.ethGetGasPriceInWei();
+                BigDecimal gasPrice;
+                if (StringUtils.isNotEmpty(body.getBaseTransferEthErc20Offchain().getGasPrice())) {
+                    gasPrice = Convert.fromWei(body.getBaseTransferEthErc20Offchain().getGasPrice(), GWEI);
+                } else {
+                    gasPrice = EthUtil.ethGetGasPriceInWei();
+                }
                 var currency = new LedgerAccount().getAccountById(withdrawal.getSenderAccountId()).getCurrency();
 
                 if (ETH_BASED_CURRENCIES.contains(currency)) {
