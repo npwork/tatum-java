@@ -13,7 +13,6 @@ import io.tatum.wallet.WalletGenerator;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.bitcoincashj.core.Coin;
 import org.bitcoincashj.core.Transaction;
 
 import java.math.BigDecimal;
@@ -57,7 +56,7 @@ public class BcashOffchain {
                     withdrawal.getAddress(),
                     body.getMnemonic(),
                     body.getKeyPair(),
-                    withdrawal.getAttr());
+                    withdrawal.getAttr(), withdrawal.getMultipleAmounts());
         } catch (Exception e) {
             e.printStackTrace();
             Common.offchainCancelWithdrawal(withdrawalResponse.getId(), true);
@@ -127,33 +126,44 @@ public class BcashOffchain {
      */
     public String prepareBitcoinCashSignedOffchainTransaction(boolean testnet, WithdrawalResponseData[] data, String amount,
                                                               String address, String mnemonic, KeyPair[] keyPair,
-                                                              String changeAddress) throws Exception {
+                                                              String changeAddress, String[] multipleAmounts) throws Exception {
 
         Preconditions.checkArgument(StringUtils.isNotEmpty(mnemonic) || ArrayUtils.isNotEmpty(keyPair),
                 "Impossible to prepare transaction. Either mnemonic or keyPair and attr must be present.");
 
         var network = testnet ? BCH_TESTNET : BCH_MAINNET;
         var tx = new TransactionBuilder(network);
-        tx.addOutput(address, amount);
+
+        if (ArrayUtils.isNotEmpty(multipleAmounts)) {
+            for (int i = 0; i < multipleAmounts.length; i++) {
+                tx.addOutput(StringUtils.split(address, ',')[i], multipleAmounts[i]);
+            }
+        } else {
+            tx.addOutput(address, amount);
+        }
 
         var lastVin = Arrays.stream(data).filter(d -> "-1".equals(d.getVIn())).findFirst();
         String last = lastVin.isPresent() ? lastVin.get().getAmount() : "0";
 
-        if (StringUtils.isNotEmpty(mnemonic) && StringUtils.isEmpty(changeAddress)) {
-            var xpub = WalletGenerator.generateWallet(Currency.BCH, testnet, mnemonic).getXpub();
-            tx.addOutput(Address.generateAddressFromXPub(Currency.BCH, testnet, xpub, 0), last);
-            for (WithdrawalResponseData input : data) {
-                if (!"-1".equals(input.getVIn())) {
+        if (new BigDecimal(last).compareTo(BigDecimal.ZERO) > 0) {
+            if (StringUtils.isNotEmpty(mnemonic) && StringUtils.isEmpty(changeAddress)) {
+                var xpub = WalletGenerator.generateWallet(Currency.BCH, testnet, mnemonic).getXpub();
+                tx.addOutput(Address.generateAddressFromXPub(Currency.BCH, testnet, xpub, 0), last);
+            } else if (StringUtils.isNotEmpty(changeAddress)) {
+                tx.addOutput(changeAddress, last);
+            } else {
+                throw new Exception("Impossible to prepare transaction. Either mnemonic or keyPair and attr must be present.");
+            }
+        }
+
+        for (WithdrawalResponseData input : data) {
+            if (!"-1".equals(input.getVIn())) {
+                if (StringUtils.isNotEmpty(mnemonic)) {
                     String value = input.getAmount();
                     var derivationKey = input.getAddress() != null ? input.getAddress().getDerivationKey() : 0;
                     String privKey = Address.generatePrivateKeyFromMnemonic(Currency.BCH, testnet, mnemonic, derivationKey);
                     tx.addInput(input.getVIn(), input.getVInIndex(), privKey, value);
-                }
-            }
-        } else if (StringUtils.isNotEmpty(changeAddress)) {
-            tx.addOutput(changeAddress, last);
-            for (WithdrawalResponseData input : data) {
-                if (!"-1".equals(input.getVIn())) {
+                } else if (ArrayUtils.isNotEmpty(keyPair)) {
                     String value = input.getAmount();
                     Optional<KeyPair> pair = Arrays.stream(keyPair).filter(k -> k.getAddress().equals(input.getAddress().getAddress())).findFirst();
                     if (pair.isPresent()) {

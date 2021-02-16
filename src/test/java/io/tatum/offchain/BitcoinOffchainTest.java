@@ -47,7 +47,8 @@ public class BitcoinOffchainTest {
         String changeAddress = "mgW4ZkNK7PZUEjfgbZC5QfQHfEJH112usb";
 
         BitcoinOffchain bitcoinOffchain = new BitcoinOffchain();
-        String preparedTx = bitcoinOffchain.prepareBitcoinSignedOffchainTransaction(testnet, data, amount, address, mnemonic, keyPair, changeAddress);
+        String preparedTx = bitcoinOffchain.prepareBitcoinSignedOffchainTransaction(testnet, data, amount, address,
+                mnemonic, keyPair, changeAddress, null);
         System.out.println(preparedTx);
 
     }
@@ -85,7 +86,8 @@ public class BitcoinOffchainTest {
         String changeAddress = "n3DS6fdDBCva3AKz12YmDSeBnNCF7Tuwvv";
 
         BitcoinOffchain bitcoinOffchain = new BitcoinOffchain();
-        String preparedTx = bitcoinOffchain.prepareBitcoinSignedOffchainTransaction(testnet, data, amountToSend, receiver, mnemonic, keyPair, changeAddress);
+        String preparedTx = bitcoinOffchain.prepareBitcoinSignedOffchainTransaction(testnet, data, amountToSend,
+                receiver, mnemonic, keyPair, changeAddress, null);
         System.out.println(preparedTx);
 
         byte[] hashd = Sha256Hash.hashTwice(HEX.decode(preparedTx));

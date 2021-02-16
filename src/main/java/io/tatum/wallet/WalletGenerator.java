@@ -187,8 +187,6 @@ public class WalletGenerator {
         switch (currency) {
             case BTC:
                 return generateBtcWallet(testnet, mnem);
-//            case Currency.ADA:
-//                return generateAdaWallet(testnet, mnem);
             case LTC:
                 return generateLtcWallet(testnet, mnem);
             case BCH:

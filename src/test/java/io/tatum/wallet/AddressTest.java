@@ -131,10 +131,4 @@ public class AddressTest {
         String rs = Address.generatePrivateKeyFromMnemonic(Currency.VET, true, "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten", 1);
         assertEquals("0x4874827a55d87f2309c55b835af509e3427aa4d52321eeb49a2b93b5c0f8edfb", rs);
     }
-
-    @Test
-    public void generateAdaPrivateKey_Test() throws Exception {
-        String rs = Address.generatePrivateKeyFromMnemonic(Currency.ADA, true, "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten", 1);
-//        assertEquals("e005602357a4265f6fc58745344c86a0260064f51712ea23e4dbf3f3795e564b83c29f3e4f84ea23a3868cd215bfe68954a6369d59bf2999b0e0e3f601778ca3c958ff0de05b645c8192022caaf6d2ae49668708a0cbc3d7e9f6f6b59fb9c4aa", rs);
-    }
 }

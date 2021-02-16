@@ -23,7 +23,7 @@ public class CreateWithdrawal {
     private String senderAccountId;
 
     @NotEmpty
-    @Size(min = 1, max = 100)
+    @Size(min = 1, max = 10000)
     private String address;
 
     @NotEmpty
@@ -42,7 +42,9 @@ public class CreateWithdrawal {
     @Size(min = 1, max = 500)
     private String senderNote;
 
+    private String[] multipleAmounts;
+
     @Size(max = 64)
-    @Pattern(regexp = "^[ -~]{0,64}$")
+    @Pattern(regexp = "^[ -~]{1,64}$")
     private String attr;
 }

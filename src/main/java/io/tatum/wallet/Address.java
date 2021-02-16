@@ -309,8 +309,6 @@ public class Address {
         switch (currency) {
             case BTC:
                 return generateBtcPrivateKey(testnet, mnemonic, i);
-            case ADA:
-                return generateAdaPrivateKey(testnet, mnemonic, i);
             case LTC:
                 return generateLtcPrivateKey(testnet, mnemonic, i);
             case BCH:

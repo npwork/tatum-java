@@ -89,10 +89,6 @@ public enum Currency implements Money {
      */
     PLTC("PLTC"),
     /**
-     * Ada currency.
-     */
-    ADA("ADA"),
-    /**
      * Xcon currency.
      */
     XCON("XCON"),
