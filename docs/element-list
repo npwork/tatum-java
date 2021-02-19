@@ -14,6 +14,7 @@ io.tatum.model.response.ledger
 io.tatum.model.response.ltc
 io.tatum.model.response.offchain
 io.tatum.model.response.security
+io.tatum.model.response.tron
 io.tatum.model.response.vet
 io.tatum.model.response.xlm
 io.tatum.model.response.xrp
