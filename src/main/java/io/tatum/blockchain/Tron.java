@@ -13,7 +13,7 @@ public class Tron {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/TronBroadcast" target="_blank">Tatum API documentation</a>
      */
-    public TransactionHash TronBroadcast(final String txData, final String signatureId) throws InterruptedException, ExecutionException, IOException {
+    public TransactionHash tronBroadcast(final String txData, final String signatureId) throws InterruptedException, ExecutionException, IOException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/tron/broadcast";
         return BlockchainUtil.broadcast(uri, txData, signatureId);
     }
@@ -21,7 +21,7 @@ public class Tron {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/TronGetCurrentBlock" target="_blank">Tatum API documentation</a>
      */
-    public TronInfo TronGetCurrentBlock() throws ExecutionException, InterruptedException {
+    public TronInfo tronGetCurrentBlock() throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/tron/current";
         return Async.get(uri, TronInfo.class);
     }
@@ -29,7 +29,7 @@ public class Tron {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/TronGetBlock" target="_blank">Tatum API documentation</a>
      */
-    public TronBlock TronGetBlock(String hash) throws ExecutionException, InterruptedException {
+    public TronBlock tronGetBlock(String hash) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/tron/block/" + hash;
         return Async.get(uri, TronBlock.class);
     }
@@ -45,7 +45,7 @@ public class Tron {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/TronGetTransaction" target="_blank">Tatum API documentation</a>
      */
-    public TronTransaction TronGetTransaction(String hash) throws ExecutionException, InterruptedException {
+    public TronTransaction tronGetTransaction(String hash) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/tron/transaction/" + hash;
         return Async.get(uri, TronTransaction.class);
     }
@@ -53,7 +53,7 @@ public class Tron {
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/TronGetAccount" target="_blank">Tatum API documentation</a>
      */
-    public TronAccount TronGetAccount(String address) throws ExecutionException, InterruptedException {
+    public TronAccount tronGetAccount(String address) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/tron/account/" + address;
         return Async.get(uri, TronAccount.class);
     }

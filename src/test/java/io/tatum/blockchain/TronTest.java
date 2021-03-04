@@ -2,7 +2,6 @@ package io.tatum.blockchain;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.tatum.model.response.btc.BtcInfo;
 import io.tatum.model.response.tron.TronAccount;
 import io.tatum.model.response.tron.TronInfo;
 import org.junit.Test;
@@ -15,7 +14,7 @@ import static org.hamcrest.Matchers.hasProperty;
 public class TronTest {
     @Test
     public void tronGetCurrentBlockTest() throws InterruptedException, ExecutionException {
-        TronInfo tronInfo = new Tron().TronGetCurrentBlock();
+        TronInfo tronInfo = new Tron().tronGetCurrentBlock();
         System.out.println(tronInfo);
 //        assertThat(tronInfo, hasProperty("blockNumber"));
 //        assertThat(tronInfo, hasProperty("hash"));
@@ -23,7 +22,7 @@ public class TronTest {
 
     @Test
     public void tronGetAccountTest() throws ExecutionException, InterruptedException, JsonProcessingException {
-        TronAccount tronAccount = new Tron().TronGetAccount("TR4KGhjnaysHrw6GiLnL75rNfoBQWZHxm8");
+        TronAccount tronAccount = new Tron().tronGetAccount("TR4KGhjnaysHrw6GiLnL75rNfoBQWZHxm8");
         System.out.println(tronAccount);
     }
 

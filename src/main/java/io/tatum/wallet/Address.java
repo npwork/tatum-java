@@ -113,6 +113,22 @@ public class Address {
     }
 
     /**
+     * Generate Tron address
+     * @param xpub extended public key to generate address from
+     * @param i derivation index of address to generate. Up to 2^31 addresses can be generated.
+     * @returns blockchain address
+     */
+    private static String generateTronAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
+//    const w = fromPublicKey(Buffer.from(xpub.slice(0, 66), 'hex'), Buffer.from(xpub.slice(-64), 'hex'));
+//        return TronWeb.address.fromHex(generateAddress(w.derive(i).publicKey));
+
+        return CompletableFuture.supplyAsync(() -> {
+            ChildNumber path = new ChildNumber(i, false);
+            return AddressBuilder.build().network(TRON_MAINNET).fromBase58("xpub" + xpub).derivePath(path).toBase58();
+        }).get();
+    }
+
+    /**
      * Generate Bitcoin private key from mnemonic seed
      *
      * @param testnet  testnet or mainnet version of address
@@ -251,6 +267,24 @@ public class Address {
     }
 
     /**
+     * Generate Tron private key from mnemonic seed
+     * @param mnemonic mnemonic to generate private key from
+     * @param i derivation index of private key to generate.
+     * @returns blockchain private key to the address
+     */
+    private static String generateTronPrivateKey(Boolean testnet, String mnemonic, int i) throws ExecutionException, InterruptedException {
+
+        return CompletableFuture.supplyAsync(() -> {
+            List<ChildNumber> path = HDUtils.parsePath(TRON_DERIVATION_PATH);
+            return PrivateKeyBuilder.build()
+                    .fromSeed(mnemonic)
+                    .derivePath(path)
+                    .derive(i)
+                    .toHex();
+        }).get();
+    }
+
+    /**
      * Generate address
      *
      * @param currency type of blockchain
@@ -265,12 +299,13 @@ public class Address {
         switch (currency) {
             case BTC:
                 return generateBtcAddress(testnet, xpub, i);
-//            case Currency.ADA:
-//                return generateAdaAddress(testnet, xpub, i);
             case LTC:
                 return generateLtcAddress(testnet, xpub, i);
             case BCH:
                 return generateBchAddress(testnet, xpub, i);
+            case TRON:
+            case USDT_TRON:
+                return generateTronAddress(testnet, xpub, i);
             case USDT:
             case LEO:
             case LINK:
@@ -313,6 +348,9 @@ public class Address {
                 return generateLtcPrivateKey(testnet, mnemonic, i);
             case BCH:
                 return generateBchPrivateKey(testnet, mnemonic, i);
+            case TRON:
+            case USDT_TRON:
+                return generateTronPrivateKey(testnet, mnemonic, i);
             case USDT:
             case LEO:
             case LINK:

@@ -28,7 +28,7 @@ public class BlockchainUtil {
         var values = new HashMap<String, String>() {{
             put("txData", txData);
         }};
-        if (signatureId != null) {
+        if (signatureId != null && signatureId != "") {
             values.put("signatureId", signatureId);
         }
 

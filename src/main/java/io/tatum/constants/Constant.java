@@ -1,10 +1,7 @@
 package io.tatum.constants;
 
 import io.tatum.model.request.Currency;
-import io.tatum.network.EthMainNetParams;
-import io.tatum.network.VetMainNetParams;
-import io.tatum.network.LtcMainNetParams;
-import io.tatum.network.LtcTestNet3Params;
+import io.tatum.network.*;
 import org.bitcoincashj.params.UnitTestParams;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.params.MainNetParams;
@@ -83,6 +80,8 @@ public class Constant {
     public static final NetworkParameters VET_MAINNET = VetMainNetParams.get();
 
 
+    public static final NetworkParameters TRON_MAINNET = TronMainNetParams.get();
+
     /**
      * The constant TESTNET_DERIVATION_PATH.
      */
@@ -120,6 +119,8 @@ public class Constant {
      * The constant ADA_DERIVATION_PATH.
      */
     public static final String ADA_DERIVATION_PATH = "M/44H/1815H/0H/0/0";
+
+    public static final String TRON_DERIVATION_PATH = "M/44H/195H/0H/0";
 
     /**
      * The constant TRANSFER_METHOD_ABI.
@@ -165,7 +166,8 @@ public class Constant {
             new AbstractMap.SimpleEntry<>(PAXG.toString(), "0x45804880de22913dafe09f4980848ece6ecbaf78"),
             new AbstractMap.SimpleEntry<>(PLTC.toString(), "0x429d83bb0dcb8cdd5311e34680adc8b12070a07f"),
             new AbstractMap.SimpleEntry<>(MMY.toString(), "0x385ddf50c3de724f6b8ecb41745c29f9dd3c6d75"),
-            new AbstractMap.SimpleEntry<>(XCON.toString(), "0x0f237d5ea7876e0e2906034d98fdb20d43666ad4")
+            new AbstractMap.SimpleEntry<>(XCON.toString(), "0x0f237d5ea7876e0e2906034d98fdb20d43666ad4"),
+            new AbstractMap.SimpleEntry<>(USDT_TRON.toString(), "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t")
     );
 
 
@@ -174,6 +176,7 @@ public class Constant {
      */
     public static final Map<String, Integer> CONTRACT_DECIMALS = Map.ofEntries(
             new AbstractMap.SimpleEntry<>(USDT.toString(), 6),
+            new AbstractMap.SimpleEntry<>(USDT_TRON.toString(), 6),
             new AbstractMap.SimpleEntry<>(LEO.toString(), 18),
             new AbstractMap.SimpleEntry<>(UNI.toString(), 18),
             new AbstractMap.SimpleEntry<>(LINK.toString(), 18),

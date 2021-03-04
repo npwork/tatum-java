@@ -72,6 +72,12 @@ public class AddressTest {
     }
 
     @Test
+    public void generateTronAddress_Mainnet_Test() throws Exception {
+        String rs = Address.generateAddressFromXPub(Currency.TRON,false, "0244b3f40c6e570ae0032f6d7be87737a6c4e5314a4a1a82e22d0460a0d0cd794936c61f0c80dc74ace4cd04690d4eeb1aa6555883be006e1748306faa7ed3a26a", 1);
+        assertEquals("TFFBpkRNro4Pe4154ayGWx7C6Ev7BvQZ6t", rs);
+    }
+
+    @Test
     public void generateBtcPrivateKey_Mainnet_Test() throws Exception {
         String rs = Address.generatePrivateKeyFromMnemonic(Currency.BTC, false, "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten", 1);
         assertEquals("KwrYonf8pFfyQR87NTn124Ep9zoJsZMBCoVUi7mjMc1eTHDyLyBN", rs);
