@@ -74,8 +74,8 @@ public class TronTx {
      * @param body    content of the transaction to broadcast
      * @returns transaction id of the transaction in the blockchain
      */
-    public TransactionHash sendTronTrc10Transaction(boolean testnet, TransferTronTrc10 body) throws IllegalException, InterruptedException, ExecutionException, IOException {
-        return new Tron().tronBroadcast(prepareTronTrc10SignedTransaction(testnet, body), null);
+    public TransactionHash sendTronTrc10Transaction(boolean testnet, TransferTronTrc10 body, int precision) throws IllegalException, InterruptedException, ExecutionException, IOException {
+        return new Tron().tronBroadcast(prepareTronTrc10SignedTransaction(testnet, body, precision), null);
     }
 
     /**
@@ -181,7 +181,7 @@ public class TronTx {
      * @param body    content of the transaction to broadcast
      * @returns transaction data to be broadcast to blockchain.
      */
-    public String prepareTronTrc10SignedTransaction(boolean testnet, TransferTronTrc10 body) throws IllegalException {
+    public String prepareTronTrc10SignedTransaction(boolean testnet, TransferTronTrc10 body, int precision) throws IllegalException {
         Preconditions.checkArgument(ObjectValidator.isValidated(body));
         TronClient client = testnet ? TronClient.ofShasta(body.getFromPrivateKey()) : TronClient.ofMainnet(body.getFromPrivateKey());
 

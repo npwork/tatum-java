@@ -1,5 +1,6 @@
 package io.tatum.model.response.ledger;
 
+import io.tatum.model.request.TrcType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -91,4 +92,18 @@ public class VC {
      * @memberof VC
      */
     private String initialAddress;
+
+    /**
+     * In ase of Tron based VC, this is type of TRC token.
+     * @type {string}
+     * @memberOf VC
+     */
+    private TrcType trcType;
+
+    /**
+     * Number of decimal places for Tron based assets
+     * @type {number}
+     * @memberof VC
+     */
+    int precision;
 }
