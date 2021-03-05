@@ -338,6 +338,7 @@ public class Address {
             case USDT_TRON:
                 return generateTronAddress(testnet, xpub, i);
             case USDT:
+            case WBTC:
             case LEO:
             case LINK:
             case UNI:
@@ -383,6 +384,7 @@ public class Address {
             case USDT_TRON:
                 return generateTronPrivateKey(testnet, mnemonic, i);
             case USDT:
+            case WBTC:
             case LEO:
             case LINK:
             case UNI:

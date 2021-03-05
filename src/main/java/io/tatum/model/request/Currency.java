@@ -54,6 +54,9 @@ public enum Currency implements Money {
      * Link currency.
      */
     LINK("LINK"),
+
+    WBTC("WBTC"),
+
     /**
      * Uni currency.
      */

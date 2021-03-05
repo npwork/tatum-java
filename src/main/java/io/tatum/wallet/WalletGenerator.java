@@ -212,6 +212,7 @@ public class WalletGenerator {
             case USDT_TRON:
                 return generateTronWallet(mnem);
             case USDT:
+            case WBTC:
             case LEO:
             case LINK:
             case UNI:
