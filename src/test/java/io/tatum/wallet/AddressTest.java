@@ -137,4 +137,10 @@ public class AddressTest {
         String rs = Address.generatePrivateKeyFromMnemonic(Currency.VET, true, "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten", 1);
         assertEquals("0x4874827a55d87f2309c55b835af509e3427aa4d52321eeb49a2b93b5c0f8edfb", rs);
     }
+
+    @Test
+    public void generateTronPrivateKey_Testnet_Test() throws Exception {
+        String rs = Address.generatePrivateKeyFromMnemonic(Currency.TRON, true, "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten", 1);
+        assertEquals("e75d702ce00987633f8009fbb1eabb5b187cb5b50fe9179a8d6cee6bab076b66", rs);
+    }
 }

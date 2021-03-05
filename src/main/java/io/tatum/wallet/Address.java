@@ -1,22 +1,31 @@
 package io.tatum.wallet;
 
+import com.google.common.collect.ImmutableList;
 import io.tatum.model.request.Currency;
 import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.crypto.ChildNumber;
-import org.bitcoinj.crypto.HDUtils;
+import org.bitcoinj.crypto.*;
+import org.tron.common.crypto.Hash;
+import org.tron.common.crypto.Sha256Sm3Hash;
+import org.tron.common.utils.Base58;
+import org.tron.common.utils.ByteArray;
+import org.tron.core.config.Parameter;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import static io.tatum.constants.Constant.*;
+import static java.util.Arrays.copyOfRange;
+import static org.bitcoinj.core.ECKey.CURVE;
+import static org.bitcoinj.core.Utils.HEX;
 
 /**
  * The type Address.
  */
 public class Address {
 
-    private Address() {}
+    private Address() {
+    }
 
     /**
      * Generate Bitcoin address
@@ -114,18 +123,39 @@ public class Address {
 
     /**
      * Generate Tron address
+     *
      * @param xpub extended public key to generate address from
-     * @param i derivation index of address to generate. Up to 2^31 addresses can be generated.
+     * @param i    derivation index of address to generate. Up to 2^31 addresses can be generated.
      * @returns blockchain address
      */
     private static String generateTronAddress(Boolean testnet, String xpub, int i) throws ExecutionException, InterruptedException {
-//    const w = fromPublicKey(Buffer.from(xpub.slice(0, 66), 'hex'), Buffer.from(xpub.slice(-64), 'hex'));
-//        return TronWeb.address.fromHex(generateAddress(w.derive(i).publicKey));
-
         return CompletableFuture.supplyAsync(() -> {
-            ChildNumber path = new ChildNumber(i, false);
-            return AddressBuilder.build().network(TRON_MAINNET).fromBase58("xpub" + xpub).derivePath(path).toBase58();
+            ChildNumber child = new ChildNumber(i, false);
+            ImmutableList<ChildNumber> path = ImmutableList.copyOf(HDUtils.parsePath(TRON_DERIVATION_PATH));
+            int depth = path.size() - 1;
+            LazyECPoint pubKey = new LazyECPoint(CURVE.getCurve(), HEX.decode(xpub.substring(0, 66)));
+            DeterministicKey deterministicKey = new DeterministicKey(path.subList(0, depth),
+                    HEX.decode(xpub.substring(66)), pubKey, null, depth, 0);
+            DeterministicKey key = HDKeyDerivation.deriveChildKey(deterministicKey, child);
+            return address2Base58(public2Address(key.getPubKeyPoint().getEncoded(false)));
         }).get();
+    }
+
+    private static String address2Base58(byte[] address) {
+        byte[] hash0 = Sha256Sm3Hash.hash(address);
+        byte[] hash1 = Sha256Sm3Hash.hash(hash0);
+        byte[] inputCheck = new byte[address.length + 4];
+        System.arraycopy(address, 0, inputCheck, 0, address.length);
+        System.arraycopy(hash1, 0, inputCheck, address.length, 4);
+        return Base58.encode(inputCheck);
+    }
+
+    private static byte[] public2Address(byte[] publicKey) {
+        byte[] hash = Hash.sha3(copyOfRange(publicKey, 1, publicKey.length));
+        System.out.println("sha3 = " + ByteArray.toHexString(hash));
+        byte[] address = copyOfRange(hash, 11, hash.length);
+        address[0] = Parameter.CommonConstant.ADD_PRE_FIX_BYTE_MAINNET;
+        return address;
     }
 
     /**
@@ -268,8 +298,9 @@ public class Address {
 
     /**
      * Generate Tron private key from mnemonic seed
+     *
      * @param mnemonic mnemonic to generate private key from
-     * @param i derivation index of private key to generate.
+     * @param i        derivation index of private key to generate.
      * @returns blockchain private key to the address
      */
     private static String generateTronPrivateKey(Boolean testnet, String mnemonic, int i) throws ExecutionException, InterruptedException {

@@ -156,6 +156,7 @@ public class WalletGenerator {
 
     /**
      * Generate Stellar address and secret.
+     *
      * @param secret secret of the account to generate address
      */
     private static Wallet generateXlmWallet(String secret) {
@@ -164,6 +165,22 @@ public class WalletGenerator {
         result.setAddress(HEX.encode(keyPair.getPublicKey()));
         result.setSecret(new String(keyPair.getSecretSeed()));
         return result;
+    }
+
+    /**
+     * Generate Tron wallet
+     *
+     * @returns mnemonic for the wallet
+     */
+    private static Wallet generateTronWallet(String mnem) throws ExecutionException, InterruptedException {
+        return CompletableFuture.supplyAsync(() -> {
+            List<ChildNumber> path = HDUtils.parsePath(TRON_DERIVATION_PATH);
+            WalletBuilder walletBuilder = WalletBuilder.build().network(TRON_MAINNET).fromSeed(mnem).derivePath(path);
+            Wallet wallet = new Wallet();
+            wallet.setMnemonic(mnem);
+            wallet.setXpub(walletBuilder.getEhKey().getPublicKeyAsHex() + HEX.encode(walletBuilder.getEhKey().getChainCode()));
+            return wallet;
+        }).get();
     }
 
     /**
@@ -191,6 +208,9 @@ public class WalletGenerator {
                 return generateLtcWallet(testnet, mnem);
             case BCH:
                 return generateBchWallet(testnet, mnem);
+            case TRON:
+            case USDT_TRON:
+                return generateTronWallet(mnem);
             case USDT:
             case LEO:
             case LINK:
