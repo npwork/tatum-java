@@ -247,10 +247,19 @@ public class TronTx {
         HashMap<String, String> frozenSupply = new HashMap<>();
         frozenSupply.put("0", "0");
 
-        Response.TransactionExtention txExt = client.createAssetIssue(ownerAddress, body.getName(), body.getAbbreviation(), body.getTotalSupply(), 0,
-                0, new Date(System.currentTimeMillis() + 60_000L).getTime(),
-                new Date(System.currentTimeMillis() + 100_000L).getTime(), body.getUrl(),
-                0, 0, body.getDecimals(), frozenSupply, body.getDescription());
+        Response.TransactionExtention txExt = client.createAssetIssue(ownerAddress, body.getName(),
+                body.getAbbreviation(),
+                body.getTotalSupply(),
+                0,
+                0,
+                new Date(System.currentTimeMillis() + 60_000L).getTime(),
+                new Date(System.currentTimeMillis() + 100_000L).getTime(),
+                body.getUrl(),
+                0,
+                0,
+                body.getDecimals(),
+                frozenSupply,
+                body.getDescription());
 
         Chain.Transaction signedTxn = client.signTransaction(txExt);
         System.out.println(signedTxn.toString());
