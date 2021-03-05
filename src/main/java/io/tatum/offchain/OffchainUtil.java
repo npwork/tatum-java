@@ -36,9 +36,13 @@ public class OffchainUtil {
             return new BroadcastResult(txHash, id);
         } catch (Exception e) {
             e.printStackTrace();
-            Common.offchainCancelWithdrawal(id, true);
-            throw e;
+            try {
+                Common.offchainCancelWithdrawal(id, true);
+            } catch (Exception ex) {
+                return new BroadcastResult(null, id);
+            }
         }
+        return null;
     }
 
 }
