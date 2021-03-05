@@ -72,6 +72,12 @@ public class AddressTest {
     }
 
     @Test
+    public void generateTronAddress_Mainnet_Test() throws Exception {
+        String rs = Address.generateAddressFromXPub(Currency.TRON,false, "0244b3f40c6e570ae0032f6d7be87737a6c4e5314a4a1a82e22d0460a0d0cd794936c61f0c80dc74ace4cd04690d4eeb1aa6555883be006e1748306faa7ed3a26a", 1);
+        assertEquals("TFFBpkRNro4Pe4154ayGWx7C6Ev7BvQZ6t", rs);
+    }
+
+    @Test
     public void generateBtcPrivateKey_Mainnet_Test() throws Exception {
         String rs = Address.generatePrivateKeyFromMnemonic(Currency.BTC, false, "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten", 1);
         assertEquals("KwrYonf8pFfyQR87NTn124Ep9zoJsZMBCoVUi7mjMc1eTHDyLyBN", rs);
@@ -133,8 +139,8 @@ public class AddressTest {
     }
 
     @Test
-    public void generateAdaPrivateKey_Test() throws Exception {
-        String rs = Address.generatePrivateKeyFromMnemonic(Currency.ADA, true, "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten", 1);
-//        assertEquals("e005602357a4265f6fc58745344c86a0260064f51712ea23e4dbf3f3795e564b83c29f3e4f84ea23a3868cd215bfe68954a6369d59bf2999b0e0e3f601778ca3c958ff0de05b645c8192022caaf6d2ae49668708a0cbc3d7e9f6f6b59fb9c4aa", rs);
+    public void generateTronPrivateKey_Testnet_Test() throws Exception {
+        String rs = Address.generatePrivateKeyFromMnemonic(Currency.TRON, true, "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten", 1);
+        assertEquals("e75d702ce00987633f8009fbb1eabb5b187cb5b50fe9179a8d6cee6bab076b66", rs);
     }
 }

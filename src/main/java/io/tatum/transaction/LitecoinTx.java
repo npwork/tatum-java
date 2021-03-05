@@ -36,54 +36,60 @@ public class LitecoinTx {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public String prepareSignedTransaction(NetworkParameters network, TransferBtcBasedBlockchain body) throws ExecutionException, InterruptedException {
+    public String prepareSignedTransaction(NetworkParameters network, TransferBtcBasedBlockchain body, boolean testnet) throws Exception {
 
         Preconditions.checkArgument(ObjectValidator.isValidated(body));
 
         Preconditions.checkArgument(
                 (ArrayUtils.isEmpty(body.getFromAddress()) && ArrayUtils.isEmpty(body.getFromUTXO())) ||
-                (ArrayUtils.isNotEmpty(body.getFromAddress()) && ArrayUtils.isNotEmpty(body.getFromUTXO())),
+                        (ArrayUtils.isNotEmpty(body.getFromAddress()) && ArrayUtils.isNotEmpty(body.getFromUTXO())),
                 "Only accept from either addresses or utxo");
 
-        return CompletableFuture.supplyAsync(() -> {
-            var fromUTXO = body.getFromUTXO();
-            var to = body.getTo();
-            var fromAddress = body.getFromAddress();
+        var fromUTXO = body.getFromUTXO();
+        var to = body.getTo();
+        var fromAddress = body.getFromAddress();
 
-            Litecoin litecoin = new Litecoin();
-            TransactionBuilder transactionBuilder = new TransactionBuilder(network);
+        Litecoin litecoin = new Litecoin();
+        TransactionBuilder transactionBuilder = new TransactionBuilder(network);
 
-            // adding outputs before adding inputs
+        // adding outputs before adding inputs
+        try {
             for (var item : to) {
+
                 transactionBuilder.addOutput(item.getAddress(), item.getValue());
             }
+        } catch (Exception e) {
+            if (!testnet) {
+                throw new Exception("Wrong output address. Supported LTC address should start with M or L.");
+            }
+            throw e;
+        }
 
-            // adding inputs
-            try {
-                if (ArrayUtils.isNotEmpty(fromAddress)) {
-                    for (var item : fromAddress) {
-                        var txs = litecoin.ltcGetTxForAccount(item.getAddress(), null, null);
-                        for (var tx : txs) {
-                            LtcTxOutputs[] outputs = tx.getOutputs();
-                            for (int i = 0; i < outputs.length; i++) {
-                                if (outputs[i].getAddress().equals(item.getAddress())) {
-                                    LtcUTXO utxo = litecoin.ltcGetUTXO(tx.getHash(), outputs[i].getValue());
-                                    transactionBuilder.addInput(item.getAddress(), utxo.getIndex().longValue(), item.getPrivateKey());
-                                }
+        // adding inputs
+        try {
+            if (ArrayUtils.isNotEmpty(fromAddress)) {
+                for (var item : fromAddress) {
+                    var txs = litecoin.ltcGetTxForAccount(item.getAddress(), null, null);
+                    for (var tx : txs) {
+                        LtcTxOutputs[] outputs = tx.getOutputs();
+                        for (int i = 0; i < outputs.length; i++) {
+                            if (outputs[i].getAddress().equals(item.getAddress())) {
+                                LtcUTXO utxo = litecoin.ltcGetUTXO(tx.getHash(), outputs[i].getValue());
+                                transactionBuilder.addInput(item.getAddress(), utxo.getIndex().longValue(), item.getPrivateKey());
                             }
                         }
                     }
-                } else if (ArrayUtils.isNotEmpty(fromUTXO)) {
-                    for (var item : fromUTXO) {
-                        transactionBuilder.addInput(item.getTxHash(), item.getIndex(), item.getPrivateKey());
-                    }
                 }
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-                return null;
+            } else if (ArrayUtils.isNotEmpty(fromUTXO)) {
+                for (var item : fromUTXO) {
+                    transactionBuilder.addInput(item.getTxHash(), item.getIndex(), item.getPrivateKey());
+                }
             }
-            return transactionBuilder.build().toHex();
-        }).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return transactionBuilder.build().toHex();
     }
 
     /**
@@ -126,9 +132,9 @@ public class LitecoinTx {
      * @throws IOException          the io exception
      * @returns transaction id of the transaction in the blockchain
      */
-    public TransactionHash sendLitecoinTransaction(NetworkParameters network, TransferBtcBasedBlockchain body) throws ExecutionException, InterruptedException, IOException {
+    public TransactionHash sendLitecoinTransaction(NetworkParameters network, TransferBtcBasedBlockchain body, boolean testnet) throws Exception {
         Litecoin litecoin = new Litecoin();
-        String txData = new LitecoinTx().prepareSignedTransaction(network, body);
+        String txData = new LitecoinTx().prepareSignedTransaction(network, body, testnet);
         return litecoin.ltcBroadcast(txData, null);
     }
 }

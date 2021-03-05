@@ -1,14 +1,12 @@
 package io.tatum.offchain;
 
 import com.google.common.base.Preconditions;
-import io.tatum.annotation.NotEmptyFields;
 import io.tatum.model.request.*;
-import io.tatum.model.response.offchain.BroadcastResult;
 import io.tatum.model.response.kms.TransactionKMS;
+import io.tatum.model.response.offchain.BroadcastResult;
 import io.tatum.model.response.offchain.WithdrawalResponse;
 import io.tatum.model.response.offchain.WithdrawalResponseData;
 import io.tatum.transaction.bitcoin.TransactionBuilder;
-import io.tatum.utils.Convert;
 import io.tatum.utils.ObjectValidator;
 import io.tatum.wallet.Address;
 import io.tatum.wallet.WalletGenerator;
@@ -17,6 +15,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
+import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -62,7 +61,7 @@ public class BitcoinOffchain {
                     withdrawal.getAddress(),
                     body.getMnemonic(),
                     body.getKeyPair(),
-                    withdrawal.getAttr());
+                    withdrawal.getAttr(), withdrawal.getMultipleAmounts());
         } catch (Exception e) {
             e.printStackTrace();
             Common.offchainCancelWithdrawal(withdrawalResponse.getId(), true);
@@ -133,59 +132,72 @@ public class BitcoinOffchain {
      * @throws Exception the exception
      * @returns transaction data to be broadcast to blockchain.
      */
-    public String prepareBitcoinSignedOffchainTransaction(boolean testnet, WithdrawalResponseData[] data, String amount,
-                                                          String address, String mnemonic, KeyPair[] keyPair,
-                                                          String changeAddress) throws Exception {
+    public String prepareBitcoinSignedOffchainTransaction(boolean testnet, WithdrawalResponseData[] data,
+                                                          String amount, String address, String mnemonic,
+                                                          KeyPair[] keyPair, String changeAddress,
+                                                          String[] multipleAmounts) throws Exception {
 
-        return prepareBitcoinSignedOffchainTransaction(testnet, data, amount, address, mnemonic, keyPair, changeAddress, false);
+        return prepareBitcoinSignedOffchainTransaction(testnet, data, amount, address, mnemonic, keyPair, changeAddress,
+                multipleAmounts, false);
     }
 
     /**
      * Sign Bitcoin transaction with private keys locally. Nothing is broadcast to the blockchain.
      *
-     * @param testnet       mainnet or testnet version
-     * @param data          data from Tatum system to prepare transaction from
-     * @param amount        amount to send
-     * @param address       recipient address
-     * @param mnemonic      mnemonic to sign transaction from. mnemonic or keyPair must be present
-     * @param keyPair       keyPair to sign transaction from. keyPair or mnemonic must be present
-     * @param changeAddress address to send the rest of the unused coins
+     * @param testnet         mainnet or testnet version
+     * @param data            data from Tatum system to prepare transaction from
+     * @param amount          amount to send
+     * @param address         recipient address, if multiple recipients are present, it should be string separated by ','
+     * @param mnemonic        mnemonic to sign transaction from. mnemonic or keyPair must be present
+     * @param keyPair         keyPair to sign transaction from. keyPair or mnemonic must be present
+     * @param changeAddress   address to send the rest of the unused coins
+     * @param multipleAmounts if multiple recipients are present in the address separated by ',', this should be list of amounts to send
      * @return the string
      * @throws Exception the exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareBitcoinSignedOffchainTransaction(boolean testnet, WithdrawalResponseData[] data, String amount,
                                                           String address, String mnemonic, KeyPair[] keyPair,
-                                                          String changeAddress, boolean bech32) throws Exception {
+                                                          String changeAddress, String[] multipleAmounts,
+                                                          boolean bech32) throws Exception {
 
         Preconditions.checkArgument(StringUtils.isNotEmpty(mnemonic) || ArrayUtils.isNotEmpty(keyPair),
                 "Impossible to prepare transaction. Either mnemonic or keyPair and attr must be present.");
 
         NetworkParameters network = testnet ? BITCOIN_TESTNET : BITCOIN_MAINNET;
         var tx = new TransactionBuilder(network);
-        tx.addOutput(address, amount);
+
+        if (ArrayUtils.isNotEmpty(multipleAmounts)) {
+            for (int i = 0; i < multipleAmounts.length; i++) {
+                tx.addOutput(StringUtils.split(address, ',')[i], multipleAmounts[i]);
+            }
+
+        } else {
+            tx.addOutput(address, amount);
+        }
 
         var lastVin = Arrays.stream(data).filter(d -> "-1".equals(d.getVIn())).findFirst();
         String last = lastVin.isPresent() ? lastVin.get().getAmount() : "0";
 
-        if (StringUtils.isNotEmpty(mnemonic)) {
-            var xpub = WalletGenerator.generateWallet(Currency.BTC, testnet, mnemonic).getXpub();
-            tx.addOutput(Address.generateAddressFromXPub(Currency.BTC, testnet, xpub, 0), last);
-            for (WithdrawalResponseData input : data) {
-                if (!"-1".equals(input.getVIn())) {
+        if (new BigDecimal(last).compareTo(BigDecimal.ZERO) > 0) {
+            if (StringUtils.isNotEmpty(mnemonic) && StringUtils.isEmpty(changeAddress)) {
+                var xpub = WalletGenerator.generateWallet(Currency.BTC, testnet, mnemonic).getXpub();
+                tx.addOutput(Address.generateAddressFromXPub(Currency.BTC, testnet, xpub, 0), last);
+            } else if (StringUtils.isNotEmpty(changeAddress)) {
+                tx.addOutput(changeAddress, last, bech32);
+            } else {
+                throw new Exception("Impossible to prepare transaction. Either mnemonic or keyPair and attr must be present.");
+            }
+        }
+
+        for (WithdrawalResponseData input : data) {
+            if (!"-1".equals(input.getVIn())) {
+                if (StringUtils.isNotEmpty(mnemonic)) {
                     var derivationKey = input.getAddress() != null ? input.getAddress().getDerivationKey() : 0;
                     String privKey = Address.generatePrivateKeyFromMnemonic(Currency.BTC, testnet, mnemonic, derivationKey);
                     tx.addInput(input.getVIn(), input.getVInIndex(), privKey);
-                }
-            }
-        } else if (keyPair != null && StringUtils.isNotEmpty(changeAddress)) {
-            tx.addOutput(changeAddress, last, bech32);
-            for (WithdrawalResponseData input : data) {
-                if (!"-1".equals(input.getVIn())) {
-                    Optional<KeyPair> pair = Arrays.stream(keyPair)
-                            .filter(k -> k != null && k.getAddress().equals(input.getAddress().getAddress()))
-                            .findFirst();
-
+                } else if (ArrayUtils.isNotEmpty(keyPair)) {
+                    Optional<KeyPair> pair = getKeyPairByAddress(keyPair, input.getAddress().getAddress());
                     if (pair.isPresent()) {
                         String privKey = pair.get().getPrivateKey();
                         tx.addInput(input.getVIn(), input.getVInIndex(), privKey);
@@ -195,5 +207,12 @@ public class BitcoinOffchain {
         }
 
         return tx.build().toHex();
+    }
+
+    @NotNull
+    private Optional<KeyPair> getKeyPairByAddress(KeyPair[] keyPair, String address) {
+        return Arrays.stream(keyPair)
+                .filter(k -> k != null && k.getAddress().equals(address))
+                .findFirst();
     }
 }

@@ -5,7 +5,7 @@
 
     <groupId>io.tatum</groupId>
     <artifactId>tatum-java</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.11</java.version>
@@ -19,8 +19,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.1</version>
-            <scope>test</scope>
+            <version>4.13.2</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -95,11 +94,6 @@
             <version>4.4</version>
         </dependency>
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>30.1-jre</version>
-        </dependency>
-        <dependency>
             <groupId>org.bitcoinj</groupId>
             <artifactId>bitcoinj-core</artifactId>
             <version>0.15.9</version>
@@ -113,11 +107,27 @@
             <groupId>io.xpring</groupId>
             <artifactId>xpring4j</artifactId>
             <version>6.1.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.grpc</groupId>
+                    <artifactId>grpc-netty-shaded</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.web3j</groupId>
             <artifactId>core</artifactId>
             <version>4.5.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.github.stellar</groupId>
@@ -141,22 +151,111 @@
             <version>1.6.4</version>
             <scope>test</scope>
         </dependency>
+        <!--<dependency>
+            <groupId>tron.java</groupId>
+            <artifactId>wallet</artifactId>
+            <version>1.0.11</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.grpc</groupId>
+                    <artifactId>grpc-protobuf</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.grpc</groupId>
+                    <artifactId>grpc-stub</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.code.findbugs</groupId>
+                    <artifactId>jsr305</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-collections4</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-lang3</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.alibaba</groupId>
+                    <artifactId>fastjson</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.projectlombok</groupId>
+                    <artifactId>lombok</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.protobuf</groupId>
+                    <artifactId>protobuf-java</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>-->
+        <dependency>
+            <groupId>tronj</groupId>
+            <artifactId>client</artifactId>
+            <version>0.1.12</version>
+        </dependency>
+        <dependency>
+            <groupId>tronj</groupId>
+            <artifactId>wallet</artifactId>
+            <version>1.0.11</version>
+        </dependency>
+        <dependency>
+            <groupId>tronj</groupId>
+            <artifactId>abi</artifactId>
+            <version>0.1.12</version>
+        </dependency>
+        <dependency>
+            <groupId>tronj</groupId>
+            <artifactId>utils</artifactId>
+            <version>0.1.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <repositories>
+        <repository>
+            <id>repsy</id>
+            <name>Tatumio Maven Repositoty on Repsy</name>
+            <url>https://repo.repsy.io/mvn/tatumio/tatumio</url>
+        </repository>
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
         <repository>
-            <id>repsy</id>
-            <name>Tatumio Maven Repositoty on Repsy</name>
-            <url>https://repo.repsy.io/mvn/tatumio/bitcoincashj</url>
-        </repository>
-        <repository>
-            <id>repsy thor</id>
-            <name>Tatumio Maven Repositoty on Repsy</name>
-            <url>https://repo.repsy.io/mvn/tatumio/thor</url>
+            <id>tronj</id>
+            <name>tronj</name>
+            <url>https://dl.bintray.com/tronj/tronj</url>
         </repository>
     </repositories>
 

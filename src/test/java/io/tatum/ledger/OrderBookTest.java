@@ -14,7 +14,7 @@ public class OrderBookTest {
     @Test
     public void getHistoricalTradesTest() throws ExecutionException, InterruptedException {
         OrderBook orderBook = new OrderBook();
-        OrderBookResponse[] orderBookResponses = orderBook.getHistoricalTrades(null, null);
+        OrderBookResponse[] orderBookResponses = orderBook.getHistoricalTrades(null, null, "", "");
         if (orderBookResponses != null && orderBookResponses.length > 0) {
             System.out.println(orderBookResponses[0]);
         }

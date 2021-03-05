@@ -67,6 +67,10 @@ public class WalletBuilder {
         return this;
     }
 
+    public DeterministicKey getEhKey() {
+        return this.ehkey;
+    }
+
     /**
      * To base 58 string.
      *

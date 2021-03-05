@@ -13,8 +13,11 @@ import io.tatum.wallet.WalletGenerator;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bitcoinj.core.Transaction;
+import org.jetbrains.annotations.NotNull;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Optional;
 
 import static io.tatum.constants.Constant.LITECOIN_MAINNET;
 import static io.tatum.constants.Constant.LITECOIN_TESTNET;
@@ -54,7 +57,7 @@ public class LitecoinOffchain {
                     withdrawal.getAddress(),
                     body.getMnemonic(),
                     body.getKeyPair(),
-                    withdrawal.getAttr());
+                    withdrawal.getAttr(), withdrawal.getMultipleAmounts());
         } catch (Exception e) {
             e.printStackTrace();
             Common.offchainCancelWithdrawal(withdrawalResponse.getId(), true);
@@ -114,52 +117,82 @@ public class LitecoinOffchain {
     /**
      * Sign Litecoin transaction with private keys locally. Nothing is broadcast to the blockchain.
      *
-     * @param testnet       mainnet or testnet version
-     * @param data          data from Tatum system to prepare transaction from
-     * @param amount        amount to send
-     * @param address       recipient address
-     * @param mnemonic      mnemonic to sign transaction from. mnemonic or keyPair must be present
-     * @param keyPair       keyPair to sign transaction from. keyPair or mnemonic must be present
-     * @param changeAddress address to send the rest of the unused coins
+     * @param testnet         mainnet or testnet version
+     * @param data            data from Tatum system to prepare transaction from
+     * @param amount          amount to send
+     * @param address         recipient address, if multiple recipients are present, it should be string separated by ','
+     * @param mnemonic        mnemonic to sign transaction from. mnemonic or keyPair must be present
+     * @param keyPair         keyPair to sign transaction from. keyPair or mnemonic must be present
+     * @param changeAddress   address to send the rest of the unused coins
+     * @param multipleAmounts if multiple recipients are present in the address separated by ',', this should be list of amounts to send
      * @return the string
      * @throws Exception the exception
      * @returns transaction data to be broadcast to blockchain.
      */
     public String prepareLitecoinSignedOffchainTransaction(boolean testnet, WithdrawalResponseData[] data, String amount,
                                                            String address, String mnemonic, KeyPair[] keyPair,
-                                                           String changeAddress) throws Exception {
+                                                           String changeAddress, String[] multipleAmounts) throws Exception {
 
         Preconditions.checkArgument(StringUtils.isNotEmpty(mnemonic) || ArrayUtils.isNotEmpty(keyPair),
                 "Impossible to prepare transaction. Either mnemonic or keyPair and attr must be present.");
 
         var network = testnet ? LITECOIN_TESTNET : LITECOIN_MAINNET;
         var tx = new TransactionBuilder(network);
-        tx.addOutput(address, amount);
+
+        try {
+            if (ArrayUtils.isNotEmpty(multipleAmounts)) {
+                for (int i = 0; i < multipleAmounts.length; i++) {
+                    tx.addOutput(StringUtils.split(address, ',')[i], multipleAmounts[i]);
+                }
+
+            } else {
+                tx.addOutput(address, amount);
+            }
+        } catch (Exception e) {
+            if (!testnet) {
+                throw new Exception("Wrong output address. Supported LTC address should start with M or L.");
+            }
+            throw e;
+        }
 
         var lastVin = Arrays.stream(data).filter(d -> "-1".equals(d.getVIn())).findFirst().get();
         String last = lastVin.getAmount();
 
-        if (StringUtils.isNotEmpty(mnemonic)) {
-            var xpub = WalletGenerator.generateWallet(Currency.LTC, testnet, mnemonic).getXpub();
-            tx.addOutput(Address.generateAddressFromXPub(Currency.LTC, testnet, xpub, 0), last);
-            for (WithdrawalResponseData input : data) {
-                if ("-1".equals(input.getVIn())) {
+        if (new BigDecimal(last).compareTo(BigDecimal.ZERO) > 0) {
+            if (StringUtils.isNotEmpty(mnemonic) && StringUtils.isEmpty(changeAddress)) {
+                var xpub = WalletGenerator.generateWallet(Currency.LTC, testnet, mnemonic).getXpub();
+                tx.addOutput(Address.generateAddressFromXPub(Currency.LTC, testnet, xpub, 0), last);
+            } else if (StringUtils.isNotEmpty(changeAddress)) {
+                tx.addOutput(changeAddress, last);
+            } else {
+                throw new Exception("Impossible to prepare transaction. Either mnemonic or keyPair and attr must be present.");
+            }
+        }
+
+        for (WithdrawalResponseData input : data) {
+            if (!"-1".equals(input.getVIn())) {
+                if (StringUtils.isNotEmpty(mnemonic)) {
                     var derivationKey = input.getAddress() != null ? input.getAddress().getDerivationKey() : 0;
                     String privKey = Address.generatePrivateKeyFromMnemonic(Currency.LTC, testnet, mnemonic, derivationKey);
                     tx.addInput(input.getVIn(), input.getVInIndex(), privKey);
-                }
-            }
-        } else if (keyPair != null && StringUtils.isNotEmpty(changeAddress)) {
-            tx.addOutput(changeAddress, last);
-            for (WithdrawalResponseData input : data) {
-                if ("-1".equals(input.getVIn())) {
-                    String privKey = Arrays.stream(keyPair).filter(k -> k.getAddress() == input.getAddress().getAddress()).findFirst().get().getPrivateKey();
-                    tx.addInput(input.getVIn(), input.getVInIndex(), privKey);
+                } else if (ArrayUtils.isNotEmpty(keyPair)) {
+                    Optional<KeyPair> pair = getKeyPairByAddress(keyPair, input.getAddress().getAddress());
+                    if (pair.isPresent()) {
+                        String privKey = pair.get().getPrivateKey();
+                        tx.addInput(input.getVIn(), input.getVInIndex(), privKey);
+                    }
                 }
             }
         }
 
         return tx.build().toHex();
+    }
+
+    @NotNull
+    private Optional<KeyPair> getKeyPairByAddress(KeyPair[] keyPair, String address) {
+        return Arrays.stream(keyPair)
+                .filter(k -> k != null && k.getAddress().equals(address))
+                .findFirst();
     }
 
 }

@@ -1,7 +1,5 @@
 package io.tatum.model.request;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.tatum.model.response.common.Money;
 
 /**
@@ -56,6 +54,9 @@ public enum Currency implements Money {
      * Link currency.
      */
     LINK("LINK"),
+
+    WBTC("WBTC"),
+
     /**
      * Uni currency.
      */
@@ -89,10 +90,6 @@ public enum Currency implements Money {
      */
     PLTC("PLTC"),
     /**
-     * Ada currency.
-     */
-    ADA("ADA"),
-    /**
      * Xcon currency.
      */
     XCON("XCON"),
@@ -103,7 +100,17 @@ public enum Currency implements Money {
     /**
      * Paxg currency.
      */
-    PAXG("PAXG");
+    PAXG("PAXG"),
+
+    /**
+     * TRON currency.
+     */
+    TRON("TRON"),
+
+    /**
+     * USDT_TRON
+     */
+    USDT_TRON("USDT_TRON");
 
     private final String currency;
 

@@ -1,10 +1,7 @@
 package io.tatum.constants;
 
 import io.tatum.model.request.Currency;
-import io.tatum.network.EthMainNetParams;
-import io.tatum.network.VetMainNetParams;
-import io.tatum.network.LtcMainNetParams;
-import io.tatum.network.LtcTestNet3Params;
+import io.tatum.network.*;
 import org.bitcoincashj.params.UnitTestParams;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.params.MainNetParams;
@@ -83,6 +80,8 @@ public class Constant {
     public static final NetworkParameters VET_MAINNET = VetMainNetParams.get();
 
 
+    public static final NetworkParameters TRON_MAINNET = TronMainNetParams.get();
+
     /**
      * The constant TESTNET_DERIVATION_PATH.
      */
@@ -121,6 +120,8 @@ public class Constant {
      */
     public static final String ADA_DERIVATION_PATH = "M/44H/1815H/0H/0/0";
 
+    public static final String TRON_DERIVATION_PATH = "M/44H/195H/0H/0";
+
     /**
      * The constant TRANSFER_METHOD_ABI.
      */
@@ -156,6 +157,7 @@ public class Constant {
             new AbstractMap.SimpleEntry<>(LEO.toString(), "0x2af5d2ad76741191d15dfe7bf6ac92d4bd912ca3"),
             new AbstractMap.SimpleEntry<>(UNI.toString(), "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984"),
             new AbstractMap.SimpleEntry<>(LINK.toString(), "0x514910771af9ca656af840dff83e8264ecf986ca"),
+            new AbstractMap.SimpleEntry<>(WBTC.toString(), "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599"),
             new AbstractMap.SimpleEntry<>(FREE.toString(), "0x2f141ce366a2462f02cea3d12cf93e4dca49e4fd"),
             new AbstractMap.SimpleEntry<>(MKR.toString(), "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2"),
             new AbstractMap.SimpleEntry<>(USDC.toString(), "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"),
@@ -165,7 +167,8 @@ public class Constant {
             new AbstractMap.SimpleEntry<>(PAXG.toString(), "0x45804880de22913dafe09f4980848ece6ecbaf78"),
             new AbstractMap.SimpleEntry<>(PLTC.toString(), "0x429d83bb0dcb8cdd5311e34680adc8b12070a07f"),
             new AbstractMap.SimpleEntry<>(MMY.toString(), "0x385ddf50c3de724f6b8ecb41745c29f9dd3c6d75"),
-            new AbstractMap.SimpleEntry<>(XCON.toString(), "0x0f237d5ea7876e0e2906034d98fdb20d43666ad4")
+            new AbstractMap.SimpleEntry<>(XCON.toString(), "0x0f237d5ea7876e0e2906034d98fdb20d43666ad4"),
+            new AbstractMap.SimpleEntry<>(USDT_TRON.toString(), "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t")
     );
 
 
@@ -174,6 +177,8 @@ public class Constant {
      */
     public static final Map<String, Integer> CONTRACT_DECIMALS = Map.ofEntries(
             new AbstractMap.SimpleEntry<>(USDT.toString(), 6),
+            new AbstractMap.SimpleEntry<>(USDT_TRON.toString(), 6),
+            new AbstractMap.SimpleEntry<>(WBTC.toString(), 8),
             new AbstractMap.SimpleEntry<>(LEO.toString(), 18),
             new AbstractMap.SimpleEntry<>(UNI.toString(), 18),
             new AbstractMap.SimpleEntry<>(LINK.toString(), 18),

@@ -1,12 +1,13 @@
 package io.tatum.ledger;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Preconditions;
-import io.tatum.model.request.BlockAmount;
-import io.tatum.model.request.CreateAccount;
-import io.tatum.model.request.CreateAccountsBatch;
+import io.tatum.model.request.*;
+import io.tatum.model.response.common.Id;
 import io.tatum.model.response.ledger.Account;
 import io.tatum.model.response.ledger.AccountBalance;
 import io.tatum.model.response.ledger.Blockage;
+import io.tatum.model.response.ledger.Reference;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
 import io.tatum.utils.ObjectValidator;
@@ -70,6 +71,15 @@ public class LedgerAccount {
     }
 
     /**
+     * For more details, see <a href="https://tatum.io/apidoc#operation/updateAccountByAccountId" target="_blank">Tatum API documentation</a>
+     */
+    public Account updateAccount(String id, UpdateAccount account) throws InterruptedException, ExecutionException, JsonProcessingException {
+        Preconditions.checkArgument(ObjectValidator.isValidated(account));
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/" + id;
+        return Async.put(uri, account, Account.class);
+    }
+
+    /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getBlockAmount" target="_blank">Tatum API documentation</a>
      *
      * @param id       the id
@@ -119,6 +129,14 @@ public class LedgerAccount {
     public void deleteBlockedAmount(String id) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/block/" + id;
         Async.delete(uri);
+    }
+
+    /**
+     * For more details, see <a href="https://tatum.io/apidoc#operation/unblockAmountWithTransaction" target="_blank">Tatum API documentation</a>
+     */
+    public Reference deleteBlockedAmountWithTransaction(String id, BlockageTransaction txData) throws InterruptedException, ExecutionException, JsonProcessingException {
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/block/" + id;
+        return Async.put(uri, txData, Reference.class);
     }
 
     /**

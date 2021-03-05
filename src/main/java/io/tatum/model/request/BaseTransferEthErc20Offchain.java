@@ -42,4 +42,10 @@ public class BaseTransferEthErc20Offchain {
 
     @Min(0)
     private BigInteger nonce;
+
+    @Pattern(regexp = "^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$") // number string
+    private String gasPrice;
+
+    @Pattern(regexp = "^[+]?((\\d+(\\.\\d*)?)|(\\.\\d+))$") // number string
+    private String gasLimit;
 }
