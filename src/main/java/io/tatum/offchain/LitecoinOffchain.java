@@ -139,13 +139,20 @@ public class LitecoinOffchain {
         var network = testnet ? LITECOIN_TESTNET : LITECOIN_MAINNET;
         var tx = new TransactionBuilder(network);
 
-        if (ArrayUtils.isNotEmpty(multipleAmounts)) {
-            for (int i = 0; i < multipleAmounts.length; i++) {
-                tx.addOutput(StringUtils.split(address, ',')[i], multipleAmounts[i]);
-            }
+        try {
+            if (ArrayUtils.isNotEmpty(multipleAmounts)) {
+                for (int i = 0; i < multipleAmounts.length; i++) {
+                    tx.addOutput(StringUtils.split(address, ',')[i], multipleAmounts[i]);
+                }
 
-        } else {
-            tx.addOutput(address, amount);
+            } else {
+                tx.addOutput(address, amount);
+            }
+        } catch (Exception e) {
+            if (!testnet) {
+                throw new Exception("Wrong output address. Supported LTC address should start with M or L.");
+            }
+            throw e;
         }
 
         var lastVin = Arrays.stream(data).filter(d -> "-1".equals(d.getVIn())).findFirst().get();
