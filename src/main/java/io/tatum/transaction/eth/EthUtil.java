@@ -78,7 +78,7 @@ public class EthUtil {
      * @throws InterruptedException the interrupted exception
      */
     public static BigInteger getGasPrice(Fee fee) throws ExecutionException, InterruptedException {
-        return fee != null ? new BigInteger(fee.getGasPrice()) : Convert.fromWei(ethGetGasPriceInWei(), GWEI).toBigInteger();
+        return fee != null ? new BigInteger(fee.getGasPrice()) : ethGetGasPriceInWei().toBigInteger();
     }
 
     /**
