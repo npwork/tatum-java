@@ -9,6 +9,7 @@ import io.tatum.model.response.kms.TransactionKMS;
 import io.tatum.transaction.eth.EthUtil;
 import io.tatum.transaction.eth.Web3jClient;
 import io.tatum.utils.ApiKey;
+import io.tatum.utils.BaseUrl;
 import io.tatum.utils.MapperFactory;
 import io.tatum.utils.ObjectValidator;
 import lombok.extern.log4j.Log4j2;
@@ -106,7 +107,12 @@ public class EthTx {
                 var _data = body.getData();
                 var _nonce = body.getNonce();
 
-                Web3j web3j = Web3jClient.get(provider);
+                String _provider = provider;
+                if (StringUtils.isEmpty(_provider)) {
+                    _provider = BaseUrl.getInstance().getUrl() + "/v3/ethereum/web3/" + ApiKey.getInstance().getApiKey();
+                }
+                Web3j web3j = Web3jClient.get(_provider);
+
                 Credentials credentials = Credentials.create(body.getFromPrivateKey());
                 var address = StringUtils.isNotEmpty(_to) ? _to : credentials.getAddress();
 
@@ -158,7 +164,12 @@ public class EthTx {
                 var _currency = body.getCurrency();
                 var _amount = body.getAmount();
 
-                Web3j web3j = Web3jClient.get(provider);
+                String _provider = provider;
+                if (StringUtils.isEmpty(_provider)) {
+                    _provider = BaseUrl.getInstance().getUrl() + "/v3/ethereum/web3/" + ApiKey.getInstance().getApiKey();
+                }
+
+                Web3j web3j = Web3jClient.get(_provider);
                 Credentials credentials = Credentials.create(body.getFromPrivateKey());
                 var from = credentials.getAddress();
 
@@ -238,7 +249,12 @@ public class EthTx {
                 var _contractAddress = body.getContractAddress();
                 var _digits = body.getDigits();
 
-                Web3j web3j = Web3jClient.get(provider);
+                String _provider = provider;
+                if (StringUtils.isEmpty(_provider)) {
+                    _provider = BaseUrl.getInstance().getUrl() + "/v3/ethereum/web3/" + ApiKey.getInstance().getApiKey();
+                }
+                Web3j web3j = Web3jClient.get(_provider);
+
                 Credentials credentials = Credentials.create(body.getFromPrivateKey());
 
                 BigInteger gasPrice = EthUtil.getGasPrice(_fee);
@@ -298,7 +314,12 @@ public class EthTx {
                 var _fee = body.getFee();
                 var _nonce = body.getNonce();
 
-                Web3j web3j = Web3jClient.get(provider);
+                String _provider = provider;
+                if (StringUtils.isEmpty(_provider)) {
+                    _provider = BaseUrl.getInstance().getUrl() + "/v3/ethereum/web3/" + ApiKey.getInstance().getApiKey();
+                }
+                Web3j web3j = Web3jClient.get(_provider);
+
                 Credentials credentials = Credentials.create(body.getFromPrivateKey());
 
                 BigInteger gasPrice = EthUtil.getGasPrice(_fee);

@@ -46,7 +46,7 @@ public class BitcoinOffchain {
         Preconditions.checkArgument(ObjectValidator.isValidated(body));
 
         CreateWithdrawal withdrawal = body.getWithdrawal();
-        if (withdrawal.getFee() != null) {
+        if (withdrawal.getFee() == null) {
             withdrawal.setFee("0.0005");
         }
 
@@ -64,7 +64,7 @@ public class BitcoinOffchain {
                     withdrawal.getAttr(), withdrawal.getMultipleAmounts());
         } catch (Exception e) {
             e.printStackTrace();
-            Common.offchainCancelWithdrawal(withdrawalResponse.getId(), true);
+            Common.offchainCancelWithdrawal(id, true);
             throw e;
         }
 
@@ -168,10 +168,10 @@ public class BitcoinOffchain {
         var tx = new TransactionBuilder(network);
 
         if (ArrayUtils.isNotEmpty(multipleAmounts)) {
+            final String[] addresses = StringUtils.split(address, ',');
             for (int i = 0; i < multipleAmounts.length; i++) {
-                tx.addOutput(StringUtils.split(address, ',')[i], multipleAmounts[i]);
+                tx.addOutput(addresses[i], multipleAmounts[i]);
             }
-
         } else {
             tx.addOutput(address, amount);
         }
@@ -202,6 +202,8 @@ public class BitcoinOffchain {
                         String privKey = pair.get().getPrivateKey();
                         tx.addInput(input.getVIn(), input.getVInIndex(), privKey);
                     }
+                } else {
+                    throw new Exception("Impossible to prepare transaction. Either mnemonic or keyPair and attr must be present.");
                 }
             }
         }

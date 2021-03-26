@@ -41,7 +41,7 @@ public class BcashOffchain {
         Preconditions.checkArgument(ObjectValidator.isValidated(body));
 
         CreateWithdrawal withdrawal = body.getWithdrawal();
-        if (withdrawal.getFee() != null) {
+        if (withdrawal.getFee() == null) {
             withdrawal.setFee("0.0005");
         }
 
