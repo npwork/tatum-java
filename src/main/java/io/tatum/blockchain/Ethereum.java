@@ -129,9 +129,14 @@ public final class Ethereum {
      * @throws InterruptedException the interrupted exception
      */
     public EthTx[] ethGetAccountTransactions(String address, Integer pageSize, Integer offset) throws ExecutionException, InterruptedException {
-        Integer _pageSize = (pageSize == null || pageSize < 0 || pageSize > 50) ? 50 : pageSize;
-        Integer _offset = (offset == null || offset < 0) ? 0 : offset;
+        int _pageSize = (pageSize == null || pageSize < 0 || pageSize > 50) ? 50 : pageSize;
+        int _offset = (offset == null || offset < 0) ? 0 : offset;
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ethereum/account/transaction/" + address + "?pageSize=" + _pageSize + "&offset=" + _offset;
         return Async.get(uri, EthTx[].class);
     }
+
+    public EthTx[] ethGetAccountTransactions(String address) throws ExecutionException, InterruptedException {
+        return ethGetAccountTransactions(address, null, null);
+    }
+
 }

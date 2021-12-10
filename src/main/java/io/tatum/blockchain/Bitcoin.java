@@ -107,10 +107,14 @@ public final class Bitcoin {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public BtcTx[] btcGetTxForAccount(String address, int pageSize, int offset) throws ExecutionException, InterruptedException {
-        int _pageSize = (pageSize < 0 || pageSize > 50) ? 50 : pageSize;
-        int _offset = Math.max(offset, 0);
+    public BtcTx[] btcGetTxForAccount(String address, Integer pageSize, Integer offset) throws ExecutionException, InterruptedException {
+        int _pageSize = (pageSize == null || pageSize < 0 || pageSize > 50) ? 50 : pageSize;
+        int _offset = (offset == null || offset < 0) ? 0 : offset;
         String uri = BaseUrl.getInstance().getUrl() + "/v3/bitcoin/transaction/address/" + address + "?pageSize=" + _pageSize + "&offset=" + _offset;
         return Async.get(uri, BtcTx[].class);
+    }
+
+    public BtcTx[] btcGetTxForAccount(String address) throws ExecutionException, InterruptedException {
+        return btcGetTxForAccount(address, null, null);
     }
 }

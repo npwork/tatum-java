@@ -68,7 +68,7 @@ public class LitecoinOffchain {
             BroadcastWithdrawal broadcastWithdrawal = new BroadcastWithdrawal();
             broadcastWithdrawal.setTxData(txData);
             broadcastWithdrawal.setWithdrawalId(id);
-            broadcastWithdrawal.setCurrency(Currency.LTC.getCurrency());
+            broadcastWithdrawal.setCurrency(Currency.LTC.currency);
             return new BroadcastResult(Common.offchainBroadcast(broadcastWithdrawal), id);
 
         } catch (Exception e) {

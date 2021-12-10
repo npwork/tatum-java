@@ -2,89 +2,191 @@ package io.tatum.blockchain;
 
 import io.tatum.model.response.eth.EthBlock;
 import io.tatum.model.response.eth.EthTx;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasProperty;
+import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Ropsten testnet
+ * <p>
+ * https://ropsten.etherscan.io/block/10995793
+ * https://ropsten.etherscan.io/address/0x44373FD089C81a5F4634F655cb73598B0E2F7799
+ * https://ropsten.etherscan.io/tx/0x52fcb688992398b5c517f70ad7f1828d08ca0d896686f72ce02823700ff502ec
+ */
 public class EthereumTest {
+    private final static Ethereum ETHERIUM = new Ethereum();
 
-    @Test
-    public void ethGetTransactionsCountTest() throws InterruptedException, ExecutionException {
-        Ethereum ethereum = new Ethereum();
-        // https://etherscan.io/address/0xec5a91b107775d267879e8474ced81a70bcfd7a9
-        String address = "0x78c115F1c8B7D0804FbDF3CF7995B030c512ee78";
-        BigInteger count = ethereum.ethGetTransactionsCount(address);
-        System.out.println(count);
+    private final static BigDecimal BLOCK_NUMBER = new BigDecimal(10995793);
+
+    public final static String ADDRESS = "0x44373FD089C81a5F4634F655cb73598B0E2F7799";
+    private final static String ADDRESS_WITHOUT_TXS = "0x037271F80b60f4F67F89054E16d0e9f82cFaa237";
+    private final static String ADDRESS_DOES_NOT_EXIST = "0x413723D459C67a5F4634F655cb73598B0E2F7799";
+
+    private final static String ERC20_CONTRACT = "0x101848D5C5bBca18E6b4431eEdF6B95E9ADF82FA";
+    private final static String ERC20_CONTRACT_DOES_NOT_EXIST = "0x121446D715bBca18E624433dEdF6B95E9ADF82FA";
+
+    private final static String ETH_TRANSACTION = "0x52fcb688992398b5c517f70ad7f1828d08ca0d896686f72ce02823700ff502ec";
+    private final static String ETH_TRANSACTION_DOES_NOT_EXIST = "0x52fcb688292338b55517f705d7f1858d085a0d895686f72ce02823700ff502ec";
+
+    @Nested
+    class GetTransactionsCount {
+        @Disabled("Flaky - sometimes 0 sometimes null") // @TODO
+        @Test
+        public void noPendingTransactions() throws ExecutionException, InterruptedException {
+            BigInteger count = ETHERIUM.ethGetTransactionsCount(ADDRESS);
+            assertEquals(BigInteger.ZERO, count);
+        }
+
+        @Test
+        public void addressDoesNotExist() throws ExecutionException, InterruptedException {
+            BigInteger count = ETHERIUM.ethGetTransactionsCount(ADDRESS_DOES_NOT_EXIST);
+            assertNull(count);
+        }
+
+        // @TODO - add testcase when in mempool
     }
 
     @Test
-    public void ethGetCurrentBlockTest() throws InterruptedException, ExecutionException {
-        Ethereum ethereum = new Ethereum();
-        BigDecimal block = ethereum.ethGetCurrentBlock();
-        System.out.println(block);
+    public void GetCurrentBlock() throws InterruptedException, ExecutionException {
+        BigDecimal block = ETHERIUM.ethGetCurrentBlock();
+        assertTrue(block.compareTo(BLOCK_NUMBER) > 0);
     }
 
-    @Test
-    public void ethGetBlockTest() throws InterruptedException, ExecutionException {
-        Ethereum ethereum = new Ethereum();
-        // https://etherscan.io/block/11449144
-        EthBlock block = ethereum.ethGetBlock("0x9f1f62a40f084b054400bbeaac766a4205a194761fa48297fd8b147cca6585e4");
-        System.out.println(block);
-        assertThat(block, hasProperty("extraData"));
-        assertThat(block, hasProperty("gasLimit"));
-        assertThat(block, hasProperty("gasUsed"));
-        assertThat(block, hasProperty("difficulty"));
+    @Nested
+    class EthGetBlock {
+        @Test
+        public void blockExists() throws InterruptedException, ExecutionException {
+            EthBlock actual = ETHERIUM.ethGetBlock(BLOCK_NUMBER.toString());
+
+            EthBlock expected = EthBlock.builder()
+                    .number(BLOCK_NUMBER)
+                    .transactionsRoot("0xfc099c56b493e5923b16e918b3d7d4ef63a73ab89b264d5a928040290e7a199e")
+                    .totalDifficulty(new BigDecimal("34720647413045951"))
+                    .gasLimit(new BigDecimal(8_000_000))
+                    .gasUsed(new BigDecimal(4_765_083))
+                    .difficulty(new BigDecimal(1060617355))
+                    .hash("0xa12dd4f56064bf056dd0a4b6f922894f61dd6d1bad9c929709d7f9941ae83945")
+                    .parentHash("0x34bdac0dd4a24b8affb17212fedf2beedc173367d60cc2a48a4f722fa3c76468")
+                    .stateRoot("0xa0de96327cc839e103c8dd360847a44a6ee3307c153990f44d63f992edfd6dae")
+                    .sha3Uncles("0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347")
+                    .nonce("0x6998cda2384b82b6")
+                    .miner("0x9ffed2297c7b81293413550db675073ab46980b2")
+                    .size(new BigDecimal(23306))
+                    .extraData("0xd883010a08846765746888676f312e31362e35856c696e7578")
+                    .timestamp(1631093664)
+                    .build();
+
+            assertNotNull(actual.getLogsBloom());
+            assertEquals(13, actual.getTransactions().length);
+
+            actual.setTransactions(null);
+            actual.setLogsBloom(null);
+
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void blockDoesNotExist() throws InterruptedException, ExecutionException {
+            EthBlock actual = ETHERIUM.ethGetBlock("0102109957931");
+            assertNull(actual);
+        }
     }
 
-    @Test
-    public void ethGetAccountBalanceTest() throws InterruptedException, ExecutionException {
-        Ethereum ethereum = new Ethereum();
-        String address = "0x78c115F1c8B7D0804FbDF3CF7995B030c512ee78";
-        BigDecimal balance = ethereum.ethGetAccountBalance(address);
-        System.out.println(balance);
+    @Nested
+    class GetAccountBalance {
+        @Test
+        public void addressExists() throws InterruptedException, ExecutionException {
+            BigDecimal balance = ETHERIUM.ethGetAccountBalance(ADDRESS);
+            assertEquals(new BigDecimal(0.39).setScale(2, RoundingMode.FLOOR), balance);
+        }
+
+        @Test
+        public void addressDoesNotExist() throws InterruptedException, ExecutionException {
+            BigDecimal balance = ETHERIUM.ethGetAccountBalance(ADDRESS_DOES_NOT_EXIST);
+            assertNull(balance);
+        }
     }
 
-    @Test
-    public void ethGetAccountErc20AddressTest() throws InterruptedException, ExecutionException, IOException {
-        Ethereum ethereum = new Ethereum();
-        // https://etherscan.io/token/0xdac17f958d2ee523a2206206994597c13d831ec7?a=0x080d43de2c3059c30f95ab2eddcee0b0a0ddb539
-        String address = "0x080d43DE2C3059c30f95AB2EdDcee0B0a0Ddb539";
-        BigDecimal balance = ethereum.ethGetAccountErc20Address(address, "0xdac17f958d2ee523a2206206994597c13d831ec7");
-        System.out.println(balance);
+    @Nested
+    class GetErc20AccountBalance {
+        @Test
+        public void addressAndContractExist() throws InterruptedException, ExecutionException, IOException {
+            BigDecimal balance = ETHERIUM.ethGetAccountErc20Address(ADDRESS, ERC20_CONTRACT);
+            BigDecimal amountWithoutZeros = balance.scaleByPowerOfTen(-18).setScale(0);
+            assertEquals(new BigDecimal(100), amountWithoutZeros);
+        }
+
+        @Test
+        public void addressDoesNotExist() throws InterruptedException, ExecutionException, IOException {
+            BigDecimal balance = ETHERIUM.ethGetAccountErc20Address(ADDRESS_DOES_NOT_EXIST, ERC20_CONTRACT);
+            assertNull(balance);
+        }
+
+        @Test
+        public void contractDoesNotExist() throws InterruptedException, ExecutionException, IOException {
+            BigDecimal balance = ETHERIUM.ethGetAccountErc20Address(ADDRESS, ERC20_CONTRACT_DOES_NOT_EXIST);
+            assertNull(balance);
+        }
     }
 
-    @Test
-    public void ethGetTransactionTest() throws InterruptedException, ExecutionException, IOException {
-        Ethereum ethereum = new Ethereum();
-        // https://etherscan.io/tx/0xffd125fb072d2974c14576a2f777f3386535db5b85c0d120066dc8fbd5d7680a
-        String hash = "0xffd125fb072d2974c14576a2f777f3386535db5b85c0d120066dc8fbd5d7680a";
-        EthTx tx = ethereum.ethGetTransaction(hash);
-        System.out.println(tx);
-        assertThat(tx, hasProperty("blockHash"));
-        assertThat(tx, hasProperty("from"));
-        assertThat(tx, hasProperty("to"));
-        assertThat(tx, hasProperty("blockNumber"));
+    @Nested
+    class GetTransaction {
+        @Test
+        public void exist() throws InterruptedException, ExecutionException, IOException {
+            EthTx expected = EthTx.builder()
+                    .status(true)
+                    .blockNumber(BigDecimal.valueOf(10995793))
+                    .blockHash("0xa12dd4f56064bf056dd0a4b6f922894f61dd6d1bad9c929709d7f9941ae83945")
+                    .from("0xe816846dde5d77bbfa5593d89242e05c6851917b")
+                    .gas(BigDecimal.valueOf(21000))
+                    .gasUsed(BigDecimal.valueOf(21000))
+                    .gasPrice(BigDecimal.valueOf(1500000585))
+                    .transactionHash(ETH_TRANSACTION)
+                    .transactionIndex(BigDecimal.valueOf(6))
+                    .nonce(BigDecimal.valueOf(13))
+                    .to("0x44373fd089c81a5f4634f655cb73598b0e2f7799")
+                    .value(BigDecimal.valueOf(0.01).scaleByPowerOfTen(18).setScale(0))
+                    .logs(new ArrayList<>())
+                    .build();
+
+            EthTx actual = ETHERIUM.ethGetTransaction(ETH_TRANSACTION);
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        public void doesNotExist() throws InterruptedException, ExecutionException, IOException {
+            EthTx actual = ETHERIUM.ethGetTransaction(ETH_TRANSACTION_DOES_NOT_EXIST);
+            assertNull(actual);
+        }
     }
 
-    @Test
-    public void ethGetAccountTransactionsTest() throws ExecutionException, InterruptedException {
+    @Nested
+    class GetAccountTransactions {
+        @Test
+        public void hasTransactions() throws InterruptedException, ExecutionException, IOException {
+            EthTx[] txs = ETHERIUM.ethGetAccountTransactions(ADDRESS);
+            assertEquals(11, txs.length);
+        }
 
-        Ethereum ethereum = new Ethereum();
-        // https://etherscan.io/tx/0xffd125fb072d2974c14576a2f777f3386535db5b85c0d120066dc8fbd5d7680a
-        String address = "0x0bE907184172706F8D5321E2DA108Ed190a8e59c";
-        EthTx[] txs = ethereum.ethGetAccountTransactions(address, null, null);
-        if (txs != null && txs.length > 0) {
-            System.out.println(txs[0]);
-            assertThat(txs[0], hasProperty("blockHash"));
-            assertThat(txs[0], hasProperty("from"));
-            assertThat(txs[0], hasProperty("to"));
-            assertThat(txs[0], hasProperty("blockNumber"));
+        @Test
+        public void noTransactions() throws InterruptedException, ExecutionException, IOException {
+            EthTx[] txs = ETHERIUM.ethGetAccountTransactions(ADDRESS_WITHOUT_TXS);
+            assertEquals(0, txs.length);
+        }
+
+        @Test
+        public void addressDoesNotExist() throws InterruptedException, ExecutionException, IOException {
+            EthTx[] txs = ETHERIUM.ethGetAccountTransactions(ADDRESS_DOES_NOT_EXIST);
+            assertEquals(0, txs.length);
         }
     }
 }

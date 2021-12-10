@@ -1,8 +1,11 @@
 package io.tatum.model.response.ledger;
 
+import lombok.AllArgsConstructor;
+
 /**
  * The enum Subscription type.
  */
+@AllArgsConstructor
 public enum SubscriptionType {
     /**
      * Account balance limit subscription type.
@@ -25,18 +28,5 @@ public enum SubscriptionType {
      */
     COMPLETE_BLOCKCHAIN_TRANSACTION("COMPLETE_BLOCKCHAIN_TRANSACTION");
 
-    private final String subscriptionType;
-
-    SubscriptionType(final String subscriptionType) {
-        this.subscriptionType = subscriptionType;
-    }
-
-    /**
-     * Gets subscription type.
-     *
-     * @return the subscription type
-     */
-    public String getSubscriptionType() {
-        return subscriptionType;
-    }
+    public final String subscriptionType;
 }

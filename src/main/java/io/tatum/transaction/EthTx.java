@@ -187,8 +187,8 @@ public class EthTx {
                             Convert.toWei(_amount, ETHER).toBigInteger(),
                             EthUtil.toHexString(_data));
                 } else {
-                    String contractAddress = CONTRACT_ADDRESSES.get(_currency.getCurrency());
-                    var amount = EthUtil.convertAmount(_amount, CONTRACT_DECIMALS.get(_currency.getCurrency()));
+                    String contractAddress = CONTRACT_ADDRESSES.get(_currency.currency);
+                    var amount = EthUtil.convertAmount(_amount, CONTRACT_DECIMALS.get(_currency.currency));
 
                     Function function = new Function(
                             "transfer",  // function we're calling

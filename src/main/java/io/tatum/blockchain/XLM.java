@@ -2,12 +2,13 @@ package io.tatum.blockchain;
 
 import io.tatum.model.response.common.TransactionHash;
 import io.tatum.model.response.xlm.Account;
+import io.tatum.model.response.xlm.XlmInfo;
+import io.tatum.model.response.xlm.XlmLedger;
+import io.tatum.model.response.xlm.XlmTransaction;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -50,9 +51,9 @@ public class XLM {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public String xlmGetCurrentLedger() throws ExecutionException, InterruptedException {
+    public XlmInfo xlmGetCurrentLedger() throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/info";
-        return Async.get(uri);
+        return Async.get(uri, XlmInfo.class);
     }
 
     /**
@@ -75,9 +76,9 @@ public class XLM {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public String xlmGetLedger(BigInteger sequence) throws ExecutionException, InterruptedException {
+    public XlmLedger xlmGetLedger(long sequence) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/ledger/" + sequence;
-        return Async.get(uri);
+        return Async.get(uri, XlmLedger.class);
     }
 
     /**
@@ -88,9 +89,10 @@ public class XLM {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public String xlmGetLedgerTx(BigDecimal sequence) throws ExecutionException, InterruptedException {
+    public XlmTransaction[] xlmGetLedgerTx(long sequence) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/ledger/" + sequence + "/transaction";
-        return Async.get(uri);
+        // new TypeReference<List<MyClass>>(){}
+        return Async.get(uri, XlmTransaction[].class);
     }
 
     /**
@@ -101,9 +103,9 @@ public class XLM {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public String xlmGetTransaction(String hash) throws ExecutionException, InterruptedException {
+    public XlmTransaction xlmGetTransaction(String hash) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/transaction/" + hash;
-        return Async.get(uri);
+        return Async.get(uri, XlmTransaction.class);
     }
 
     /**
@@ -114,8 +116,8 @@ public class XLM {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public String xlmGetAccountTransactions(String address) throws ExecutionException, InterruptedException {
+    public XlmTransaction[] xlmGetAccountTransactions(String address) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/account/tx/" + address;
-        return Async.get(uri);
+        return Async.get(uri, XlmTransaction[].class);
     }
 }

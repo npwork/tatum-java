@@ -1,12 +1,10 @@
 package io.tatum.model.response.eth;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * The type Eth tx.
@@ -15,6 +13,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EthTx {
 
@@ -23,16 +22,15 @@ public class EthTx {
     private BigDecimal blockNumber;
     private String from;
     private BigDecimal gas;
-    private String gasPrice;
+    private BigDecimal gasPrice;
     private String transactionHash;
     private String input;
     private BigDecimal nonce;
     private String to;
     private BigDecimal transactionIndex;
-    private String value;
+    private BigDecimal value;
     private BigDecimal gasUsed;
     private BigDecimal cumulativeGasUsed;
     private String contractAddress;
-    private EthTxLogs[] logs;
-
+    private List<EthTxLogs> logs;
 }

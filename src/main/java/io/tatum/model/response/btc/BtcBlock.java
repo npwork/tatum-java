@@ -1,10 +1,7 @@
 package io.tatum.model.response.btc;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigInteger;
 
@@ -14,6 +11,7 @@ import java.math.BigInteger;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BtcBlock {
@@ -26,7 +24,7 @@ public class BtcBlock {
     private String merkleRoot;
     private long time;
     private long bits;
-    private BigInteger nonce;
+    private long nonce;
     private BtcTx[] txs;
 
 }

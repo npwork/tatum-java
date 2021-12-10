@@ -1,15 +1,32 @@
 package io.tatum.security;
 
-import org.junit.Test;
+
+import io.tatum.blockchain.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.concurrent.ExecutionException;
 
-public class AddressTest {
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-    @Test
-    public void checkMaliciousAddressTest() throws ExecutionException, InterruptedException {
-        Address address = new Address();
-        String status = address.checkMaliciousAddress("0xeff92411ea883db8465ae4d8f93210f1f416e06a");
-        System.out.println(status);
+public class AddressTest {
+    private final static Address ADDRESS = new Address();
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            BcashTest.ADDRESS,
+            BitcoinTest.ADDRESS,
+            EthereumTest.ADDRESS,
+            LitecoinTest.ADDRESS,
+            TronTest.ADDRESS,
+            VETTest.ADDRESS,
+            XLMTest.ADDRESS,
+            XRPTest.ADDRESS,
+    })
+    public void valid(String address) throws ExecutionException, InterruptedException {
+        Boolean valid = ADDRESS.checkMaliciousAddress(address);
+        assertTrue(valid);
     }
+
+    // @TODO - think about non valid addresses for testnet
 }

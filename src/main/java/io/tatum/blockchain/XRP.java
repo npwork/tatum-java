@@ -2,6 +2,9 @@ package io.tatum.blockchain;
 
 import io.tatum.model.response.common.TransactionHash;
 import io.tatum.model.response.xrp.AccountData;
+import io.tatum.model.response.xrp.XrpAccountTransactions;
+import io.tatum.model.response.xrp.XrpLedger;
+import io.tatum.model.response.xrp.XrpTransaction;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
 import org.json.JSONObject;
@@ -62,15 +65,6 @@ public class XRP {
     public AccountData xrpGetAccountInfo(String address) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/account/" + address;
         var res = Async.get(uri);
-        if (res != null) {
-            AccountData accountData = new AccountData();
-            JSONObject jsonObject = new JSONObject(res);
-            JSONObject account_data = jsonObject.getJSONObject("account_data");
-            accountData.setSequence(account_data.getInt("Sequence"));
-            accountData.setLedgerCurrentIndex(jsonObject.getInt("ledger_current_index"));
-            accountData.setAccount(jsonObject.getString("Account"));
-            return accountData;
-        }
         return Async.get(uri, AccountData.class);
     }
 
@@ -81,12 +75,12 @@ public class XRP {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public BigInteger xrpGetCurrentLedger() throws ExecutionException, InterruptedException {
+    public Long xrpGetCurrentLedger() throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/info";
         var res = Async.get(uri);
         if (res != null) {
             JSONObject jsonObject = new JSONObject(res);
-            return jsonObject.getBigInteger("ledger_index");
+            return jsonObject.getLong("ledger_index");
         }
         return null;
     }
@@ -99,9 +93,9 @@ public class XRP {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public String xrpGetLedger(BigInteger ledgerIndex) throws ExecutionException, InterruptedException {
+    public XrpLedger xrpGetLedger(Long ledgerIndex) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/ledger/" + ledgerIndex;
-        return Async.get(uri);
+        return Async.get(uri, XrpLedger.class);
     }
 
     /**
@@ -130,9 +124,9 @@ public class XRP {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public String xrpGetTransaction(String hash) throws ExecutionException, InterruptedException {
+    public XrpTransaction xrpGetTransaction(String hash) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/transaction/" + hash;
-        return Async.get(uri);
+        return Async.get(uri, XrpTransaction.class);
     }
 
     /**
@@ -147,8 +141,12 @@ public class XRP {
      */
     public String xrpGetAccountTransactions(String address, BigInteger min, String marker) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/account/tx/" + address + "?min=" + min + "&marker=" + URLEncoder.encode(marker, StandardCharsets.UTF_8);
-        System.out.println(uri);
         return Async.get(uri);
+    }
+
+    public XrpAccountTransactions xrpGetAccountTransactions(String address) throws ExecutionException, InterruptedException {
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/xrp/account/tx/" + address;
+        return Async.get(uri, XrpAccountTransactions.class);
     }
 
 }

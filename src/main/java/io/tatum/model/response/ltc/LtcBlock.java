@@ -1,10 +1,7 @@
 package io.tatum.model.response.ltc;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -14,17 +11,18 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LtcBlock {
 
     private String hash;
     private BigDecimal height;
-    private BigDecimal version;
+    private long version;
     private String prevBlock;
     private String merkleRoot;
-    private BigDecimal ts;
-    private BigDecimal bits;
-    private BigDecimal nonce;
+    private long ts;
+    private long bits;
+    private long nonce;
     private LtcTx[] txs;
 }

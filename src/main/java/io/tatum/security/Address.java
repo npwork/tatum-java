@@ -19,11 +19,11 @@ public class Address {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public String checkMaliciousAddress(String address) throws ExecutionException, InterruptedException {
+    public Boolean checkMaliciousAddress(String address) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/security/address/" + address;
         var status = Async.get(uri, Status.class);
         if (status != null) {
-            return status.getStatus();
+            return status.getStatus().equals("valid");
         }
         return null;
     }

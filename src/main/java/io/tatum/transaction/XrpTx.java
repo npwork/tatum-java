@@ -86,7 +86,7 @@ public class XrpTx {
 
                 AccountData accountDataInfo = xrp.xrpGetAccountInfo(fromAccount);
 
-                var sequenceInt = accountDataInfo.getSequence();
+                var sequenceInt = accountDataInfo.getDetails().getSequence();
                 Sequence sequence = Sequence.newBuilder().setValue(sequenceInt).build();
                 var maxLedgerVersion = accountDataInfo.getLedgerCurrentIndex() + 5;
                 LastLedgerSequence lastLedgerSequence = LastLedgerSequence.newBuilder().setValue(maxLedgerVersion).build();
@@ -154,7 +154,7 @@ public class XrpTx {
 
                 AccountData accountDataInfo = new XRP().xrpGetAccountInfo(txJSON.getAccount());
 
-                var sequenceInt = accountDataInfo.getSequence();
+                var sequenceInt = accountDataInfo.getDetails().getSequence();
                 Sequence sequence = Sequence.newBuilder().setValue(sequenceInt).build();
                 var maxLedgerVersion = accountDataInfo.getLedgerCurrentIndex() + 5;
                 LastLedgerSequence lastLedgerSequence = LastLedgerSequence.newBuilder().setValue(maxLedgerVersion).build();

@@ -72,7 +72,7 @@ public class BitcoinOffchain {
             BroadcastWithdrawal broadcastWithdrawal = new BroadcastWithdrawal();
             broadcastWithdrawal.setTxData(txData);
             broadcastWithdrawal.setWithdrawalId(id);
-            broadcastWithdrawal.setCurrency(Currency.BTC.getCurrency());
+            broadcastWithdrawal.setCurrency(Currency.BTC.currency);
             return new BroadcastResult(Common.offchainBroadcast(broadcastWithdrawal), id);
 
         } catch (Exception e) {

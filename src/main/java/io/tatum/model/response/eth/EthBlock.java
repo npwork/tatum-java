@@ -1,10 +1,7 @@
 package io.tatum.model.response.eth;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -15,10 +12,11 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EthBlock {
 
-    private String difficulty;
+    private BigDecimal difficulty;
     private String extraData;
     private BigDecimal gasLimit;
     private BigDecimal gasUsed;
@@ -33,8 +31,8 @@ public class EthBlock {
     private String sha3Uncles;
     private BigDecimal size;
     private String stateRoot;
-    private BigDecimal timestamp;
-    private String totalDifficulty;
+    private long timestamp;
+    private BigDecimal totalDifficulty;
     private EthTx[] transactions;
     private String transactionsRoot;
 

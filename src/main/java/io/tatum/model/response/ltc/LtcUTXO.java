@@ -1,9 +1,6 @@
 package io.tatum.model.response.ltc;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -13,16 +10,17 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 @EqualsAndHashCode
 public class LtcUTXO {
 
-    private BigDecimal version;
-    private BigDecimal height;
+    private Long version;
+    private Long height;
     private BigDecimal value;
     private String script;
     private String address;
     private Boolean coinbase;
     private String hash;
-    private BigDecimal index;
+    private Long index;
 
 }

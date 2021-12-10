@@ -63,7 +63,7 @@ public class KMS {
      * @throws InterruptedException the interrupted exception
      */
     public TransactionKMS[] getPendingTransactionsKMSByChain(Currency chain) throws ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().getUrl() + "/v3/kms/pending/" + chain.getCurrency();
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/kms/pending/" + chain.currency;
         return Async.get(uri, TransactionKMS[].class);
     }
 }

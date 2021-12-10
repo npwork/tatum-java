@@ -22,7 +22,7 @@ public class Tron {
      * For more details, see <a href="https://tatum.io/apidoc#operation/TronGetCurrentBlock" target="_blank">Tatum API documentation</a>
      */
     public TronInfo tronGetCurrentBlock() throws ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().getUrl() + "/v3/tron/current";
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/tron/info";
         return Async.get(uri, TronInfo.class);
     }
 
@@ -47,7 +47,8 @@ public class Tron {
      */
     public TronTransaction tronGetTransaction(String hash) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/tron/transaction/" + hash;
-        return Async.get(uri, TronTransaction.class);
+        TronTransaction tronTransaction = Async.get(uri, TronTransaction.class);
+        return tronTransaction == null || tronTransaction.getTxID() == null ? null : tronTransaction;
     }
 
     /**

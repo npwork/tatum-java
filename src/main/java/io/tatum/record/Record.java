@@ -20,8 +20,8 @@ public class Record {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public Log getLogRecord(Currency chain, String id) throws ExecutionException, InterruptedException {
-        String uri = BaseUrl.getInstance().getUrl() + "/v3/record?chain=" + chain.getCurrency() + "&id=" + id;
+    public Log getLogRecord(Currency chain, String txId) throws ExecutionException, InterruptedException {
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/record?chain=" + chain.currency + "&id=" + txId;
         return Async.get(uri, Log.class);
     }
 }

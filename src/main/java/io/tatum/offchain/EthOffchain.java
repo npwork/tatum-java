@@ -99,7 +99,7 @@ public class EthOffchain {
                 withdrawal.setFee(Convert.fromWei(gasLimit.multiply(gasPrice.toBigInteger()).toString(), ETHER).toString());
                 WithdrawalResponse withdrawalResponse = Common.offchainStoreWithdrawal(withdrawal);
 
-                return OffchainUtil.broadcast(prepareEthTx.getTx(), withdrawalResponse.getId(), Currency.ETH.getCurrency());
+                return OffchainUtil.broadcast(prepareEthTx.getTx(), withdrawalResponse.getId(), Currency.ETH.currency);
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -172,7 +172,7 @@ public class EthOffchain {
 
                 withdrawal.setFee(Convert.fromWei(prepareEthTx.getGasLimit().multiply(gasPrice.toBigInteger()).toString(), ETHER).toString());
                 var withdrawalResponse = Common.offchainStoreWithdrawal(withdrawal);
-                return OffchainUtil.broadcast(prepareEthTx.getTx(), withdrawalResponse.getId(), Currency.ETH.getCurrency());
+                return OffchainUtil.broadcast(prepareEthTx.getTx(), withdrawalResponse.getId(), Currency.ETH.currency);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -257,12 +257,12 @@ public class EthOffchain {
                             Convert.toWei(amount, ETHER).toBigInteger(),
                             null);
                 } else {
-                    String contractAddress = CONTRACT_ADDRESSES.get(currency.getCurrency());
+                    String contractAddress = CONTRACT_ADDRESSES.get(currency.currency);
                     if (StringUtils.isNotEmpty(contractAddress)) {
                         throw new Exception("Unsupported ETH ERC20 blockchain.");
                     }
 
-                    var _amount = EthUtil.convertAmount(amount, CONTRACT_DECIMALS.get(currency.getCurrency()));
+                    var _amount = EthUtil.convertAmount(amount, CONTRACT_DECIMALS.get(currency.currency));
                     String txData = encodeContractTransfer(address, _amount);
                     prepareTx = new Transaction(
                             from,

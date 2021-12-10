@@ -1,10 +1,16 @@
 package io.tatum.model.request;
 
 import io.tatum.model.response.common.Money;
+import lombok.AllArgsConstructor;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The enum Currency.
  */
+@AllArgsConstructor
 public enum Currency implements Money {
     /**
      * Btc currency.
@@ -112,18 +118,27 @@ public enum Currency implements Money {
      */
     USDT_TRON("USDT_TRON");
 
-    private final String currency;
+    public final String currency;
 
-    Currency(final String currency) {
-        this.currency = currency;
+    public static List<Currency> supportedCurrencies() {
+        return Arrays.asList(
+                Currency.BTC, Currency.BCH, Currency.LTC,
+                Currency.ETH, Currency.XRP, Currency.BNB,
+                Currency.TRON, Currency.XLM, Currency.VET
+        );
     }
 
-    /**
-     * Gets currency.
-     *
-     * @return the currency
-     */
-    public String getCurrency() {
-        return this.currency;
+    public static List<Currency> supportsXpub() {
+        return Arrays.asList(Currency.ETH, Currency.XRP, Currency.BNB, Currency.XLM, Currency.VET);
+    }
+
+    public static List<Currency> doesNotSupportXpub() {
+        List<Currency> supportsXpub = supportsXpub();
+        return Arrays.stream(Currency.values()).filter(c -> !supportsXpub.contains(c)).collect(Collectors.toList());
+    }
+
+    public static List<Currency> virtualCurrencies() {
+        List<Currency> supported = supportedCurrencies();
+        return Arrays.stream(Currency.values()).filter(c -> !supported.contains(c)).collect(Collectors.toList());
     }
 }

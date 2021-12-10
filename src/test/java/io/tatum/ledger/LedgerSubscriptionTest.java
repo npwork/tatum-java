@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 import java.util.concurrent.ExecutionException;
 
 public class LedgerSubscriptionTest {
-
     @Test
     public void createNewSubscriptionTypeFailedTest() throws InterruptedException, ExecutionException, IOException {
         CreateSubscription createSubscription = new CreateSubscription();

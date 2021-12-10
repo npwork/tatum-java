@@ -16,7 +16,6 @@ import io.xpring.xrpl.Signer;
 import io.xpring.xrpl.Wallet;
 import io.xpring.xrpl.XrpException;
 import org.apache.commons.lang3.StringUtils;
-import org.bitcoinj.core.Base58;
 import org.xrpl.rpc.v1.Common.*;
 import org.xrpl.rpc.v1.CurrencyAmount;
 import org.xrpl.rpc.v1.Payment;
@@ -71,7 +70,7 @@ public class XrpOffchain {
                     throw e;
                 }
 
-                return OffchainUtil.broadcast(txData, id, Currency.XRP.getCurrency());
+                return OffchainUtil.broadcast(txData, id, Currency.XRP.currency);
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -108,7 +107,7 @@ public class XrpOffchain {
                 Destination destination = XrpUtil.createDestination(txJSON.getDestination());
 
                 AccountData accountDataInfo = new XRP().xrpGetAccountInfo(txJSON.getAccount());
-                var sequenceInt = accountDataInfo.getSequence();
+                var sequenceInt = accountDataInfo.getDetails().getSequence();
                 Sequence sequence = Sequence.newBuilder().setValue(sequenceInt).build();
                 var maxLedgerVersion = accountDataInfo.getLedgerCurrentIndex() + 5;
                 LastLedgerSequence lastLedgerSequence = LastLedgerSequence.newBuilder().setValue(maxLedgerVersion).build();
@@ -155,7 +154,7 @@ public class XrpOffchain {
 
         return CompletableFuture.supplyAsync(() -> {
             try {
-                Destination destination = XrpUtil.createDestination(account.getAccount());
+                Destination destination = XrpUtil.createDestination(account.getDetails().getAccount());
 
                 CurrencyAmount paymentAmount = XrpUtil.createPayment(Long.valueOf(amount));
                 Amount _amount = Amount.newBuilder().setValue(paymentAmount).build();
@@ -175,7 +174,7 @@ public class XrpOffchain {
 
                 XRPDropsAmount feeAmount = XRPDropsAmount.newBuilder().setDrops(Long.valueOf(fee)).build();
                 Account _account = XrpUtil.createSenderAccount(address);
-                Sequence sequence = Sequence.newBuilder().setValue(account.getSequence()).build();
+                Sequence sequence = Sequence.newBuilder().setValue(account.getDetails().getSequence()).build();
                 SourceTag _sourceTag = SourceTag.newBuilder().setValue(sourceTag).build();
                 var maxLedgerVersion = account.getLedgerCurrentIndex() + 5;
                 LastLedgerSequence lastLedgerSequence = LastLedgerSequence.newBuilder().setValue(maxLedgerVersion).build();

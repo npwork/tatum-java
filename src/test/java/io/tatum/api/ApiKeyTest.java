@@ -4,11 +4,12 @@ import io.tatum.utils.ApiKey;
 import io.tatum.utils.BaseUrl;
 import org.junit.Test;
 
-public class ApiKeyTest {
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+public class ApiKeyTest {
     @Test
-    public void getApiKeyTest() {
-        System.out.println(ApiKey.getInstance().getApiKey());
-        System.out.println(BaseUrl.getInstance().getUrl());
+    public void apiKeyAndUrlAreInEnv() {
+        assertNotNull(ApiKey.getInstance().getApiKey());
+        assertNotNull(BaseUrl.getInstance().getUrl());
     }
 }

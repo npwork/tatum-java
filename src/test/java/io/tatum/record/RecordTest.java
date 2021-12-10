@@ -1,17 +1,26 @@
 package io.tatum.record;
 
+import io.tatum.blockchain.EthereumTest;
 import io.tatum.model.request.Currency;
 import io.tatum.model.response.eth.Log;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Endpoint doesn't work correctly. returns 500
+ *
+ * {{url}}/record?chain=ETH&id=0x3f852b9a17349cafb2b423b3c93ac2bc5791dd9478f849070bba6e8a367f7d3e
+ * {{url}}/record?chain=ETH&id=0x8a238e7991efcd6729c8299aa47339208703cca231f07e2d10b55e9dd484adbf
+ *
+ */
+@Disabled
 public class RecordTest {
     @Test
     public void getLogRecordTest() throws ExecutionException, InterruptedException {
         Record record = new Record();
-        // https://etherscan.io/tx/0xffd125fb072d2974c14576a2f777f3386535db5b85c0d120066dc8fbd5d7680a
-        Log log = record.getLogRecord(Currency.ETH, "0xffd125fb072d2974c14576a2f777f3386535db5b85c0d120066dc8fbd5d7680a");
-        System.out.println(log.getData());
+        Log log = record.getLogRecord(Currency.ETH, EthereumTest.ADDRESS);
+        System.out.println(log);
     }
 }

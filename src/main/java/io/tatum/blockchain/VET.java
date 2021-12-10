@@ -1,5 +1,8 @@
 package io.tatum.blockchain;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Preconditions;
 import io.tatum.model.request.EstimateGasVet;
 import io.tatum.model.response.common.TransactionHash;
@@ -17,6 +20,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * The type Vet.
  */
+
 public class VET {
 
     /**
@@ -56,13 +60,9 @@ public class VET {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public BigInteger vetGetCurrentBlock() throws ExecutionException, InterruptedException {
+    public Long vetGetCurrentBlock() throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/vet/block/current";
-        var res = Async.get(uri, String.class);
-        if (res != null) {
-            return new BigInteger(res);
-        }
-        return null;
+        return Async.get(uri, Long.class);
     }
 
     /**

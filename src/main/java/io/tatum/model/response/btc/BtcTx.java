@@ -1,10 +1,7 @@
 package io.tatum.model.response.btc;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -14,6 +11,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BtcTx {
@@ -24,7 +22,7 @@ public class BtcTx {
     private BigDecimal rate;
     private long mtime;
     private long height;
-    private String block;
+    private long blockNumber;
     private long time;
     private int index;
     private int version;

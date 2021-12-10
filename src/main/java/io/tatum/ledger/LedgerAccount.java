@@ -11,6 +11,7 @@ import io.tatum.model.response.ledger.Reference;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
 import io.tatum.utils.ObjectValidator;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.json.JSONObject;
 
@@ -67,7 +68,7 @@ public class LedgerAccount {
             return null;
         }
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/batch";
-        return Async.post(uri, accounts, Account[].class);
+        return Async.post(uri, accounts, Account[].class); // @TODO - returns null?
     }
 
     /**
@@ -94,6 +95,10 @@ public class LedgerAccount {
         Integer _offset = (offset == null || offset < 0) ? 0 : offset;
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/block/" + id + "?pageSize=" + _pageSize + "&offset=" + _offset;
         return Async.get(uri, Blockage[].class);
+    }
+
+    public Blockage[] getBlockedAmountsByAccountId(String id) throws ExecutionException, InterruptedException {
+        return getBlockedAmountsByAccountId(id, null, null);
     }
 
     /**
@@ -170,8 +175,10 @@ public class LedgerAccount {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public void deactivateAccount(String id) throws ExecutionException, InterruptedException {
+    @SneakyThrows({ExecutionException.class, InterruptedException.class})
+    public void deactivateAccount(String id) {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account/" + id + "/deactivate";
+        // @TODO - can't get account by id after deactivation?
         Async.put(uri, EMPTY_BODY);
     }
 
@@ -216,6 +223,10 @@ public class LedgerAccount {
         return Async.get(uri, Account[].class);
     }
 
+    public Account[] getAccountsByCustomerId(String id) throws ExecutionException, InterruptedException {
+        return getAccountsByCustomerId(id, null, null);
+    }
+
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/getAllAccounts" target="_blank">Tatum API documentation</a>
      *
@@ -230,6 +241,10 @@ public class LedgerAccount {
         Integer _offset = (offset == null || offset < 0) ? 0 : offset;
         String uri = BaseUrl.getInstance().getUrl() + "/v3/ledger/account?pageSize=" + _pageSize + "&offset=" + _offset;
         return Async.get(uri, Account[].class);
+    }
+
+    public Account[] getAllAccounts() throws ExecutionException, InterruptedException {
+        return getAllAccounts(null, null);
     }
 
     /**

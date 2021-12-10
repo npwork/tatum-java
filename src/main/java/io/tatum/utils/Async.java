@@ -229,7 +229,12 @@ public class Async implements Serializable {
                 .thenApply(response -> {
                     if (response.statusCode() == 200) {
                         try {
-                            return objectMapper.readValue(response.body(), valueType);
+                            // @TODO
+                            String body = response.body();
+                            if (body == null || body.equals(""))
+                                return null;
+
+                            return objectMapper.readValue(body, valueType);
                         } catch (JsonProcessingException e) {
                             e.printStackTrace();
                             return null;

@@ -16,18 +16,11 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Customer {
-
     private String id;
-
     private String externalId;
-
     private Country customerCountry;
-
     private Fiat accountingCurrency;
-
     private Country providerCountry;
-
     private Boolean active;
-
     private Boolean enabled;
 }

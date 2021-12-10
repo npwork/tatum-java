@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 /**
  * The type Create accounts batch.
@@ -17,9 +18,5 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @EqualsAndHashCode
 public class CreateAccountsBatch {
-
-    @NotEmpty
-    @NotEmptyFields
-    @Valid
-    private CreateAccount[] accounts;
+    private List<CreateAccount> accounts;
 }

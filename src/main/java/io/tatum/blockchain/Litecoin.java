@@ -102,6 +102,10 @@ public final class Litecoin {
         return Async.get(uri, LtcTx[].class);
     }
 
+    public LtcTx[] ltcGetTxForAccount(String address) throws ExecutionException, InterruptedException {
+        return ltcGetTxForAccount(address, null, null);
+    }
+
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/LtcGetRawTransaction" target="_blank">Tatum API documentation</a>
      *

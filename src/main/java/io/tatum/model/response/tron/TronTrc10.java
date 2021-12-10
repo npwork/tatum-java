@@ -1,14 +1,14 @@
 package io.tatum.model.response.tron;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.math.BigDecimal;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TronTrc10 {
@@ -19,6 +19,6 @@ public class TronTrc10 {
     private String abbr;
     private String url;
     private String name;
-    private long totalSupply;
+    private BigDecimal totalSupply;
     private String ownerAddress;
 }

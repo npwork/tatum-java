@@ -71,7 +71,7 @@ public class XlmOffchain {
                     Common.offchainCancelWithdrawal(id, true);
                     throw e;
                 }
-                return OffchainUtil.broadcast(tx, id, Currency.XLM.getCurrency());
+                return OffchainUtil.broadcast(tx, id, Currency.XLM.currency);
 
             } catch (Exception e) {
                 e.printStackTrace();

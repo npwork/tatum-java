@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 /**
  * The type Vet tx clauses.
  */
@@ -13,26 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode
 public class VetTxClauses {
-
-    /**
-     *
-     * @type {string}
-     * @memberof VetTxClauses
-     */
     private String to;
-
-    /**
-     *
-     * @type {string}
-     * @memberof VetTxClauses
-     */
-    private String value;
-
-    /**
-     *
-     * @type {string}
-     * @memberof VetTxClauses
-     */
+    private BigDecimal value;
     private String data;
-
 }

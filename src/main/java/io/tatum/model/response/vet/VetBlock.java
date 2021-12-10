@@ -1,10 +1,7 @@
 package io.tatum.model.response.vet;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -14,113 +11,38 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class VetBlock {
+    private Long number;
 
-    /**
-     * block number (height)
-     * @type {number}
-     * @memberof VetBlock
-     */
-    private BigDecimal number;
-
-    /**
-     * block identifier
-     * @type {string}
-     * @memberof VetBlock
-     */
     private String id;
 
-    /**
-     * RLP encoded block size in bytes
-     * @type {number}
-     * @memberof VetBlock
-     */
-    private BigDecimal size;
+    private Long size;
 
-    /**
-     * parent block ID
-     * @type {string}
-     * @memberof VetBlock
-     */
     private String parentID;
 
-    /**
-     * block unix timestamp
-     * @type {number}
-     * @memberof VetBlock
-     */
-    private BigDecimal timestamp;
+    private Long timestamp;
 
-    /**
-     * block gas limit (max allowed accumulative gas usage of transactions)
-     * @type {number}
-     * @memberof VetBlock
-     */
-    private BigDecimal gasLimit;
+    private Long gasLimit;
 
-    /**
-     * Address of account to receive block reward
-     * @type {string}
-     * @memberof VetBlock
-     */
     private String beneficiary;
 
-    /**
-     * accumulative gas usage of transactions
-     * @type {number}
-     * @memberof VetBlock
-     */
-    private BigDecimal gasUsed;
+    private Long gasUsed;
 
-    /**
-     * sum of all ancestral blocks' score
-     * @type {number}
-     * @memberof VetBlock
-     */
-    private BigDecimal totalScore;
+    private Long totalScore;
 
-    /**
-     * root hash of transactions in the block
-     * @type {string}
-     * @memberof VetBlock
-     */
     private String txsRoot;
 
-    /**
-     * supported txs features bitset
-     * @type {number}
-     * @memberof VetBlock
-     */
-    private BigDecimal txsFeatures;
+    private Long txsFeatures;
 
-    /**
-     * root hash of accounts state
-     * @type {string}
-     * @memberof VetBlock
-     */
     private String stateRoot;
 
-    /**
-     * root hash of transaction receipts
-     * @type {string}
-     * @memberof VetBlock
-     */
     private String receiptsRoot;
 
-    /**
-     * the one who signed this block
-     * @type {string}
-     * @memberof VetBlock
-     */
     private String signer;
 
-    /**
-     * transactions IDs
-     * @type {Array<string>}
-     * @memberof VetBlock
-     */
     private String[] transactions;
 
 }

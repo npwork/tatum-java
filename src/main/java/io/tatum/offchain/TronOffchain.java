@@ -93,7 +93,7 @@ public class TronOffchain {
                 WithdrawalResponse withdrawalResponse = Common.offchainStoreWithdrawal(withdrawal);
                 var id = withdrawalResponse.getId();
                 try {
-                    return OffchainUtil.broadcast(txData, id, Currency.TRON.getCurrency());
+                    return OffchainUtil.broadcast(txData, id, Currency.TRON.currency);
                 } catch (Exception e) {
                     e.printStackTrace();
                     new BroadcastResult(null, id);

@@ -1,22 +1,168 @@
 package io.tatum.blockchain;
 
 import io.tatum.model.request.EstimateGasVet;
-import io.tatum.model.response.vet.VetBlock;
-import io.tatum.model.response.vet.VetEstimateGas;
-import io.tatum.model.response.vet.VetTx;
-import io.tatum.model.response.vet.VetTxReceipt;
-import org.junit.Test;
+import io.tatum.model.response.vet.*;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.concurrent.ExecutionException;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasProperty;
+import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Vechain testnet
+ * <p>
+ * https://explore-testnet.vechain.org/blocks/0x00a66904e5f9ea388f9c4c10ef7d134d4cf714d880d4fbcb0b1d0cc03731e6e4
+ * https://explore-testnet.vechain.org/accounts/0x745502e1892a97846fca30781b9232162dda43b9
+ * https://explore-testnet.vechain.org/transactions/0x6c262504e9b23848400834ac805f3dd45a115095a97dde722bd845d06bc535d1
+ */
 public class VETTest {
+    private final static VET VET = new VET();
 
+    public static final String ADDRESS = "0x745502e1892a97846fca30781b9232162dda43b9";
+    private static final String ADDRESS_NO_TX = "0x492eb8c15af354339b08ec23a500109f2c6a1570";
+    private static final String ADDRESS_WRONG = "0x491eb1c11af154339b08ec23a500109f2c6a1570";
+
+    private static final long BLOCK = 10_905_862;
+    private static final String BLOCK_HASH = "0x00a66906e0b756d83b30955fa4a53675dff81d6eff670ee235519135ba1a0850";
+    private static final String BLOCK_DOES_NOT_EXIST_HASH = "0x00a62906e1b756d23b32952fa4a53675dff81d6eff670ee235519135ba1a0850";
+
+    private static final String TX = "0x6c262504e9b23848400834ac805f3dd45a115095a97dde722bd845d06bc535d1";
+    private static final String TX_DOES_NOT_EXIST = "0x6c162104e1b21848401834ac805f3dd45a115095a97dde722bd845d06bc535d1";
+
+    private static final String TX_SENDER = "0x4f6fc409e152d33843cf4982d414c1dd0879277e";
+
+    @Test
+    public void GetCurrentBlock() throws InterruptedException, ExecutionException {
+        long currentBlock = VET.vetGetCurrentBlock();
+        assertTrue(currentBlock > BLOCK);
+    }
+
+    @Nested
+    class GetBlock {
+        @Test
+        public void valid() throws ExecutionException, InterruptedException {
+            VetBlock expected = VetBlock.builder()
+                    .number(BLOCK)
+                    .id(BLOCK_HASH)
+                    .size(588L)
+                    .parentID("0x00a669056d3cc4e276d34c411e2a969020b91bf1423719acab0d45ba774ea446")
+                    .timestamp(1639089870L)
+                    .gasLimit(21000000L)
+                    .beneficiary("0xb4094c25f86d628fdd571afc4077f0d0196afb48")
+                    .gasUsed(52582L)
+                    .totalScore(55898023L)
+                    .txsRoot("0x7c1bf9e58f3f702b53f8efbfb3593b04a26713aec0f7f067ef39b57dff512675")
+                    .txsFeatures(1L)
+                    .stateRoot("0x2d7ed3e2df513dcd9c61773c166cdbed02281e7dfd028478a451130196c1c4cd")
+                    .receiptsRoot("0x87c70ba39333c7df1a60d2cfe99b8ee5674265de94eb0f3aab10afdf43d5aeab")
+                    .signer("0xd7b5750dbfae7d2aabc16b0ed16fbf2c048067ca")
+                    .transactions(new String[]{TX})
+                    .build();
+
+            VetBlock block = VET.vetGetBlock(BLOCK_HASH);
+
+            assertEquals(expected, block);
+        }
+
+        @Test
+        public void notFound() throws ExecutionException, InterruptedException {
+            VetBlock block = VET.vetGetBlock(BLOCK_DOES_NOT_EXIST_HASH);
+            assertNull(block);
+        }
+    }
+
+    @Nested
+    class GetAccountBalance {
+        @Test
+        public void valid() throws ExecutionException, InterruptedException {
+            BigDecimal balance = VET.vetGetAccountBalance(ADDRESS);
+            assertEquals(BigDecimal.valueOf(500), balance);
+        }
+
+        @Test
+        public void emptyAccount() throws ExecutionException, InterruptedException {
+            BigDecimal balance = VET.vetGetAccountBalance(ADDRESS_NO_TX);
+            assertEquals(BigDecimal.ZERO, balance);
+        }
+
+        @Test
+        public void addressNotFound() throws ExecutionException, InterruptedException {
+            BigDecimal balance = VET.vetGetAccountBalance(ADDRESS_WRONG);
+            assertEquals(BigDecimal.ZERO, balance);
+        }
+    }
+
+    @Nested
+    class GetAccountEnergy {
+        @Test
+        public void valid() throws ExecutionException, InterruptedException {
+            BigDecimal energy = VET.vetGetAccountEnergy(ADDRESS);
+            assertTrue(energy.compareTo(BigDecimal.valueOf(50)) > 0);
+        }
+
+        @Test
+        public void emptyAccount() throws ExecutionException, InterruptedException {
+            BigDecimal energy = VET.vetGetAccountEnergy(ADDRESS_NO_TX);
+            assertEquals(BigDecimal.ZERO, energy);
+        }
+
+        @Test
+        public void addressNotFound() throws ExecutionException, InterruptedException {
+            BigDecimal energy = VET.vetGetAccountEnergy(ADDRESS_WRONG);
+            assertEquals(BigDecimal.ZERO, energy);
+        }
+    }
+
+    @Nested
+    class GetTransaction {
+        @Test
+        public void valid() throws ExecutionException, InterruptedException {
+            VetTx expected = VetTx.builder()
+                    .id(TX)
+                    .chainTag("0x27")
+                    .blockRef("0x00a66904e5f9ea38")
+                    .expiration(32L)
+                    .gasPriceCoef(BigDecimal.valueOf(255))
+                    .gas(BigDecimal.valueOf(100000))
+                    .origin(TX_SENDER)
+                    .nonce("0x702e531f044b6af4")
+                    .size(BigDecimal.valueOf(225))
+                    .clauses(new VetTxClauses[]{
+                            new VetTxClauses(
+                                    ADDRESS,
+                                    new BigDecimal(500).scaleByPowerOfTen(18).setScale(0, RoundingMode.HALF_EVEN),
+                                    "0x"
+                            ),
+                            new VetTxClauses(
+                                    "0x0000000000000000000000000000456e65726779",
+                                    BigDecimal.ZERO,
+                                    "0xa9059cbb000000000000000000000000745502e1892a97846fca30781b9232162dda43b9000000000000000000000000000000000000000000000002b5e3af16b1880000"
+                            )
+                    })
+                    .meta(new VetTxMeta(BLOCK_HASH, BLOCK, 1639089870L))
+                    .blockNumber(BLOCK)
+                    .build();
+
+            VetTx tx = VET.vetGetTransaction(TX);
+
+            assertEquals(expected, tx);
+        }
+
+        @Test
+        public void notFound() throws ExecutionException, InterruptedException {
+            VetTx tx = VET.vetGetTransaction(TX_DOES_NOT_EXIST);
+            assertNull(tx);
+        }
+    }
+
+    // @TODO add estimategas
+    @Disabled
     @Test
     public void vetEstimateGasTest() throws InterruptedException, ExecutionException, IOException {
         VET vet = new VET();
@@ -29,68 +175,41 @@ public class VETTest {
         VetEstimateGas vetEstimateGas = vet.vetEstimateGas(body);
     }
 
-    @Test
-    public void vetGetCurrentBlockTest() throws ExecutionException, InterruptedException {
-        VET vet = new VET();
-        BigInteger block = vet.vetGetCurrentBlock();
-        System.out.println(block);
-    }
+    @Nested
+    class GetTransactionReceipt {
+        @Test
+        public void valid() throws ExecutionException, InterruptedException {
+            VetTxReceipt expected = VetTxReceipt.builder()
+                    .gasUsed(BigDecimal.valueOf(52582))
+                    .gasPayer(TX_SENDER)
+                    .paid("0xe982d0217978000")
+                    .reward("0x460da4d6d7a4000")
+                    .reverted(false)
+                    .meta(new VetTxReceiptMeta(BLOCK_HASH, BLOCK, 1639089870L, TX, TX_SENDER))
+                    .outputs(new VetTxReceiptOutputs[]{
+                            new VetTxReceiptOutputs(new Event[0], new VetTxReceiptTransfers[]{
+                                    new VetTxReceiptTransfers(TX_SENDER, ADDRESS, "0x1b1ae4d6e2ef500000"),
+                            }),
+                            new VetTxReceiptOutputs(
+                                    new Event[]{new Event(new String[]{"0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef", "0x0000000000000000000000004f6fc409e152d33843cf4982d414c1dd0879277e", "0x000000000000000000000000745502e1892a97846fca30781b9232162dda43b9"})},
+                                    new VetTxReceiptTransfers[0]
+                            )
+                    })
+                    .blockNumber(BLOCK)
+                    .blockHash(BLOCK_HASH)
+                    .transactionHash(TX)
+                    .status("0x1")
+                    .build();
 
-    @Test
-    public void vetGetBlockTest() throws ExecutionException, InterruptedException {
-        VET vet = new VET();
-        // https://explore.vechain.org/blocks/0x007626454021a171f4afc50af1a46418320fa761536eace78ee8c4f252a51389/
-        String hash = "0x007626454021a171f4afc50af1a46418320fa761536eace78ee8c4f252a51389";
-        VetBlock block = vet.vetGetBlock(hash);
-        System.out.println(block);
-        assertThat(block, hasProperty("number"));
-        assertThat(block, hasProperty("parentID"));
-        assertThat(block, hasProperty("size"));
-        assertThat(block, hasProperty("timestamp"));
-    }
+            VetTxReceipt txReceipt = VET.vetGetTransactionReceipt(TX);
 
-    @Test
-    public void vetGetAccountBalanceTest() throws ExecutionException, InterruptedException {
-        VET vet = new VET();
-        // https://explore.vechain.org/accounts/0x0f296031669698427aff5df1e186794d182a583d/
-        String address = "0x0F296031669698427aFF5Df1e186794d182a583D";
-        BigDecimal balance = vet.vetGetAccountBalance(address);
-        System.out.println(balance);
-    }
+            assertEquals(expected, txReceipt);
+        }
 
-    @Test
-    public void vetGetAccountEnergyTest() throws ExecutionException, InterruptedException {
-        VET vet = new VET();
-        // https://explore.vechain.org/accounts/0x0f296031669698427aff5df1e186794d182a583d/
-        String address = "0x0F296031669698427aFF5Df1e186794d182a583D";
-        BigDecimal energy = vet.vetGetAccountEnergy(address);
-        System.out.println(energy);
-    }
-
-    @Test
-    public void vetGetTransactionTest() throws ExecutionException, InterruptedException {
-        VET vet = new VET();
-        // https://explore.vechain.org/transactions/0x226c64b8622997b8f88fda3935588d34d0b744fab16e5710a7722889317f4872#info
-        String tx = "0x226c64b8622997b8f88fda3935588d34d0b744fab16e5710a7722889317f4872";
-        VetTx vetTx = vet.vetGetTransaction(tx);
-        System.out.println(vetTx);
-        assertThat(vetTx, hasProperty("chainTag"));
-        assertThat(vetTx, hasProperty("expiration"));
-        assertThat(vetTx, hasProperty("clauses"));
-        assertThat(vetTx, hasProperty("blockRef"));
-    }
-
-    @Test
-    public void vetGetTransactionReceiptTest() throws ExecutionException, InterruptedException {
-        VET vet = new VET();
-        // https://explore.vechain.org/transactions/0x226c64b8622997b8f88fda3935588d34d0b744fab16e5710a7722889317f4872#info
-        String txHash = "0x226c64b8622997b8f88fda3935588d34d0b744fab16e5710a7722889317f4872";
-        VetTxReceipt vetTxReceipt = vet.vetGetTransactionReceipt(txHash);
-        System.out.println(vetTxReceipt);
-        System.out.println(vetTxReceipt.getOutputs()[0].getEvents()[0]);
-        assertThat(vetTxReceipt, hasProperty("gasUsed"));
-        assertThat(vetTxReceipt, hasProperty("gasPayer"));
-        assertThat(vetTxReceipt, hasProperty("paid"));
-        assertThat(vetTxReceipt, hasProperty("reward"));
+        @Test
+        public void notFound() throws ExecutionException, InterruptedException {
+            VetTxReceipt txReceipt = VET.vetGetTransactionReceipt(TX_DOES_NOT_EXIST);
+            assertNull(txReceipt);
+        }
     }
 }

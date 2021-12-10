@@ -1,10 +1,7 @@
 package io.tatum.model.response.bch;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigInteger;
 
@@ -14,6 +11,7 @@ import java.math.BigInteger;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BchBlock {
@@ -28,8 +26,8 @@ public class BchBlock {
     private String bits;
     private long strippedsize;
     private long time;
-    private BigInteger nonce;
-    private BigInteger difficulty;
+    private long nonce;
+    private long difficulty;
     private int confirmations;
     private String previousblockhash;
     private String nextblockhash;

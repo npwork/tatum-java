@@ -67,7 +67,7 @@ public class BcashOffchain {
             BroadcastWithdrawal broadcastWithdrawal = new BroadcastWithdrawal();
             broadcastWithdrawal.setTxData(txData);
             broadcastWithdrawal.setWithdrawalId(id);
-            broadcastWithdrawal.setCurrency(Currency.BCH.getCurrency());
+            broadcastWithdrawal.setCurrency(Currency.BCH.currency);
             return new BroadcastResult(Common.offchainBroadcast(broadcastWithdrawal), id);
 
         } catch (Exception e) {

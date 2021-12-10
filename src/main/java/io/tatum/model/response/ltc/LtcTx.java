@@ -3,10 +3,7 @@ package io.tatum.model.response.ltc;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.tatum.model.response.btc.BtcTxInputs;
 import io.tatum.model.response.btc.BtcTxOutputs;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -16,23 +13,23 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LtcTx {
 
     private String hash;
     private String witnessHash;
-    private String fee;
-    private String rate;
-    private BigDecimal ps;
-    private BigDecimal height;
-    private String block;
+    private BigDecimal fee;
+    private BigDecimal rate;
+    private Long ps;
+    private Long blockNumber;
     private BigDecimal ts;
-    private BigDecimal index;
+    private Long index;
     private LtcTxOutputs[] outputs;
-    private BigDecimal flag;
+    private Long flag;
     private LtcTxInputs[] inputs;
-    private BigDecimal version;
-    private BigDecimal locktime;
+    private Long version;
+    private Long locktime;
 
 }
