@@ -2,7 +2,7 @@ package io.tatum.transaction;
 
 import io.tatum.blockchain.XLM;
 import io.tatum.model.request.TransferXlm;
-import io.tatum.model.response.xlm.Account;
+import io.tatum.model.response.xlm.XlmAccount;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.junit.Test;
@@ -20,7 +20,7 @@ public class XlmTest {
     @Test
     public void should_test_XLM_transaction_data() throws ExecutionException, InterruptedException {
 
-        Account sequence = new Account();
+        XlmAccount sequence = new XlmAccount();
         sequence.setSequence(123L);
 
         XLM xlm = new XLM();

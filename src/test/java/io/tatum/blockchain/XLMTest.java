@@ -1,12 +1,14 @@
 package io.tatum.blockchain;
 
+import io.tatum.AbstractApiTest;
 import io.tatum.model.response.xlm.*;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Collections;
-import java.util.concurrent.ExecutionException;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasProperty;
@@ -19,10 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * http://testnet.stellarchain.io/tx/b7c7b6d69444faca7a130a8413281704f11decc8fbc45a11bb36527bf351522f
  * http://testnet.stellarchain.io/ledger/1405538
  */
-public class XLMTest {
-    private final static XLM XLM = new XLM();
-
-    private final static long LEDGER_INDEX = 1405538L;
+public class XLMTest extends AbstractApiTest {
+    private final static long LEDGER_SEQUENCE = 1405538L;
     private final static String LEDGER_HASH = "b218268fb72ab9c5fda457b5d6eba4e55361d8187634ea095b21b1927009126e";
     public final static String ADDRESS = "GDYTQXSTHRCV7GVGMMSA6ZXGNGZSSXED4RORYVKAICH5JVO5V7FGGZJW";
     private final static String ADDRESS_WITHOUT_TXS = "GDAV35IHODCQFP22QISJIID3VUSFL57GDX4DP5676TYY6DAMO4AUMBOU";
@@ -31,27 +31,27 @@ public class XLMTest {
     private final static String TX_DOES_NOT_EXIST = "b7c7b6d614441ac17a13018411281704f11decc8fbc45a11bb36527bf351522f";
 
     @Test
-    public void GetCurrentLedger() throws InterruptedException, ExecutionException {
-        XlmInfo current = XLM.xlmGetCurrentLedger();
-        assertTrue(current.getSequence() > LEDGER_INDEX);
+    public void GetCurrentLedger() throws IOException {
+        XlmInfo current = tatumApi.xlm.info().execute().body();
+        assertTrue(current.getSequence() > LEDGER_SEQUENCE);
     }
 
     @Test
-    public void GetFee() throws ExecutionException, InterruptedException {
-        long fee = XLM.xlmGetFee();
+    public void GetFee() throws IOException {
+        long fee = tatumApi.xlm.feeInfo().execute().body();
         assertTrue(fee > 0);
     }
 
     @Nested
     class GetAccountInfo {
         @Test
-        public void valid() throws InterruptedException, ExecutionException {
-            Account expected = Account.builder()
+        public void valid() throws IOException {
+            XlmAccount expected = XlmAccount.builder()
                     .id(ADDRESS)
                     .accountId(ADDRESS)
                     .sequence(6036739743285248L)
                     .subentryCount(0L)
-                    .lastModifiedLedger(LEDGER_INDEX)
+                    .lastModifiedLedger(LEDGER_SEQUENCE)
                     .lastModifiedTime("2021-12-09T21:08:24Z")
                     .thresholds(XlmAccountThresholds.builder()
                             .lowThreshold(0L)
@@ -84,14 +84,14 @@ public class XLMTest {
                     .pagingToken(ADDRESS)
                     .build();
 
-            Account account = XLM.xlmGetAccountInfo(ADDRESS);
+            XlmAccount account = tatumApi.xlm.getAccount(ADDRESS).execute().body();
 
             assertEquals(expected, account);
         }
 
         @Test
-        public void notFound() throws InterruptedException, ExecutionException {
-            Account account = XLM.xlmGetAccountInfo(ADDRESS_DOES_NOT_EXIST);
+        public void notFound() throws IOException {
+            XlmAccount account = tatumApi.xlm.getAccount(ADDRESS_DOES_NOT_EXIST).execute().body();
             assertNull(account);
         }
     }
@@ -99,13 +99,13 @@ public class XLMTest {
     @Nested
     class GetLedger {
         @Test
-        public void valid() throws ExecutionException, InterruptedException {
+        public void valid() throws IOException {
             XlmLedger expected = XlmLedger.builder()
                     .id(LEDGER_HASH)
                     .hash(LEDGER_HASH)
                     .pagingToken(6036739743285248L)
                     .prevHash("b76393771e1b8ba4832fe5dfa71a4958706134cafe8c34b76f03a2143a0467d7")
-                    .sequence(LEDGER_INDEX)
+                    .sequence(LEDGER_SEQUENCE)
                     .successfulTransactionCount(4L)
                     .failedTransactionCount(0L)
                     .operationCount(4L)
@@ -119,7 +119,7 @@ public class XLMTest {
                     .protocolVersion(18L)
                     .build();
 
-            XlmLedger ledger = XLM.xlmGetLedger(LEDGER_INDEX);
+            XlmLedger ledger = tatumApi.xlm.getLedger(LEDGER_SEQUENCE).execute().body();
 
             assertNotNull(ledger.getHeaderXdr());
             ledger.setHeaderXdr(null);
@@ -128,8 +128,8 @@ public class XLMTest {
         }
 
         @Test
-        public void notFound() throws ExecutionException, InterruptedException {
-            XlmLedger ledger = XLM.xlmGetLedger(Long.MAX_VALUE);
+        public void notFound() throws IOException {
+            XlmLedger ledger = tatumApi.xlm.getLedger(Long.MAX_VALUE).execute().body();
             assertNull(ledger);
         }
     }
@@ -137,21 +137,21 @@ public class XLMTest {
     @Nested
     class GetLedgerTx {
         @Test
-        public void valid() throws ExecutionException, InterruptedException {
+        public void valid() throws IOException {
             XlmTransaction expectedFirst = getXlmTransaction();
 
-            XlmTransaction[] xlmLedgerTxes = XLM.xlmGetLedgerTx(LEDGER_INDEX);
-            assertEquals(4, xlmLedgerTxes.length);
+            List<XlmTransaction> xlmLedgerTxes = tatumApi.xlm.getLedgerTx(LEDGER_SEQUENCE).execute().body();
+            assertEquals(4, xlmLedgerTxes.size());
 
-            XlmTransaction first = xlmLedgerTxes[0];
+            XlmTransaction first = xlmLedgerTxes.get(0);
 
             verifyAndNullFields(first);
             assertEquals(expectedFirst, first);
         }
 
         @Test
-        public void notFound() throws ExecutionException, InterruptedException {
-            XlmTransaction[] xlmLedgerTxes = XLM.xlmGetLedgerTx(Long.MAX_VALUE);
+        public void notFound() throws IOException {
+            List<XlmTransaction> xlmLedgerTxes = tatumApi.xlm.getLedgerTx(Long.MAX_VALUE).execute().body();
             assertNull(xlmLedgerTxes);
         }
     }
@@ -159,18 +159,18 @@ public class XLMTest {
     @Nested
     class GetTransaction {
         @Test
-        public void valid() throws ExecutionException, InterruptedException {
+        public void valid() throws IOException {
             XlmTransaction expected = getXlmTransaction();
 
-            XlmTransaction tx = XLM.xlmGetTransaction(TX);
+            XlmTransaction tx = tatumApi.xlm.getTransaction(TX).execute().body();
 
             verifyAndNullFields(tx);
             assertEquals(expected, tx);
         }
 
         @Test
-        public void notFound() throws ExecutionException, InterruptedException {
-            XlmTransaction tx = XLM.xlmGetTransaction(TX_DOES_NOT_EXIST);
+        public void notFound() throws IOException {
+            XlmTransaction tx = tatumApi.xlm.getTransaction(TX_DOES_NOT_EXIST).execute().body();
             assertNull(tx);
         }
     }
@@ -178,27 +178,27 @@ public class XLMTest {
     @Nested
     class GetTransactionsForAccount {
         @Test
-        public void valid() throws ExecutionException, InterruptedException {
+        public void valid() throws IOException {
             XlmTransaction expectedFirst = getXlmTransaction();
 
-            XlmTransaction[] txs = XLM.xlmGetAccountTransactions(ADDRESS);
-            assertEquals(1, txs.length);
+            List<XlmTransaction> txs = tatumApi.xlm.getAccountTx(ADDRESS).execute().body();
+            assertEquals(1, txs.size());
 
-            XlmTransaction first = txs[0];
+            XlmTransaction first = txs.get(0);
 
             verifyAndNullFields(first);
             assertEquals(expectedFirst, first);
         }
 
         @Test
-        public void withoutTx() throws ExecutionException, InterruptedException {
-            XlmTransaction[] txs = XLM.xlmGetAccountTransactions(ADDRESS_WITHOUT_TXS);
+        public void withoutTx() throws IOException {
+            List<XlmTransaction> txs = tatumApi.xlm.getAccountTx(ADDRESS_WITHOUT_TXS).execute().body();
             assertNull(txs);
         }
 
         @Test
-        public void notFound() throws ExecutionException, InterruptedException {
-            XlmTransaction[] txs = XLM.xlmGetAccountTransactions(ADDRESS_DOES_NOT_EXIST);
+        public void notFound() throws IOException {
+            List<XlmTransaction> txs = tatumApi.xlm.getAccountTx(ADDRESS_DOES_NOT_EXIST).execute().body();
             assertNull(txs);
         }
     }
@@ -233,7 +233,7 @@ public class XLMTest {
                 .maxFee(BigDecimal.valueOf(100000))
                 .operationCount(1L)
                 .validAfter("1970-01-01T00:00:00Z")
-                .ledgerAttr(LEDGER_INDEX)
+                .ledgerAttr(LEDGER_SEQUENCE)
                 .build();
     }
 }

@@ -1,15 +1,16 @@
 package io.tatum.blockchain;
 
+import io.tatum.AbstractApiTest;
 import io.tatum.model.response.xrp.*;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.ExecutionException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasProperty;
@@ -21,9 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * https://blockexplorer.one/xrp/testnet/address/rPVb2HeAhFGZ3T2eCwT1TiPJJ97fdFUxxQ
  * https://blockexplorer.one/xrp/testnet/tx/efb7a664e9d406e902195e6eae5385d628f7424b0258a0a4354af997ca6f2dc4
  */
-public class XRPTest {
-    private final static XRP XRP = new XRP();
-
+public class XRPTest extends AbstractApiTest {
     private final static long LEDGER_INDEX = 23425067L;
     public final static String ADDRESS = "rPVb2HeAhFGZ3T2eCwT1TiPJJ97fdFUxxQ";
     private final static String ADDRESS_WITHOUT_TXS = "rwcsGiYMcgmic3nHQDeUEZPJqZfqvMLD85";
@@ -32,21 +31,21 @@ public class XRPTest {
     private final static String TX_DOES_NOT_EXIST = "efb7a615e9d422e502195ee5ae5315d628f7424b0258a0a4354af997ca6f2dc4";
 
     @Test
-    public void GetFee() throws InterruptedException, ExecutionException {
-        BigDecimal fee = XRP.xrpGetFee();
+    public void GetFee() throws IOException {
+        BigDecimal fee = tatumApi.xrp.feeInfo().execute().body().getFee();
         assertTrue(fee.compareTo(BigDecimal.ZERO) > 0);
     }
 
     @Test
-    public void GetCurrentLedger() throws InterruptedException, ExecutionException {
-        Long currentLedger = XRP.xrpGetCurrentLedger();
+    public void GetCurrentLedger() throws IOException {
+        Long currentLedger = tatumApi.xrp.info().execute().body().getLedgerIndex();
         assertTrue(currentLedger > LEDGER_INDEX);
     }
 
     @Nested
     class GetAccountInfo {
         @Test
-        public void valid() throws InterruptedException, ExecutionException {
+        public void valid() throws IOException {
             AccountDataDetails expected = AccountDataDetails.builder()
                     .account(ADDRESS)
                     .balance(new BigDecimal(1000).scaleByPowerOfTen(6).setScale(0, RoundingMode.HALF_EVEN))
@@ -58,7 +57,8 @@ public class XRPTest {
                     .sequence(23424979)
                     .index("B5AA32FF8B9439D63200E2D8DA205E7C67000A4B428712FFE1144CBCEF6E5270")
                     .build();
-            AccountData accountData = XRP.xrpGetAccountInfo(ADDRESS);
+
+            AccountData accountData = tatumApi.xrp.getAccount(ADDRESS).execute().body();
 
             assertEquals(expected, accountData.getDetails());
 
@@ -67,8 +67,8 @@ public class XRPTest {
         }
 
         @Test
-        public void notFound() throws InterruptedException, ExecutionException {
-            AccountData accountData = XRP.xrpGetAccountInfo(ADDRESS_DOES_NOT_EXIST);
+        public void notFound() throws IOException {
+            AccountData accountData = tatumApi.xrp.getAccount(ADDRESS_DOES_NOT_EXIST).execute().body();
             assertNull(accountData);
         }
     }
@@ -76,7 +76,7 @@ public class XRPTest {
     @Nested
     class GetLedger {
         @Test
-        public void valid() throws ExecutionException, InterruptedException {
+        public void valid() throws IOException {
             String ledgerHash = "EBB8429A6D45E35FAC34709DE8E07BCA985E9338E8AFBB6111D930C9E7DA04DD";
             XrpLedger expected = XrpLedger.builder()
                     .ledgerHash(ledgerHash)
@@ -102,7 +102,7 @@ public class XRPTest {
                     )
                     .build();
 
-            XrpLedger ledger = XRP.xrpGetLedger(LEDGER_INDEX);
+            XrpLedger ledger = tatumApi.xrp.getLedger(LEDGER_INDEX).execute().body();
 
             assertEquals(2, ledger.getDetails().getTransactions().size());
 
@@ -111,8 +111,8 @@ public class XRPTest {
         }
 
         @Test
-        public void notFound() throws ExecutionException, InterruptedException {
-            XrpLedger ledger = XRP.xrpGetLedger(Long.MAX_VALUE);
+        public void notFound() throws IOException {
+            XrpLedger ledger = tatumApi.xrp.getLedger(Long.MAX_VALUE).execute().body();
             assertNull(ledger);
         }
     }
@@ -120,33 +120,33 @@ public class XRPTest {
     @Nested
     class GetAccountBalance {
         @Test
-        public void valid() throws ExecutionException, InterruptedException {
-            BigInteger balance = XRP.xrpGetAccountBalance(ADDRESS);
+        public void valid() throws IOException {
+            BigInteger balance = tatumApi.xrp.getBalance(ADDRESS).execute().body().getBalance();
             long balanceDivided = (long) (balance.longValue() / Math.pow(10, 6));
             assertEquals(1000L, balanceDivided);
         }
 
         @Test
-        public void notFound() throws ExecutionException, InterruptedException {
-            BigInteger balance = XRP.xrpGetAccountBalance(ADDRESS_DOES_NOT_EXIST);
-            assertNull(balance);
+        public void notFound() throws IOException {
+            XrpAccountBalance xrpAccountBalance = tatumApi.xrp.getBalance(ADDRESS_DOES_NOT_EXIST).execute().body();
+            assertNull(xrpAccountBalance);
         }
     }
 
     @Nested
     class GetTransaction {
         @Test
-        public void valid() throws ExecutionException, InterruptedException {
+        public void valid() throws IOException {
             XrpTransaction expected = getTransaction();
 
-            XrpTransaction xrpTransaction = XRP.xrpGetTransaction(TX);
+            XrpTransaction xrpTransaction = tatumApi.xrp.getTransaction(TX).execute().body();
 
             assertEquals(expected, xrpTransaction);
         }
 
         @Test
-        public void notFound() throws ExecutionException, InterruptedException {
-            XrpTransaction xrpTransaction = XRP.xrpGetTransaction(TX_DOES_NOT_EXIST);
+        public void notFound() throws IOException {
+            XrpTransaction xrpTransaction = tatumApi.xrp.getTransaction(TX_DOES_NOT_EXIST).execute().body();
             assertNull(xrpTransaction);
         }
     }
@@ -154,7 +154,7 @@ public class XRPTest {
     @Nested
     class GetAccountTransactions {
         @Test
-        public void valid() throws ExecutionException, InterruptedException {
+        public void valid() throws IOException {
             XrpAccountTransactions expected = XrpAccountTransactions.builder()
                     .account(ADDRESS)
                     .ledgerIndexMin(21996156L)
@@ -172,7 +172,7 @@ public class XRPTest {
                                     .build())
                     )
                     .build();
-            XrpAccountTransactions accountTransactions = XRP.xrpGetAccountTransactions(ADDRESS);
+            XrpAccountTransactions accountTransactions = tatumApi.xrp.getAccountTx(ADDRESS).execute().body();
 
             assertTrue(accountTransactions.getLedgerIndexMax() > LEDGER_INDEX);
             accountTransactions.setLedgerIndexMax(null);
@@ -181,7 +181,7 @@ public class XRPTest {
         }
 
         @Test
-        public void withoutTxs() throws ExecutionException, InterruptedException {
+        public void withoutTxs() throws IOException {
             XrpAccountTransactions expected = XrpAccountTransactions.builder()
                     .account(ADDRESS_WITHOUT_TXS)
                     .ledgerIndexMin(21996156L)
@@ -189,7 +189,7 @@ public class XRPTest {
                     .transactions(new ArrayList<>())
                     .validated(true)
                     .build();
-            XrpAccountTransactions accountTransactions = XRP.xrpGetAccountTransactions(ADDRESS_WITHOUT_TXS);
+            XrpAccountTransactions accountTransactions = tatumApi.xrp.getAccountTx(ADDRESS_WITHOUT_TXS).execute().body();
 
             assertTrue(accountTransactions.getLedgerIndexMax() > LEDGER_INDEX);
             accountTransactions.setLedgerIndexMax(null);
@@ -198,8 +198,8 @@ public class XRPTest {
         }
 
         @Test
-        public void notFound() throws ExecutionException, InterruptedException {
-            XrpAccountTransactions accountTransactions = XRP.xrpGetAccountTransactions(ADDRESS_DOES_NOT_EXIST);
+        public void notFound() throws IOException {
+            XrpAccountTransactions accountTransactions = tatumApi.xrp.getAccountTx(ADDRESS_DOES_NOT_EXIST).execute().body();
             assertNull(accountTransactions);
         }
     }

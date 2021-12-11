@@ -1,7 +1,7 @@
 package io.tatum.blockchain;
 
 import io.tatum.model.response.common.TransactionHash;
-import io.tatum.model.response.xlm.Account;
+import io.tatum.model.response.xlm.XlmAccount;
 import io.tatum.model.response.xlm.XlmInfo;
 import io.tatum.model.response.xlm.XlmLedger;
 import io.tatum.model.response.xlm.XlmTransaction;
@@ -39,9 +39,9 @@ public class XLM {
      * @throws ExecutionException   the execution exception
      * @throws InterruptedException the interrupted exception
      */
-    public Account xlmGetAccountInfo(String account) throws ExecutionException, InterruptedException {
+    public XlmAccount xlmGetAccountInfo(String account) throws ExecutionException, InterruptedException {
         String uri = BaseUrl.getInstance().getUrl() + "/v3/xlm/account/" + account;
-        return Async.get(uri, Account.class);
+        return Async.get(uri, XlmAccount.class);
     }
 
     /**

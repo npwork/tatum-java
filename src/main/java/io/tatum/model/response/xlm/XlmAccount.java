@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Account {
+public class XlmAccount {
     private String id;
 
     @JsonProperty("account_id")

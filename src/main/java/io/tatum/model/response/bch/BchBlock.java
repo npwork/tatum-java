@@ -3,6 +3,7 @@ package io.tatum.model.response.bch;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
@@ -27,7 +28,7 @@ public class BchBlock {
     private long strippedsize;
     private long time;
     private long nonce;
-    private long difficulty;
+    private BigDecimal difficulty;
     private int confirmations;
     private String previousblockhash;
     private String nextblockhash;

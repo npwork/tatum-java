@@ -17,6 +17,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.bitcoincashj.core.Transaction;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -95,15 +96,17 @@ public class BcashTx {
                 List<BchTx> txs = getTransactions(txHashs);
 
                 if (CollectionUtils.isNotEmpty(txs)) {
-                    long satoshis;
+                    BigDecimal satoshis;
                     for (int i = 0; i < fromUTXO.length; i++) {
                         FromUTXO item = fromUTXO[i];
                         if (txs.get(i) == null) {
                             return null;
                         }
 
+                        // @TODO was satoshis?
                         satoshis = txs.get(i).getVout()[Math.toIntExact(item.getIndex())].getValue();
-                        transactionBuilder.addInput(item.getTxHash(), item.getIndex(), item.getPrivateKey(), satoshis);
+                        // @TODO error here!!!
+                        transactionBuilder.addInput(item.getTxHash(), item.getIndex(), item.getPrivateKey(), satoshis.longValue());
                     }
                 }
                 return transactionBuilder.build().toHex();

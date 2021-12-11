@@ -1,5 +1,6 @@
 package io.tatum.blockchain;
 
+import io.tatum.AbstractApiTest;
 import io.tatum.model.response.common.BlockHash;
 import io.tatum.model.response.ltc.LtcBlock;
 import io.tatum.model.response.ltc.LtcInfo;
@@ -8,9 +9,10 @@ import io.tatum.model.response.ltc.LtcUTXO;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.concurrent.ExecutionException;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasProperty;
@@ -23,8 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * https://chain.so/address/LTCTEST/tltc1q05l3z297ypsge7cztya6hs7elyj7z9uk6s8szdc026jr6p7sdqsqe8smt2
  * https://chain.so/tx/LTCTEST/5e878df3e6308cd35f4da52075b4107ce57b74fff3f24815cfe0362f6034a81f
  */
-public class LitecoinTest {
-    private final static Litecoin LITECOIN = new Litecoin();
+public class LitecoinTest extends AbstractApiTest {
     public final static String ADDRESS = "tltc1q05l3z297ypsge7cztya6hs7elyj7z9uk6s8szdc026jr6p7sdqsqe8smt2";
     private final static String ADDRESS_DOES_NOT_EXIST = "tltc1q03l3z197ypsge2czzya6hs7elyj7z9uk6s8szdc026jr6p7sdqsqe8smt2";
     private final static String ADDRESS_NO_TX = "tltc1qem9sfcjvjcxacdta7cx3a20hm5djmfymvgwv3rc0t2mmd9vdy87qe0deuv";
@@ -37,8 +38,8 @@ public class LitecoinTest {
     private final static String BLOCK_DOESNT_EXIST = "1fa8b5dc6614c07bcafeb1b2c24931b214e969f860b1a9606fe5b341928ec490";
 
     @Test
-    public void getCurrentBlock() throws InterruptedException, ExecutionException {
-        LtcInfo info = LITECOIN.ltcGetCurrentBlock();
+    public void getCurrentBlock() throws IOException {
+        LtcInfo info = tatumApi.litecoin.info().execute().body();
         assertTrue(info.getBlocks().compareTo(BLOCK_NUMBER) > 0);
         assertTrue(info.getHeaders().compareTo(BLOCK_NUMBER) > 0);
 
@@ -49,7 +50,7 @@ public class LitecoinTest {
     @Nested
     class GetBlock {
         @Test
-        public void valid() throws ExecutionException, InterruptedException {
+        public void valid() throws IOException {
             LtcBlock expected = LtcBlock.builder()
                     .hash(BLOCK_HASH)
                     .height(BLOCK_NUMBER)
@@ -60,7 +61,7 @@ public class LitecoinTest {
                     .bits(487902576L)
                     .nonce(2619504603L)
                     .build();
-            LtcBlock ltcBlock = LITECOIN.ltcGetBlock(BLOCK_HASH);
+            LtcBlock ltcBlock = tatumApi.litecoin.getBlock(BLOCK_HASH).execute().body();
 
             assertEquals(6, ltcBlock.getTxs().length);
             ltcBlock.setTxs(null);
@@ -69,8 +70,8 @@ public class LitecoinTest {
         }
 
         @Test
-        public void notExist() throws ExecutionException, InterruptedException {
-            LtcBlock ltcBlock = LITECOIN.ltcGetBlock(BLOCK_DOESNT_EXIST);
+        public void notExist() throws IOException {
+            LtcBlock ltcBlock = tatumApi.litecoin.getBlock(BLOCK_DOESNT_EXIST).execute().body();
             assertNull(ltcBlock);
         }
     }
@@ -78,14 +79,14 @@ public class LitecoinTest {
     @Nested
     class GetBlockHash {
         @Test
-        public void valid() throws ExecutionException, InterruptedException {
-            BlockHash blockHash = LITECOIN.ltcGetBlockHash(BLOCK_NUMBER);
+        public void valid() throws IOException {
+            BlockHash blockHash = tatumApi.litecoin.getBlockHash(BLOCK_NUMBER.longValue()).execute().body();
             assertEquals(new BlockHash(BLOCK_HASH), blockHash);
         }
 
         @Test
-        public void notExist() throws ExecutionException, InterruptedException {
-            BlockHash blockHash = LITECOIN.ltcGetBlockHash(new BigDecimal(Long.MAX_VALUE));
+        public void notExist() throws IOException {
+            BlockHash blockHash = tatumApi.litecoin.getBlockHash(Long.MAX_VALUE).execute().body();
             assertNull(blockHash);
         }
     }
@@ -93,7 +94,7 @@ public class LitecoinTest {
     @Nested
     class GetUTXO {
         @Test
-        public void valid() throws InterruptedException, ExecutionException {
+        public void valid() throws IOException {
             LtcUTXO expected = LtcUTXO.builder()
                     .index(0L)
                     .hash(TX)
@@ -105,19 +106,19 @@ public class LitecoinTest {
                     .script("00207d3f1128be20608cfb02593babc3d9f925e11796d40f01370f56a43d07d06820")
                     .build();
 
-            LtcUTXO ltcUTXO = LITECOIN.ltcGetUTXO(TX, BigDecimal.ZERO);
-            assertEquals(expected, ltcUTXO);
+            LtcUTXO utxo = tatumApi.litecoin.getUtxo(TX, 0).execute().body();
+            assertEquals(expected, utxo);
         }
 
         @Test
-        public void utxoDoesntExist() throws InterruptedException, ExecutionException {
-            LtcUTXO utxo = LITECOIN.ltcGetUTXO(TX, BigDecimal.TEN);
+        public void utxoDoesntExist() throws IOException {
+            LtcUTXO utxo = tatumApi.litecoin.getUtxo(TX, 10).execute().body();
             assertNull(utxo);
         }
 
         @Test
-        public void txDoesNotExist() throws InterruptedException, ExecutionException {
-            LtcUTXO utxo = LITECOIN.ltcGetUTXO(TX_DOESNT_EXIST, BigDecimal.ZERO);
+        public void txDoesNotExist() throws IOException {
+            LtcUTXO utxo = tatumApi.litecoin.getUtxo(TX_DOESNT_EXIST, 0).execute().body();
             assertNull(utxo);
         }
     }
@@ -125,28 +126,28 @@ public class LitecoinTest {
     @Nested
     class GetTXForAccount {
         @Test
-        public void accountExists() throws InterruptedException, ExecutionException {
-            LtcTx[] txs = LITECOIN.ltcGetTxForAccount(ADDRESS);
-            assertEquals(1, txs.length);
+        public void accountExists() throws IOException {
+            List<LtcTx> txs = tatumApi.litecoin.getTxForAccount(ADDRESS).execute().body();
+            assertEquals(1, txs.size());
         }
 
         @Test
-        public void accountDoesNotExist() throws InterruptedException, ExecutionException {
-            LtcTx[] txs = LITECOIN.ltcGetTxForAccount(ADDRESS_DOES_NOT_EXIST);
-            assertEquals(0, txs.length);
+        public void accountDoesNotExist() throws IOException {
+            List<LtcTx> txs = tatumApi.litecoin.getTxForAccount(ADDRESS_DOES_NOT_EXIST).execute().body();
+            assertEquals(0, txs.size());
         }
 
         @Test
-        public void noTxs() throws InterruptedException, ExecutionException {
-            LtcTx[] txs = LITECOIN.ltcGetTxForAccount(ADDRESS_NO_TX);
-            assertEquals(0, txs.length);
+        public void noTxs() throws IOException {
+            List<LtcTx> txs = tatumApi.litecoin.getTxForAccount(ADDRESS_NO_TX).execute().body();
+            assertEquals(0, txs.size());
         }
     }
 
     @Nested
     class GetTX {
         @Test
-        public void valid() throws InterruptedException, ExecutionException {
+        public void valid() throws IOException {
             LtcTx expected = LtcTx.builder()
                     .hash(TX)
                     .blockNumber(2121413L)
@@ -160,7 +161,7 @@ public class LitecoinTest {
                     .locktime(0L)
                     .build();
 
-            LtcTx tx = LITECOIN.ltcGetTransaction(TX);
+            LtcTx tx = tatumApi.litecoin.getTransaction(TX).execute().body();
 
             assertEquals(1, tx.getInputs().length);
             assertEquals(2, tx.getOutputs().length);
@@ -171,8 +172,8 @@ public class LitecoinTest {
         }
 
         @Test
-        public void txDoesntExist() throws InterruptedException, ExecutionException {
-            LtcTx tx = LITECOIN.ltcGetTransaction(TX_DOESNT_EXIST);
+        public void txDoesntExist() throws IOException {
+            LtcTx tx = tatumApi.litecoin.getTransaction(TX_DOESNT_EXIST).execute().body();
             assertNull(tx);
         }
     }

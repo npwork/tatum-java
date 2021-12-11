@@ -1,4 +1,4 @@
-package io.tatum.model.response.eth;
+package io.tatum.model.response.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

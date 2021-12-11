@@ -4,8 +4,10 @@ import io.tatum.model.response.btc.BtcBlock;
 import io.tatum.model.response.btc.BtcInfo;
 import io.tatum.model.response.btc.BtcTx;
 import io.tatum.model.response.btc.BtcUTXO;
+import io.tatum.model.response.common.AddressResponse;
 import io.tatum.model.response.common.BlockHash;
 import io.tatum.model.response.common.TransactionHash;
+import io.tatum.model.response.common.CreateWalletResponse;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
 
@@ -16,6 +18,22 @@ import java.util.concurrent.ExecutionException;
  * The type Bitcoin.
  */
 public final class Bitcoin {
+
+    /**
+     * For more details, see <a href="https://tatum.io/apidoc.php#operation/BtcGenerateWallet" target="_blank">Tatum API documentation</a>
+     */
+    public CreateWalletResponse generateWallet() throws ExecutionException, InterruptedException {
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/bitcoin/wallet";
+        return Async.get(uri, CreateWalletResponse.class);
+    }
+
+    /**
+     * For more details, see <a href="https://tatum.io/apidoc.php#operation/BtcGenerateAddress" target="_blank">Tatum API documentation</a>
+     */
+    public AddressResponse addressFromXpub(String xpub, int index) throws ExecutionException, InterruptedException {
+        String uri = BaseUrl.getInstance().getUrl() + "/v3/bitcoin/address/" + xpub + "/" + index;
+        return Async.get(uri, AddressResponse.class);
+    }
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/BtcBroadcast" target="_blank">Tatum API documentation</a>

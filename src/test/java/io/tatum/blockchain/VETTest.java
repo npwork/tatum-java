@@ -1,6 +1,8 @@
 package io.tatum.blockchain;
 
+import io.tatum.AbstractApiTest;
 import io.tatum.model.request.EstimateGasVet;
+import io.tatum.model.response.common.Balance;
 import io.tatum.model.response.vet.*;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
@@ -10,7 +12,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
-import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,9 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * https://explore-testnet.vechain.org/accounts/0x745502e1892a97846fca30781b9232162dda43b9
  * https://explore-testnet.vechain.org/transactions/0x6c262504e9b23848400834ac805f3dd45a115095a97dde722bd845d06bc535d1
  */
-public class VETTest {
-    private final static VET VET = new VET();
-
+public class VETTest extends AbstractApiTest {
     public static final String ADDRESS = "0x745502e1892a97846fca30781b9232162dda43b9";
     private static final String ADDRESS_NO_TX = "0x492eb8c15af354339b08ec23a500109f2c6a1570";
     private static final String ADDRESS_WRONG = "0x491eb1c11af154339b08ec23a500109f2c6a1570";
@@ -38,15 +37,15 @@ public class VETTest {
     private static final String TX_SENDER = "0x4f6fc409e152d33843cf4982d414c1dd0879277e";
 
     @Test
-    public void GetCurrentBlock() throws InterruptedException, ExecutionException {
-        long currentBlock = VET.vetGetCurrentBlock();
+    public void GetCurrentBlock() throws IOException {
+        Long currentBlock = tatumApi.vet.currentBlock().execute().body();
         assertTrue(currentBlock > BLOCK);
     }
 
     @Nested
     class GetBlock {
         @Test
-        public void valid() throws ExecutionException, InterruptedException {
+        public void valid() throws IOException {
             VetBlock expected = VetBlock.builder()
                     .number(BLOCK)
                     .id(BLOCK_HASH)
@@ -65,14 +64,14 @@ public class VETTest {
                     .transactions(new String[]{TX})
                     .build();
 
-            VetBlock block = VET.vetGetBlock(BLOCK_HASH);
+            VetBlock block = tatumApi.vet.getBlock(BLOCK_HASH).execute().body();
 
             assertEquals(expected, block);
         }
 
         @Test
-        public void notFound() throws ExecutionException, InterruptedException {
-            VetBlock block = VET.vetGetBlock(BLOCK_DOES_NOT_EXIST_HASH);
+        public void notFound() throws IOException {
+            VetBlock block = tatumApi.vet.getBlock(BLOCK_DOES_NOT_EXIST_HASH).execute().body();
             assertNull(block);
         }
     }
@@ -80,49 +79,49 @@ public class VETTest {
     @Nested
     class GetAccountBalance {
         @Test
-        public void valid() throws ExecutionException, InterruptedException {
-            BigDecimal balance = VET.vetGetAccountBalance(ADDRESS);
-            assertEquals(BigDecimal.valueOf(500), balance);
+        public void valid() throws IOException {
+            Balance balance = tatumApi.vet.getBalance(ADDRESS).execute().body();
+            assertEquals(BigDecimal.valueOf(500), balance.getBalance());
         }
 
         @Test
-        public void emptyAccount() throws ExecutionException, InterruptedException {
-            BigDecimal balance = VET.vetGetAccountBalance(ADDRESS_NO_TX);
-            assertEquals(BigDecimal.ZERO, balance);
+        public void emptyAccount() throws IOException {
+            Balance balance = tatumApi.vet.getBalance(ADDRESS_NO_TX).execute().body();
+            assertEquals(BigDecimal.ZERO, balance.getBalance());
         }
 
         @Test
-        public void addressNotFound() throws ExecutionException, InterruptedException {
-            BigDecimal balance = VET.vetGetAccountBalance(ADDRESS_WRONG);
-            assertEquals(BigDecimal.ZERO, balance);
+        public void addressNotFound() throws IOException {
+            Balance balance = tatumApi.vet.getBalance(ADDRESS_WRONG).execute().body();
+            assertEquals(BigDecimal.ZERO, balance.getBalance());
         }
     }
 
     @Nested
     class GetAccountEnergy {
         @Test
-        public void valid() throws ExecutionException, InterruptedException {
-            BigDecimal energy = VET.vetGetAccountEnergy(ADDRESS);
-            assertTrue(energy.compareTo(BigDecimal.valueOf(50)) > 0);
+        public void valid() throws IOException {
+            Energy energy = tatumApi.vet.getAccountEnergy(ADDRESS).execute().body();
+            assertTrue(energy.getEnergy().compareTo(BigDecimal.valueOf(50)) > 0);
         }
 
         @Test
-        public void emptyAccount() throws ExecutionException, InterruptedException {
-            BigDecimal energy = VET.vetGetAccountEnergy(ADDRESS_NO_TX);
-            assertEquals(BigDecimal.ZERO, energy);
+        public void emptyAccount() throws IOException {
+            Energy energy = tatumApi.vet.getAccountEnergy(ADDRESS_NO_TX).execute().body();
+            assertEquals(BigDecimal.ZERO, energy.getEnergy());
         }
 
         @Test
-        public void addressNotFound() throws ExecutionException, InterruptedException {
-            BigDecimal energy = VET.vetGetAccountEnergy(ADDRESS_WRONG);
-            assertEquals(BigDecimal.ZERO, energy);
+        public void addressNotFound() throws IOException {
+            Energy energy = tatumApi.vet.getAccountEnergy(ADDRESS_WRONG).execute().body();
+            assertEquals(BigDecimal.ZERO, energy.getEnergy());
         }
     }
 
     @Nested
     class GetTransaction {
         @Test
-        public void valid() throws ExecutionException, InterruptedException {
+        public void valid() throws IOException {
             VetTx expected = VetTx.builder()
                     .id(TX)
                     .chainTag("0x27")
@@ -149,14 +148,14 @@ public class VETTest {
                     .blockNumber(BLOCK)
                     .build();
 
-            VetTx tx = VET.vetGetTransaction(TX);
+            VetTx tx = tatumApi.vet.getTransaction(TX).execute().body();
 
             assertEquals(expected, tx);
         }
 
         @Test
-        public void notFound() throws ExecutionException, InterruptedException {
-            VetTx tx = VET.vetGetTransaction(TX_DOES_NOT_EXIST);
+        public void notFound() throws IOException {
+            VetTx tx = tatumApi.vet.getTransaction(TX_DOES_NOT_EXIST).execute().body();
             assertNull(tx);
         }
     }
@@ -164,22 +163,21 @@ public class VETTest {
     // @TODO add estimategas
     @Disabled
     @Test
-    public void vetEstimateGasTest() throws InterruptedException, ExecutionException, IOException {
-        VET vet = new VET();
+    public void vetEstimateGasTest() throws IOException {
         EstimateGasVet body = new EstimateGasVet();
         body.setData("0x0d7A1a48a8996Dd51F94d9e9118cCb028562B955");
         body.setFrom("123456789012345678901234567890123456789012345678901234567890123456");
         body.setTo("0x0d7A1a48a8996Dd51F94d9e9118cCb028562B955");
         body.setNonce(new BigInteger("100"));
         body.setValue("123321");
-        VetEstimateGas vetEstimateGas = vet.vetEstimateGas(body);
+        VetEstimateGas vetEstimateGas = tatumApi.vet.estimateGas(body).execute().body();
     }
 
     @Nested
     class GetTransactionReceipt {
         @Test
-        public void valid() throws ExecutionException, InterruptedException {
-            VetTxReceipt expected = VetTxReceipt.builder()
+        public void valid() throws IOException {
+            var expected = VetTxReceipt.builder()
                     .gasUsed(BigDecimal.valueOf(52582))
                     .gasPayer(TX_SENDER)
                     .paid("0xe982d0217978000")
@@ -201,14 +199,14 @@ public class VETTest {
                     .status("0x1")
                     .build();
 
-            VetTxReceipt txReceipt = VET.vetGetTransactionReceipt(TX);
+            var txReceipt = tatumApi.vet.getTransactionReceipt(TX).execute().body();
 
             assertEquals(expected, txReceipt);
         }
 
         @Test
-        public void notFound() throws ExecutionException, InterruptedException {
-            VetTxReceipt txReceipt = VET.vetGetTransactionReceipt(TX_DOES_NOT_EXIST);
+        public void notFound() throws IOException {
+            var txReceipt = tatumApi.vet.getTransactionReceipt(TX_DOES_NOT_EXIST).execute().body();
             assertNull(txReceipt);
         }
     }

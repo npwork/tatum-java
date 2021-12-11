@@ -1,13 +1,14 @@
 package io.tatum.blockchain;
 
+import io.tatum.AbstractApiTest;
 import io.tatum.model.response.tron.*;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasProperty;
@@ -20,8 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * https://shasta.tronscan.org/#/address/TKAU1QN2McYpTVFR1t92KPzjpzytvfNzE9
  * https://shasta.tronscan.org/#/transaction/1eaad1926ab6d51c67c4d3203fa291543b19db589f6850024dbc243abe7d792f
  */
-public class TronTest {
-    private final static Tron TRON = new Tron();
+public class TronTest extends AbstractApiTest {
     public final static String ADDRESS = "TKAU1QN2McYpTVFR1t92KPzjpzytvfNzE9";
     private final static String ADDRESS_WITH_TRC10 = "TMZCJUzy98NBPw42537QsKxPuqbVuj1NZv";
     private final static String ADDRESS_WITH_TRC20 = "TScnb6dhpzZfVyFxYNv9pYyJ35qzfBoXQp";
@@ -35,8 +35,8 @@ public class TronTest {
     private final static String BLOCK_DOESNT_EXIST = "000000000139a53f63e149c428dbbd28db997e1934a6d8b7a1bb06da9fc24fc3";
 
     @Test
-    public void getCurrentBlock() throws InterruptedException, ExecutionException {
-        TronInfo info = TRON.tronGetCurrentBlock();
+    public void getCurrentBlock() throws IOException {
+        TronInfo info = tatumApi.tron.info().execute().body();
         assertTrue(info.getBlockNumber() > BLOCK_NUMBER);
         assertTrue(info.isTestnet());
         assertThat(info, hasProperty("hash"));
@@ -45,7 +45,7 @@ public class TronTest {
     @Nested
     class GetBlock {
         @Test
-        public void valid() throws ExecutionException, InterruptedException {
+        public void valid() throws IOException {
             TronBlock expected = TronBlock.builder()
                     .hash(BLOCK_HASH)
                     .blockNumber(BLOCK_NUMBER)
@@ -55,7 +55,7 @@ public class TronTest {
                     .witnessSignature("97f6385fa5985200c10cde87092306353c62c9880063f56dc2fb89367bf8261e6735f41371667bd37c2e5d2104d3f8b061f4f76f2d00adf1c2b424843b4fd6cc01")
                     .build();
 
-            TronBlock block = TRON.tronGetBlock(BLOCK_HASH);
+            TronBlock block = tatumApi.tron.getBlock(BLOCK_HASH).execute().body();
 
             assertEquals(2, block.getTransactions().length);
             block.setTransactions(null);
@@ -64,8 +64,8 @@ public class TronTest {
         }
 
         @Test
-        public void notExist() throws ExecutionException, InterruptedException {
-            TronBlock block = TRON.tronGetBlock(BLOCK_DOESNT_EXIST);
+        public void notExist() throws IOException {
+            TronBlock block = tatumApi.tron.getBlock(BLOCK_DOESNT_EXIST).execute().body();
             assertNull(block);
         }
     }
@@ -73,7 +73,7 @@ public class TronTest {
     @Nested
     class GetTransaction {
         @Test
-        public void valid() throws ExecutionException, InterruptedException {
+        public void valid() throws IOException {
             TronTransaction expected = TronTransaction.builder()
                     .ret(new Ret[]{new Ret("SUCCESS", 0L)})
                     .signature(new String[]{"f6f6b13ac2de247319e582658598f34a797934f7f08f4ab6e9964cd5a64eefebe6d1f20a9a8a1732ae8be4eed66df2ec022903250681c0482c8cd4e33001263800"})
@@ -85,7 +85,7 @@ public class TronTest {
                     .energyUsageTotal(0L)
                     .build();
 
-            TronTransaction tx = TRON.tronGetTransaction(TX);
+            TronTransaction tx = tatumApi.tron.getTransaction(TX).execute().body();
 
             assertNotNull(tx.getRawData());
             tx.setRawData(null);
@@ -94,40 +94,40 @@ public class TronTest {
         }
 
         @Test
-        public void notExist() throws ExecutionException, InterruptedException {
-            TronTransaction tx = TRON.tronGetTransaction(TX_DOESNT_EXIST);
-            assertNull(tx);
+        public void notExist() throws IOException {
+            TronTransaction tx = tatumApi.tron.getTransaction(TX_DOESNT_EXIST).execute().body();
+            assertNull(tx.getTxID());
         }
     }
 
     @Nested
     class GetAccount {
         @Test
-        public void valid() throws ExecutionException, InterruptedException {
+        public void valid() throws IOException {
             TronAccount expected = TronAccount.builder()
                     .balance(new BigDecimal(50).scaleByPowerOfTen(6).setScale(0, RoundingMode.FLOOR))
                     .createTime(1639060311000L)
                     .trc20(new HashMap[]{})
                     .build();
 
-            TronAccount tronAccount = TRON.tronGetAccount(ADDRESS);
+            TronAccount tronAccount = tatumApi.tron.getAccount(ADDRESS).execute().body();
             assertEquals(expected, tronAccount);
         }
 
         @Test
-        public void validWithTrc10() throws ExecutionException, InterruptedException {
+        public void validWithTrc10() throws IOException {
             TronAccount expected = TronAccount.builder()
                     .createTime(1594185723000L)
                     .trc20(new HashMap[]{})
                     .trc10(new Trc10[]{new Trc10("1000252", new BigDecimal(2.214).scaleByPowerOfTen(6).setScale(0, RoundingMode.HALF_EVEN))})
                     .build();
 
-            TronAccount tronAccount = TRON.tronGetAccount(ADDRESS_WITH_TRC10);
+            TronAccount tronAccount = tatumApi.tron.getAccount(ADDRESS_WITH_TRC10).execute().body();
             assertEquals(expected, tronAccount);
         }
 
         @Test
-        public void validWithTrc20() throws ExecutionException, InterruptedException {
+        public void validWithTrc20() throws IOException {
             HashMap<String, BigDecimal> first = createMap("TDPnHo7BdAaXERFmMdvsYx7kssW4aaRrh5", BigDecimal.valueOf(999990809997588L));
             HashMap<String, BigDecimal> second = createMap("TFpiQ5iV3hHFzkVeMr7RLse76be5FqNnj6", BigDecimal.valueOf(981179054538361L));
             HashMap<String, BigDecimal> third = createMap("TRJaNt34a7uWqL1XsapU5f19joXeN3MPoL", new BigDecimal("999919700000000000002359296"));
@@ -140,13 +140,13 @@ public class TronTest {
                     .build();
 
 
-            TronAccount tronAccount = TRON.tronGetAccount(ADDRESS_WITH_TRC20);
+            TronAccount tronAccount = tatumApi.tron.getAccount(ADDRESS_WITH_TRC20).execute().body();
             assertEquals(expected, tronAccount);
         }
 
         @Test
-        public void notFound() throws ExecutionException, InterruptedException {
-            TronAccount tronAccount = TRON.tronGetAccount(ADDRESS_DOES_NOT_EXIST);
+        public void notFound() throws IOException {
+            TronAccount tronAccount = tatumApi.tron.getAccount(ADDRESS_DOES_NOT_EXIST).execute().body();
             assertNull(tronAccount);
         }
 
@@ -160,7 +160,7 @@ public class TronTest {
     @Nested
     class GetTrc10Detail {
         @Test
-        public void valid() throws ExecutionException, InterruptedException {
+        public void valid() throws IOException {
             long tokenId = 1000252;
 
             TronTrc10 expected = TronTrc10.builder()
@@ -174,14 +174,14 @@ public class TronTest {
                     .url("btfs.io")
                     .build();
 
-            TronTrc10 tronTrc10 = TRON.tronGetTrc10Detail("" + tokenId);
+            TronTrc10 tronTrc10 = tatumApi.tron.getTrc10Details(tokenId).execute().body();
 
             assertEquals(expected, tronTrc10);
         }
 
         @Test
-        public void notFound() throws ExecutionException, InterruptedException {
-            TronTrc10 tronTrc10 = TRON.tronGetTrc10Detail("" + Long.MAX_VALUE);
+        public void notFound() throws IOException {
+            TronTrc10 tronTrc10 = tatumApi.tron.getTrc10Details(Long.MAX_VALUE).execute().body();
             assertNull(tronTrc10);
         }
     }

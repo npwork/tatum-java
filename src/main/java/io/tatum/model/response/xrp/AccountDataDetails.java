@@ -18,7 +18,6 @@ public class AccountDataDetails {
     @JsonProperty("Account")
     private String account;
 
-
     @NotNull
     @JsonProperty("Balance")
     private BigDecimal balance;

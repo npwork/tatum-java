@@ -1,7 +1,7 @@
 package io.tatum.blockchain;
 
 import io.tatum.model.response.common.TransactionHash;
-import io.tatum.model.response.eth.Balance;
+import io.tatum.model.response.common.Balance;
 import io.tatum.model.response.eth.EthBlock;
 import io.tatum.model.response.eth.EthTx;
 import io.tatum.utils.Async;
@@ -16,6 +16,8 @@ import java.util.concurrent.ExecutionException;
  * The type Ethereum.
  */
 public final class Ethereum {
+
+
 
     /**
      * For more details, see <a href="https://tatum.io/apidoc#operation/EthBroadcast" target="_blank">Tatum API documentation</a>

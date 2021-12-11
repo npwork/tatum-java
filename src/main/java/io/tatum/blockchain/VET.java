@@ -1,12 +1,9 @@
 package io.tatum.blockchain;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Preconditions;
 import io.tatum.model.request.EstimateGasVet;
 import io.tatum.model.response.common.TransactionHash;
-import io.tatum.model.response.eth.Balance;
+import io.tatum.model.response.common.Balance;
 import io.tatum.model.response.vet.*;
 import io.tatum.utils.Async;
 import io.tatum.utils.BaseUrl;
@@ -14,7 +11,6 @@ import io.tatum.utils.ObjectValidator;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.concurrent.ExecutionException;
 
 /**
